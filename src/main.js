@@ -25,6 +25,11 @@ Preload.prototype.preload = function() {
   // License is for noncommercial use
   // http://www.fontspace.com/freaky-fonts/gamegirl-classic
   this.game.load.bitmapFont('font', 'asset/font/font.png', 'asset/font/font.json');
+
+  this.game.load.spritesheet('jesseSheet1', 'asset/img/finalrenderfordaniel1.png', 32, 64);
+
+  this.game.load.spritesheet('jesseSheet1_tile', 'asset/img/finalrenderfordaniel1.png');
+  this.game.load.tilemap('level1', 'asset/map/map1.json', undefined, Phaser.Tilemap.TILED_JSON);
 };
 Preload.prototype.create = function() {
   this.game.state.start('Gameplay');
