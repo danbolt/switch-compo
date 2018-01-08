@@ -83,15 +83,15 @@ Player.prototype.update = function() {
     inputY = -1.0;
   }
 
-  if (this.currentState === PlayerState.MOVING) {
-    this.body.velocity.set(this.walkSpeed * inputX, this.walkSpeed * inputY);
+  if (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01) {
+    this.facingDirection.set(inputX, inputY);
+    this.facingDirection.normalize();
+  }
 
-    if (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01) {
-      this.facingDirection.set(inputX, inputY);
-      this.facingDirection.normalize();
-    }
+  if (this.currentState === PlayerState.MOVING) {
+    this.body.velocity.set(this.walkSpeed * this.facingDirection.x, this.walkSpeed * this.facingDirection.y);
   } else if (this.currentState === PlayerState.CHARGE) {
-    this.targetPt.body.velocity.set(this.targetMoveSpeed * inputX, this.targetMoveSpeed * inputY);
+    this.targetPt.body.velocity.set(this.targetMoveSpeed * this.facingDirection.x, this.targetMoveSpeed * this.facingDirection.y);
   }
 };
 
