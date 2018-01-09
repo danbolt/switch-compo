@@ -5,8 +5,10 @@
 
     <!-- Libraries -->
     <script type="text/javascript" src="lib/phaser.js"></script>
+    <script type="text/javascript" src="lib/three.js"></script>
 
     <!-- Game code -->
+    <script type="text/javascript" src="src/threeRenderer.js"></script>
     <script type="text/javascript" src="src/gameplay.js"></script>
     <script type="text/javascript" src="src/main.js"></script>
 
@@ -16,6 +18,13 @@
 
         background-color: gray;
       }
+       canvas {
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        image-rendering: pixelated;
+       }
     </style>
 
     </head>

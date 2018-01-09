@@ -202,6 +202,9 @@ Gameplay.prototype.update = function() {
     }, undefined, this);
   }
 };
+Gameplay.prototype.preRender = function () {
+  ThreeRenderer.render(ThreeScene, ThreeCamera);
+};
 Gameplay.prototype.shutdown = function() {
   this.player = null;
   this.wolves = null;

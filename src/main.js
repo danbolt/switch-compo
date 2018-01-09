@@ -34,6 +34,18 @@ Preload.prototype.preload = function() {
 };
 Preload.prototype.create = function() {
   this.game.state.start('Gameplay');
+
+  this.game.scale.onSizeChange.add(function () {
+    var cv = this.game.canvas;
+    this.game.canvas = ThreeJSCanvas;
+    this.game.scale.reflowCanvas();
+    this.game.canvas = cv;
+  }, this);
+
+  var cv = this.game.canvas;
+  this.game.canvas = ThreeJSCanvas;
+  this.game.scale.reflowCanvas();
+  this.game.canvas = cv;
 };
 
 
@@ -41,7 +53,9 @@ Preload.prototype.create = function() {
 var main = function () {
 	console.log('hello, jam! 😊');
 
-	var game = new Phaser.Game(640, 480);
+  setupTHREE();
+
+	var game = new Phaser.Game(320, 240, Phaser.WEBGL, undefined, undefined, true);
 	game.state.add('Preload', Preload, false);
   game.state.add('Gameplay', Gameplay, false);
 
