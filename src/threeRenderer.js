@@ -27,19 +27,29 @@ var setupThree = function () {
 
 var setupThreeScene= function (game) {
   var tl = new THREE.TextureLoader();
-  var spriteMap = tl.load('asset/img/finalrenderfordaniel1.png' );
-  spriteMap.magFilter = THREE.NearestFilter;
-  spriteMap.minFilter = THREE.LinearMipMapLinearFilter;
-  spriteMap.wrapS = spriteMap.wrapT = THREE.RepeatWrapping;
-  spriteMap.repeat.set(32 / 256, 32 / 256);
-  spriteMap.offset.x = 6 / 8;
-  spriteMap.offset.y = 1 / 8;
+  var grass = tl.load('asset/img/finalrenderfordaniel1.png' );
+  grass.magFilter = THREE.NearestFilter;
+  grass.minFilter = THREE.LinearMipMapLinearFilter;
+  grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
+  grass.repeat.set(32 / 256, 32 / 256);
+  grass.offset.x = 6 / 8;
+  grass.offset.y = 1 / 8;
+
+  var stone = tl.load('asset/img/finalrenderfordaniel1.png' );
+  stone.magFilter = THREE.NearestFilter;
+  stone.minFilter = THREE.LinearMipMapLinearFilter;
+  stone.wrapS = grass.wrapT = THREE.RepeatWrapping;
+  stone.repeat.set(32 / 256, 32 / 256);
+  stone.offset.x = 4 / 8;
+  stone.offset.y = 6 / 8;
 
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
-  var material = new THREE.MeshLambertMaterial( { map: spriteMap } );
+  var material = new THREE.MeshLambertMaterial( { map: grass } );
+  var material2 = new THREE.MeshLambertMaterial( { map: stone } );
   
   var map = game.state.getCurrentState().map;
   var background = game.state.getCurrentState().background;
+  var foreground = game.state.getCurrentState().foreground;
 
   for (var tx = 0; tx < 10; tx++) {
       for (var ty = 0; ty < 10; ty++) {
@@ -48,6 +58,13 @@ var setupThreeScene= function (game) {
 	  var cube = new THREE.Mesh( geometry, material );
 	  ThreeScene.add(cube);
 	  cube.position.set(tx * 32, 0, ty * 32);
+	}
+	
+	var tile = map.getTile(tx, ty, foreground);
+	if (tile) {
+	  var cube = new THREE.Mesh( geometry, material2 );
+	  ThreeScene.add(cube);
+	  cube.position.set(tx * 32, 32, ty * 32);
 	}
       }
   }
