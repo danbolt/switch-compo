@@ -53,7 +53,7 @@ Preload.prototype.create = function() {
 var main = function () {
 	console.log('hello, jam! 😊');
 
-  setupTHREE();
+  setupThree();
 
 	var game = new Phaser.Game(320, 240, Phaser.WEBGL, undefined, undefined, true);
 	game.state.add('Preload', Preload, false);

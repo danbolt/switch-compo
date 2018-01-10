@@ -192,6 +192,8 @@ Gameplay.prototype.create = function() {
   wolf.revive();
   
   this.game.add.bitmapText(32, 32, 'font', 'snap maze!', 8);
+
+  setupThreeScene(this.game);
 };
 Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground);
@@ -203,6 +205,8 @@ Gameplay.prototype.update = function() {
   }
 };
 Gameplay.prototype.preRender = function () {
+  UpdateThreeScene(this.player);
+
   ThreeRenderer.render(ThreeScene, ThreeCamera);
 };
 Gameplay.prototype.shutdown = function() {
