@@ -183,6 +183,9 @@ Gameplay.prototype.create = function() {
   this.map.setCollisionByExclusion([0], true, this.foreground);
   this.game.physics.enable(this.foreground, Phaser.Physics.ARCADE);
 
+  this.background.renderable = false;
+  this.foreground.renderable = false;
+
   this.player = this.game.add.existing(new Player(this.game, 100, 100));
 
   this.wolves = this.game.add.group();

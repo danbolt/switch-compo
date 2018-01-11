@@ -5,6 +5,8 @@ var ThreeScene = null;
 var ThreeCamera = null;
 var ThreeRenderer = null;
 
+var sprite = null; // TODO: rename me
+
 var setupThree = function () {
   ThreeScene = new THREE.Scene();
   ThreeCamera = new THREE.PerspectiveCamera( 75, 320 / 240, 0.1, 1000 );
@@ -22,7 +24,7 @@ var setupThree = function () {
 
   ThreeCamera.position.x = 100;
   ThreeCamera.position.z = 250;
-  ThreeCamera.position.y = 40;
+  ThreeCamera.position.y = 100;
 };
 
 var setupThreeScene= function (game) {
@@ -43,28 +45,41 @@ var setupThreeScene= function (game) {
   stone.offset.x = 4 / 8;
   stone.offset.y = 6 / 8;
 
+  var playerSprite = tl.load('asset/img/finalrenderfordaniel1.png' );
+  playerSprite.magFilter = THREE.NearestFilter;
+  playerSprite.minFilter = THREE.LinearMipMapLinearFilter;
+  playerSprite.wrapS = grass.wrapT = THREE.RepeatWrapping;
+  playerSprite.repeat.set(32 / 256, 64 / 256);
+  playerSprite.offset.x = 0 / 8;
+  playerSprite.offset.y = 3 / 4;
+
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
   var material = new THREE.MeshLambertMaterial( { map: grass } );
   var material2 = new THREE.MeshLambertMaterial( { map: stone } );
-  
+  var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
+ 
+  sprite = new THREE.Sprite(material3);
+  sprite.scale.set(32, 64, 32);
+  ThreeScene.add(sprite);
+
+  // populate small tilemap
   var map = game.state.getCurrentState().map;
   var background = game.state.getCurrentState().background;
   var foreground = game.state.getCurrentState().foreground;
-
-  for (var tx = 0; tx < 10; tx++) {
-      for (var ty = 0; ty < 10; ty++) {
+  for (var tx = 0; tx < map.width; tx++) {
+      for (var ty = 0; ty < map.height; ty++) {
 	var tile = map.getTile(tx, ty, background);
 	if (tile) {
 	  var cube = new THREE.Mesh( geometry, material );
 	  ThreeScene.add(cube);
-	  cube.position.set(tx * 32, 0, ty * 32);
+	  cube.position.set(tx * 32 + 16, 0, ty * 32 + 16);
 	}
 	
 	var tile = map.getTile(tx, ty, foreground);
 	if (tile) {
 	  var cube = new THREE.Mesh( geometry, material2 );
 	  ThreeScene.add(cube);
-	  cube.position.set(tx * 32, 32, ty * 32);
+	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
 	}
       }
   }
@@ -72,6 +87,9 @@ var setupThreeScene= function (game) {
 
 var UpdateThreeScene = function (player) {
     ThreeCamera.position.x = player.x;
-    ThreeCamera.position.z = player.y;
+    ThreeCamera.position.z = player.y + 120;
+    ThreeCamera.lookAt(player.x, 0, player.y);
+
+    sprite.position.set(player.x, 48, player.y - 16);
 };
 
