@@ -39,7 +39,7 @@ var Player = function(game, x, y) {
   this.targetPt.tint = 0xFF4466;
   this.targetPt.anchor.set(0.5, 0.5);
   this.targetPt.update = function() {
-    this.rotation += this.game.time.elapsed * 2;
+    this.rotation += this.game.time.elapsed * 0.01;
   }
   this.game.physics.enable(this.targetPt, Phaser.Physics.ARCADE);
   this.targetPt.kill();
@@ -114,7 +114,9 @@ Player.prototype.update = function() {
     } else {
       this.body.velocity.set(0);
     }
-  } else if (this.currentState === PlayerState.CHARGE && moving) {
+  } else if (this.currentState === PlayerState.CHARGE) {
+    this.body.velocity.set(0);
+
     if (moving) {
       this.targetPt.body.velocity.set(this.targetMoveSpeed * this.facingDirection.x, this.targetMoveSpeed * this.facingDirection.y);
 
@@ -122,9 +124,8 @@ Player.prototype.update = function() {
         var theta = Math.atan2(this.targetPt.y - this.position.y, this.targetPt.x - this.position.x);
 
         this.targetPt.position.set(this.position.x + Math.cos(theta) * this.maxTargetDistance, this.position.y + Math.sin(theta) * this.maxTargetDistance);
-      }
+      } 
     } else {
-      this.body.velocity.set(0);
       this.targetPt.body.velocity.set(0);
     }
   }

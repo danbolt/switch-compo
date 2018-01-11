@@ -6,6 +6,7 @@ var ThreeCamera = null;
 var ThreeRenderer = null;
 
 var sprite = null; // TODO: rename me
+var target = null;
 
 var setupThree = function () {
   ThreeScene = new THREE.Scene();
@@ -53,14 +54,27 @@ var setupThreeScene= function (game) {
   playerSprite.offset.x = 0 / 8;
   playerSprite.offset.y = 3 / 4;
 
+  var targetSprite = tl.load('asset/img/finalrenderfordaniel1.png' );
+  targetSprite.magFilter = THREE.NearestFilter;
+  targetSprite.minFilter = THREE.LinearMipMapLinearFilter;
+  targetSprite.wrapS = grass.wrapT = THREE.RepeatWrapping;
+  targetSprite.repeat.set(32 / 256, 32 / 256);
+  targetSprite.offset.x = 0 / 8;
+  targetSprite.offset.y = 0 / 8;
+
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
+  var sphere = new THREE.SphereGeometry(32, 3, 3);
   var material = new THREE.MeshLambertMaterial( { map: grass, transparent: true } );
   var material2 = new THREE.MeshLambertMaterial( { map: stone, transparent: true } );
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
+  var material4 = new THREE.MeshLambertMaterial( { map: targetSprite, transparent: true } );
  
   sprite = new THREE.Sprite(material3);
   sprite.scale.set(32, 64, 32);
   ThreeScene.add(sprite);
+
+  target = new THREE.Mesh(sphere, material4);
+  ThreeScene.add(target);
 
   // populate small tilemap
   var map = game.state.getCurrentState().map;
@@ -68,19 +82,19 @@ var setupThreeScene= function (game) {
   var foreground = game.state.getCurrentState().foreground;
   for (var tx = 0; tx < map.width; tx++) {
       for (var ty = 0; ty < map.height; ty++) {
-	var tile = map.getTile(tx, ty, background);
-	if (tile) {
-	  var cube = new THREE.Mesh( geometry, material );
-	  ThreeScene.add(cube);
-	  cube.position.set(tx * 32 + 16, 0, ty * 32 + 16);
-	}
-	
-	var tile = map.getTile(tx, ty, foreground);
-	if (tile) {
-	  var cube = new THREE.Mesh( geometry, material2 );
-	  ThreeScene.add(cube);
-	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
-	}
+      	var tile = map.getTile(tx, ty, background);
+      	if (tile) {
+      	  var cube = new THREE.Mesh( geometry, material );
+      	  ThreeScene.add(cube);
+      	  cube.position.set(tx * 32 + 16, 0, ty * 32 + 16);
+      	}
+      	
+      	var tile = map.getTile(tx, ty, foreground);
+      	if (tile) {
+      	  var cube = new THREE.Mesh( geometry, material2 );
+      	  ThreeScene.add(cube);
+      	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
+      	}
       }
   }
 };
@@ -93,6 +107,10 @@ var UpdateThreeScene = function (player) {
   sprite.position.set(player.x, 48, player.y - 16);
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
-  sprite.scale.set(player.animations.currentAnim.name === 'run_right' ? -32 : 32, 64, 32)
+  sprite.scale.set(player.animations.currentAnim.name === 'run_right' ? -32 : 32, 64, 32);
+
+  target.position.set(player.targetPt.x, 16, player.targetPt.y);
+  target.rotation.y = player.targetPt.rotation;
+  target.visible = player.targetPt.alive;
 };
 
