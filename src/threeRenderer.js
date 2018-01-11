@@ -24,7 +24,7 @@ var setupThree = function () {
 
   ThreeCamera.position.x = 100;
   ThreeCamera.position.z = 250;
-  ThreeCamera.position.y = 100;
+  ThreeCamera.position.y = 130;
 };
 
 var setupThreeScene= function (game) {
@@ -54,8 +54,8 @@ var setupThreeScene= function (game) {
   playerSprite.offset.y = 3 / 4;
 
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
-  var material = new THREE.MeshLambertMaterial( { map: grass } );
-  var material2 = new THREE.MeshLambertMaterial( { map: stone } );
+  var material = new THREE.MeshLambertMaterial( { map: grass, transparent: true } );
+  var material2 = new THREE.MeshLambertMaterial( { map: stone, transparent: true } );
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
  
   sprite = new THREE.Sprite(material3);
@@ -86,10 +86,13 @@ var setupThreeScene= function (game) {
 };
 
 var UpdateThreeScene = function (player) {
-    ThreeCamera.position.x = player.x;
-    ThreeCamera.position.z = player.y + 120;
-    ThreeCamera.lookAt(player.x, 0, player.y);
+  ThreeCamera.position.x = player.x;
+  ThreeCamera.position.z = player.y + 120;
+  ThreeCamera.lookAt(player.x, 0, player.y);
 
-    sprite.position.set(player.x, 48, player.y - 16);
+  sprite.position.set(player.x, 48, player.y - 16);
+  sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
+  sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
+  sprite.scale.set(player.animations.currentAnim.name === 'run_right' ? -32 : 32, 64, 32)
 };
 

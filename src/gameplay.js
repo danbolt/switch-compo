@@ -10,6 +10,16 @@ var PlayerState = {
 var Player = function(game, x, y) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
 
+  this.animations.add('run_right', [2, 10, 18, 26], 8, true);
+  this.animations.add('run_down', [8, 0, 16, 0], 8, true);
+  this.animations.add('run_left', [2, 10, 18, 26], 8, true);
+  this.animations.add('run_up', [9, 1, 17, 1], 8, true);
+  this.animations.add('idle_right', [2], 8, true);
+  this.animations.add('idle_down', [0], 8, true);
+  this.animations.add('idle_left', [2], 8, true);
+  this.animations.add('idle_up', [1], 8, true);
+  this.animations.play('run_down');
+
   this.walkSpeed = 150;
   this.dashSpeed = 400;
   this.dashTime = 200;
@@ -92,19 +102,43 @@ Player.prototype.update = function() {
     inputY = -1.0;
   }
 
+  var moving = (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01);
+  if (moving) {
     this.facingDirection.set(inputX, inputY);
     this.facingDirection.normalize();
+  }
 
   if (this.currentState === PlayerState.MOVING) {
-    this.body.velocity.set(this.walkSpeed * this.facingDirection.x, this.walkSpeed * this.facingDirection.y);
-  } else if (this.currentState === PlayerState.CHARGE) {
-    this.targetPt.body.velocity.set(this.targetMoveSpeed * this.facingDirection.x, this.targetMoveSpeed * this.facingDirection.y);
-
-    if (this.targetPt.position.distance(this.position) > this.maxTargetDistance) {
-      var theta = Math.atan2(this.targetPt.y - this.position.y, this.targetPt.x - this.position.x);
-
-      this.targetPt.position.set(this.position.x + Math.cos(theta) * this.maxTargetDistance, this.position.y + Math.sin(theta) * this.maxTargetDistance);
+    if (moving) {
+      this.body.velocity.set(this.walkSpeed * this.facingDirection.x, this.walkSpeed * this.facingDirection.y);
+    } else {
+      this.body.velocity.set(0);
     }
+  } else if (this.currentState === PlayerState.CHARGE && moving) {
+    if (moving) {
+      this.targetPt.body.velocity.set(this.targetMoveSpeed * this.facingDirection.x, this.targetMoveSpeed * this.facingDirection.y);
+
+      if (this.targetPt.position.distance(this.position) > this.maxTargetDistance) {
+        var theta = Math.atan2(this.targetPt.y - this.position.y, this.targetPt.x - this.position.x);
+
+        this.targetPt.position.set(this.position.x + Math.cos(theta) * this.maxTargetDistance, this.position.y + Math.sin(theta) * this.maxTargetDistance);
+      }
+    } else {
+      this.body.velocity.set(0);
+      this.targetPt.body.velocity.set(0);
+    }
+  }
+
+  // update animations
+  var theta = Math.atan2(this.facingDirection.y, this.facingDirection.x);
+  if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
+    this.animations.play(moving ? 'run_down' : 'idle_down');
+  } else if (Math.abs(theta) > Math.PI * 0.75) {
+    this.animations.play(moving ? 'run_left' : 'idle_left');
+  } else if (Math.abs(theta) < Math.PI * 0.25) {
+    this.animations.play(moving ? 'run_right' : 'idle_right');
+  } else {
+    this.animations.play(moving ? 'run_up' : 'idle_up' );
   }
 };
 
@@ -187,14 +221,18 @@ Gameplay.prototype.create = function() {
   this.foreground.renderable = false;
 
   this.player = this.game.add.existing(new Player(this.game, 100, 100));
+  this.player.renderable = false;
+  this.player.targetPt.renderable = false;
 
   this.wolves = this.game.add.group();
   var wolf = this.game.add.existing(new Wolf(this.game, 120, 200, this.player));
   this.wolves.addChild(wolf);
   this.wolves.addToHash(wolf);
+  wolf.renderable = false;
+
   wolf.revive();
   
-  this.game.add.bitmapText(32, 32, 'font', 'snap maze!', 8);
+  this.game.add.bitmapText(32, 32, 'font', 'movement', 8);
 
   setupThreeScene(this.game);
 };
