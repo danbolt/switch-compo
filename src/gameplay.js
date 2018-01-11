@@ -10,6 +10,8 @@ var PlayerState = {
 var Player = function(game, x, y) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
 
+  this.cameraAngle = 0.0;
+
   this.animations.add('run_right', [2, 10, 18, 26], 8, true);
   this.animations.add('run_down', [8, 0, 16, 0], 8, true);
   this.animations.add('run_left', [2, 10, 18, 26], 8, true);
@@ -26,6 +28,7 @@ var Player = function(game, x, y) {
   this.targetMoveSpeed = 220;
   this.attackDuration = 680;
   this.maxTargetDistance = 32 * 5;
+  this.cameraMoveSpeed = 0.0025;
 
   this.game.physics.enable(this, Phaser.Physics.ARCADE);
   this.anchor.set(0.5, 1);
@@ -91,20 +94,31 @@ Player.prototype.update = function() {
   // Used to get the directions of the directional input.
   var inputX = 0.0;
   var inputY = 0.0;
-  if (this.game.input.keyboard.isDown(Phaser.KeyCode.RIGHT)) {
+  if (this.game.input.keyboard.isDown(Phaser.KeyCode.D)) {
     inputX = 1.0;
-  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.LEFT)) {
+  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.A)) {
     inputX = -1.0;
   }
-  if (this.game.input.keyboard.isDown(Phaser.KeyCode.DOWN)) {
+  if (this.game.input.keyboard.isDown(Phaser.KeyCode.S)) {
     inputY = 1.0;
-  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.UP)) {
+  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.W)) {
     inputY = -1.0;
+  }
+
+  if (this.game.input.keyboard.isDown(Phaser.KeyCode.Q)) {
+    this.cameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed;
+
+    if (this.cameraAngle < -Math.PI) { this.cameraAngle = Math.PI; }
+  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.E)) {
+    this.cameraAngle += this.cameraMoveSpeed * this.game.time.elapsed;
+
+    if (this.cameraAngle > Math.PI) { this.cameraAngle = -Math.PI; }
   }
 
   var moving = (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01);
   if (moving) {
     this.facingDirection.set(inputX, inputY);
+    this.facingDirection.rotate(0, 0, this.cameraAngle + Math.PI / 2);
     this.facingDirection.normalize();
   }
 
@@ -131,14 +145,16 @@ Player.prototype.update = function() {
   }
 
   // update animations
-  var theta = Math.atan2(this.facingDirection.y, this.facingDirection.x);
+  var theta = Math.atan2(this.facingDirection.y, this.facingDirection.x) - this.cameraAngle - Math.PI * 0.5;
+  if (theta > Math.PI) { theta -= Math.PI * 2; }
+  if (theta < -Math.PI) { theta += Math.PI * 2; }
   if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
     this.animations.play(moving ? 'run_down' : 'idle_down');
   } else if (Math.abs(theta) > Math.PI * 0.75) {
     this.animations.play(moving ? 'run_left' : 'idle_left');
   } else if (Math.abs(theta) < Math.PI * 0.25) {
     this.animations.play(moving ? 'run_right' : 'idle_right');
-  } else {
+  } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
     this.animations.play(moving ? 'run_up' : 'idle_up' );
   }
 };
@@ -233,7 +249,7 @@ Gameplay.prototype.create = function() {
 
   wolf.revive();
   
-  this.game.add.bitmapText(32, 32, 'font', 'movement', 8);
+  this.game.add.bitmapText(32, 32, 'font', 'wasd + q/e', 8);
 
   setupThreeScene(this.game);
 };

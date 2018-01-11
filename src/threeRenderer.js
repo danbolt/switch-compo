@@ -67,7 +67,7 @@ var setupThreeScene= function (game) {
   var material = new THREE.MeshLambertMaterial( { map: grass, transparent: true } );
   var material2 = new THREE.MeshLambertMaterial( { map: stone, transparent: true } );
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
-  var material4 = new THREE.MeshLambertMaterial( { map: targetSprite, transparent: true } );
+  var material4 = new THREE.MeshLambertMaterial( { map: targetSprite, transparent: false } );
  
   sprite = new THREE.Sprite(material3);
   sprite.scale.set(32, 64, 32);
@@ -100,8 +100,8 @@ var setupThreeScene= function (game) {
 };
 
 var UpdateThreeScene = function (player) {
-  ThreeCamera.position.x = player.x;
-  ThreeCamera.position.z = player.y + 120;
+  ThreeCamera.position.x = player.x - 120 * Math.cos(player.cameraAngle);
+  ThreeCamera.position.z = player.y - 120 * Math.sin(player.cameraAngle);
   ThreeCamera.lookAt(player.x, 0, player.y);
 
   sprite.position.set(player.x, 48, player.y - 16);
