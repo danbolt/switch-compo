@@ -107,7 +107,7 @@ var UpdateThreeScene = function (player) {
   sprite.position.set(player.x, 48, player.y - 16);
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
-  sprite.scale.set(player.animations.currentAnim.name === 'run_right' ? -32 : 32, 64, 32);
+  sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' ? -32 : 32, 64, 32);
 
   target.position.set(player.targetPt.x, 16, player.targetPt.y);
   target.rotation.y = player.targetPt.rotation;
