@@ -10,7 +10,7 @@ var target = null;
 
 var setupThree = function () {
   ThreeScene = new THREE.Scene();
-  ThreeCamera = new THREE.PerspectiveCamera( 75, 320 / 240, 0.1, 1000 );
+  ThreeCamera = new THREE.PerspectiveCamera( 80, 320 / 240, 0.1, 1000 );
   ThreeRenderer = new THREE.WebGLRenderer( { alpha: false } );
   ThreeRenderer.setSize(320, 240);
 
@@ -101,8 +101,8 @@ var setupThreeScene= function (game) {
 
 var UpdateThreeScene = function (player) {
   ThreeCamera.position.x = player.x - 120 * Math.cos(player.cameraAngle);
-  ThreeCamera.position.z = player.y - 120 * Math.sin(player.cameraAngle);
-  ThreeCamera.lookAt(player.x, 0, player.y);
+  ThreeCamera.position.z = player.y - 16 - 120 * Math.sin(player.cameraAngle);
+  ThreeCamera.lookAt(player.x, 16, player.y - 16);
 
   sprite.position.set(player.x, 48, player.y - 16);
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
