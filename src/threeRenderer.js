@@ -5,8 +5,18 @@ var ThreeScene = null;
 var ThreeCamera = null;
 var ThreeRenderer = null;
 
+var JesseSheetTexture = null;
+
 var sprite = null; // TODO: rename me
 var target = null;
+var wolves = null;
+
+var loadThreeTextures = function () {
+  var tl = new THREE.TextureLoader();
+  tl.load('asset/img/finalrenderfordaniel1.png', function (loadedTexture) {
+    JesseSheetTexture = loadedTexture;
+  });
+};
 
 var setupThree = function () {
   ThreeScene = new THREE.Scene();
@@ -28,35 +38,38 @@ var setupThree = function () {
   ThreeCamera.position.y = 130;
 };
 
-var setupThreeScene= function (game) {
-  var tl = new THREE.TextureLoader();
-  var grass = tl.load('asset/img/finalrenderfordaniel1.png' );
+var setupThreeScene= function (game, wolves) {
+  var grass = JesseSheetTexture.clone();
+  grass.needsUpdate = true;
   grass.magFilter = THREE.NearestFilter;
-  grass.minFilter = THREE.LinearMipMapLinearFilter;
+  grass.minFilter = THREE.NearestFilter;
   grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
   grass.repeat.set(32 / 256, 32 / 256);
   grass.offset.x = 6 / 8;
   grass.offset.y = 1 / 8;
 
-  var stone = tl.load('asset/img/finalrenderfordaniel1.png' );
+  var stone = JesseSheetTexture.clone();
+  stone.needsUpdate = true;
   stone.magFilter = THREE.NearestFilter;
-  stone.minFilter = THREE.LinearMipMapLinearFilter;
+  stone.minFilter = THREE.NearestFilter;
   stone.wrapS = grass.wrapT = THREE.RepeatWrapping;
   stone.repeat.set(32 / 256, 32 / 256);
   stone.offset.x = 4 / 8;
   stone.offset.y = 6 / 8;
 
-  var playerSprite = tl.load('asset/img/finalrenderfordaniel1.png' );
+  var playerSprite = JesseSheetTexture.clone();
+  playerSprite.needsUpdate = true;
   playerSprite.magFilter = THREE.NearestFilter;
-  playerSprite.minFilter = THREE.LinearMipMapLinearFilter;
+  playerSprite.minFilter = THREE.NearestFilter;
   playerSprite.wrapS = grass.wrapT = THREE.RepeatWrapping;
   playerSprite.repeat.set(32 / 256, 64 / 256);
   playerSprite.offset.x = 0 / 8;
   playerSprite.offset.y = 3 / 4;
 
-  var targetSprite = tl.load('asset/img/finalrenderfordaniel1.png' );
+  var targetSprite = JesseSheetTexture.clone();
+  targetSprite.needsUpdate = true;
   targetSprite.magFilter = THREE.NearestFilter;
-  targetSprite.minFilter = THREE.LinearMipMapLinearFilter;
+  targetSprite.minFilter = THREE.NearestFilter;
   targetSprite.wrapS = grass.wrapT = THREE.RepeatWrapping;
   targetSprite.repeat.set(32 / 256, 32 / 256);
   targetSprite.offset.x = 0 / 8;
@@ -97,6 +110,13 @@ var setupThreeScene= function (game) {
       	}
       }
   }
+
+  wolves.children.forEach(function (w) {
+    var sprite = new THREE.Sprite(material3);
+    sprite.position.set(w.x, 48, w.z);
+    sprite.scale.set(32, 64, 32);
+    ThreeScene.add(sprite);
+  }, this);
 };
 
 var UpdateThreeScene = function (player) {

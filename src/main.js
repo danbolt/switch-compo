@@ -33,8 +33,6 @@ Preload.prototype.preload = function() {
   this.game.load.tilemap('level1', 'asset/map/map1.json', undefined, Phaser.Tilemap.TILED_JSON);
 };
 Preload.prototype.create = function() {
-  this.game.state.start('Gameplay');
-
   this.game.scale.onSizeChange.add(function () {
     var cv = this.game.canvas;
     this.game.canvas = ThreeJSCanvas;
@@ -46,8 +44,15 @@ Preload.prototype.create = function() {
   this.game.canvas = ThreeJSCanvas;
   this.game.scale.reflowCanvas();
   this.game.canvas = cv;
-};
 
+  // move this to loader later
+  loadThreeTextures();
+};
+Preload.prototype.update = function () {
+  if (JesseSheetTexture !== null) {
+    this.game.state.start('Gameplay');
+  }
+};
 
 
 var main = function () {
