@@ -7,6 +7,8 @@ var ThreeRenderer = null;
 
 var JesseSheetTexture = null;
 
+var GameplayCameraAngle = 0;
+
 var sprite = null; // TODO: rename me
 var target = null;
 var wolves = null;
@@ -112,16 +114,32 @@ var setupThreeScene= function (game, wolves) {
   }
 
   wolves.children.forEach(function (w) {
-    var sprite = new THREE.Sprite(material3);
-    sprite.position.set(w.x, 48, w.z);
+    var wolfSpriteTexture = JesseSheetTexture.clone();
+    wolfSpriteTexture.needsUpdate = true;
+    wolfSpriteTexture.magFilter = THREE.NearestFilter;
+    wolfSpriteTexture.minFilter = THREE.NearestFilter;
+    wolfSpriteTexture.wrapS = grass.wrapT = THREE.RepeatWrapping;
+    wolfSpriteTexture.repeat.set(32 / 256, 64 / 256);
+    wolfSpriteTexture.offset.x = 0 / 8;
+    wolfSpriteTexture.offset.y = 3 / 4;
+
+    var wolfSpriteMaterial = new THREE.SpriteMaterial( {fog: true, map: wolfSpriteTexture });
+    wolfSpriteMaterial.color = new THREE.Color(0xDD4444);
+
+    var sprite = new THREE.Sprite(wolfSpriteMaterial);
+    sprite.position.set(w.x, 48, w.y);
     sprite.scale.set(32, 64, 32);
     ThreeScene.add(sprite);
+
+    w.data.threeTexture = wolfSpriteTexture;
+    w.data.threeMaterial = wolfSpriteMaterial;
+    w.data.threeSprite = sprite;
   }, this);
 };
 
-var UpdateThreeScene = function (player) {
-  ThreeCamera.position.x = player.x - 120 * Math.cos(player.cameraAngle);
-  ThreeCamera.position.z = player.y - 16 - 120 * Math.sin(player.cameraAngle);
+var UpdateThreeScene = function (player, wolves) {
+  ThreeCamera.position.x = player.x - 120 * Math.cos(GameplayCameraAngle);
+  ThreeCamera.position.z = player.y - 16 - 120 * Math.sin(GameplayCameraAngle);
   ThreeCamera.lookAt(player.x, 16, player.y - 16);
 
   sprite.position.set(player.x, 48, player.y - 16);
@@ -132,5 +150,10 @@ var UpdateThreeScene = function (player) {
   target.position.set(player.targetPt.x, 16, player.targetPt.y);
   target.rotation.y = player.targetPt.rotation;
   target.visible = player.targetPt.alive;
+
+  wolves.forEach(function (w) {
+    w.data.threeSprite.material.map.offset.x = (w.animations.frame % 8) / 8;
+    w.data.threeSprite.material.map.offset.y = (3 - ~~(w.animations.frame / 8)) / 4;
+  });
 };
 

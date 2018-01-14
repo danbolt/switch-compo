@@ -10,8 +10,6 @@ var PlayerState = {
 var Player = function(game, x, y) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
 
-  this.cameraAngle = 0.0;
-
   this.animations.add('run_right', [2, 10, 18, 26], 8, true);
   this.animations.add('run_down', [8, 0, 16, 0], 8, true);
   this.animations.add('run_left', [2, 10, 18, 26], 8, true);
@@ -106,19 +104,19 @@ Player.prototype.update = function() {
   }
 
   if (this.game.input.keyboard.isDown(Phaser.KeyCode.Q)) {
-    this.cameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed;
+    GameplayCameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed;
 
-    if (this.cameraAngle < -Math.PI) { this.cameraAngle = Math.PI; }
+    if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
   } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.E)) {
-    this.cameraAngle += this.cameraMoveSpeed * this.game.time.elapsed;
+    GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed;
 
-    if (this.cameraAngle > Math.PI) { this.cameraAngle = -Math.PI; }
+    if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
   }
 
   var moving = (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01);
   if (moving) {
     this.facingDirection.set(inputX, inputY);
-    this.facingDirection.rotate(0, 0, this.cameraAngle + Math.PI / 2);
+    this.facingDirection.rotate(0, 0, GameplayCameraAngle + Math.PI / 2);
     this.facingDirection.normalize();
   }
 
@@ -145,7 +143,7 @@ Player.prototype.update = function() {
   }
 
   // update animations
-  var theta = Math.atan2(this.facingDirection.y, this.facingDirection.x) - this.cameraAngle - Math.PI * 0.5;
+  var theta = Math.atan2(this.facingDirection.y, this.facingDirection.x) - GameplayCameraAngle - Math.PI * 0.5;
   if (theta > Math.PI) { theta -= Math.PI * 2; }
   if (theta < -Math.PI) { theta += Math.PI * 2; }
   if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
@@ -185,12 +183,13 @@ var Wolf = function (game, x, y, player) {
   this.kill();
 
   this.events.onRevived.add(function () {
-    console.log('spawned!');
+    //
   }, this);
 
 
   this.events.onKilled.add(function() {
     console.log('died!');
+    this.data.threeSprite.visible = false;
   }, this);
 };
 Wolf.prototype = Object.create(Phaser.Sprite.prototype);
@@ -199,21 +198,25 @@ Wolf.prototype.update = function () {
 
   // DEBUG
   var theta = this.position.angle(this.player.position);
-  if (theta < 0) { theta += Math.PI * 2; }
   this.facing = theta;
 
-  if (theta < Math.PI * 0.25 || theta > Math.PI * 1.75) {
-    this.frame = 2;
-    this.scale.x = -1;
-  } else if (theta > Math.PI * 0.25 && theta < Math.PI * 0.75) {
+  // adjust for camera
+  theta = theta - GameplayCameraAngle - Math.PI * 0.5;
+  if (theta > Math.PI) { theta -= Math.PI * 2; }
+  if (theta < -Math.PI) { theta += Math.PI * 2; }
+
+  if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
     this.frame = 0;
-    this.scale.x = 1;
-  } else if (theta > Math.PI * 0.75 && theta < Math.PI * 1.25) {
+    this.data.threeSprite.scale.x = 32;
+  } else if (Math.abs(theta) > Math.PI * 0.75) {
     this.frame = 2;
-    this.scale.x = 1;
-  } else {
+    this.data.threeSprite.scale.x = 32;
+  } else if (Math.abs(theta) < Math.PI * 0.25) {
+    this.frame = 2;
+    this.data.threeSprite.scale.x = -32;
+  } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
     this.frame = 1;
-    this.scale.x = 1;
+    this.data.threeSprite.scale.x = 32;
   }
 };
 
@@ -242,12 +245,17 @@ Gameplay.prototype.create = function() {
   this.player.targetPt.renderable = false;
 
   this.wolves = this.game.add.group();
-  var wolf = this.game.add.existing(new Wolf(this.game, 120, 200, this.player));
+  var wolf = this.game.add.existing(new Wolf(this.game, 64, 64, this.player));
   this.wolves.addChild(wolf);
   this.wolves.addToHash(wolf);
   wolf.renderable = false;
+  var wolf2 = this.game.add.existing(new Wolf(this.game, 96, 128, this.player));
+  this.wolves.addChild(wolf2);
+  this.wolves.addToHash(wolf2);
+  wolf2.renderable = false;
 
   wolf.revive();
+  wolf2.revive();
   
   this.game.add.bitmapText(32, 32, 'font', 'wasd + q/e', 8);
 
@@ -263,7 +271,7 @@ Gameplay.prototype.update = function() {
   }
 };
 Gameplay.prototype.preRender = function () {
-  UpdateThreeScene(this.player);
+  UpdateThreeScene(this.player, this. wolves);
 
   ThreeRenderer.render(ThreeScene, ThreeCamera);
 };
