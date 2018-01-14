@@ -159,6 +159,7 @@ var UpdateThreeScene = function (player, wolves) {
   wolves.forEach(function (w) {
     w.data.threeSprite.material.map.offset.x = (w.animations.frame % 8) / 8;
     w.data.threeSprite.material.map.offset.y = (3 - ~~(w.animations.frame / 8)) / 4;
+    w.data.threeSprite.position.set(w.x, 48, w.y - 16);
   });
 };
 
