@@ -249,7 +249,7 @@ Gameplay.prototype.create = function() {
   this.wolves.addChild(wolf);
   this.wolves.addToHash(wolf);
   wolf.renderable = false;
-  var wolf2 = this.game.add.existing(new Wolf(this.game, 96, 128, this.player));
+  var wolf2 = this.game.add.existing(new Wolf(this.game, 96, 400, this.player));
   this.wolves.addChild(wolf2);
   this.wolves.addToHash(wolf2);
   wolf2.renderable = false;
@@ -257,7 +257,7 @@ Gameplay.prototype.create = function() {
   wolf.revive();
   wolf2.revive();
   
-  this.game.add.bitmapText(32, 32, 'font', 'wasd + q/e', 8);
+  this.game.add.bitmapText(32, 32, 'font', 'scene 2', 8);
 
   setupThreeScene(this.game, this.wolves);
 };
@@ -269,10 +269,10 @@ Gameplay.prototype.update = function() {
       wolf.kill();
     }, undefined, this);
   }
+
+  UpdateThreeScene(this.player, this. wolves);
 };
 Gameplay.prototype.preRender = function () {
-  UpdateThreeScene(this.player, this. wolves);
-
   ThreeRenderer.render(ThreeScene, ThreeCamera);
 };
 Gameplay.prototype.shutdown = function() {

@@ -35,6 +35,11 @@ var setupThree = function () {
   var directional = new THREE.DirectionalLight(0xFFFFFF, 0.3);
   ThreeScene.add(directional);
 
+  var backgroundColor = new THREE.Color( 0x3a4d51 );
+  //ThreeScene.fog = new THREE.Fog(backgroundColor, 0.1, 1000);
+  ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.003);
+  ThreeScene.background = backgroundColor;
+
   ThreeCamera.position.x = 100;
   ThreeCamera.position.z = 250;
   ThreeCamera.position.y = 130;
