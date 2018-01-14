@@ -56,7 +56,7 @@ Preload.prototype.update = function () {
 
 
 var main = function () {
-	console.log('hello, jam! 😊');
+	console.log('hello, jam! ✌✨✨❤️');
 
   setupThree();
 
