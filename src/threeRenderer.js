@@ -19,16 +19,20 @@ var loadThreeTextures = function () {
   tl.load('asset/img/finalrenderfordaniel1.png', function (loadedTexture) {
     JesseSheetTexture = loadedTexture;
 
+    // create a hash table of materials for each block texture
     for (var x = 0; x < JesseSheetTexture.image.width / 32; x++) {
       for (var y = 0; y < JesseSheetTexture.image.height / 32; y++) {
         var texture = JesseSheetTexture.clone();
         texture.needsUpdate = true;
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(32 / JesseSheetTexture.image.width, 32 / JesseSheetTexture.image.height);
         texture.offset.x = (x - 1) / (JesseSheetTexture.image.width / 32);
         texture.offset.y = ((JesseSheetTexture.image.height / 32 - 1) - y) / (JesseSheetTexture.image.height / 32);
+
+        
         var material = new THREE.MeshLambertMaterial( { map: texture, transparent: true } );
         TileMaterialMap[(x + (y * (JesseSheetTexture.image.width / 32)))] = material;
       }
