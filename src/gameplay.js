@@ -40,11 +40,15 @@ Gameplay.prototype.create = function() {
   
   this.game.add.bitmapText(32, 32, 'font', 'scene 2', 8);
 
-  setupThreeScene(this.game, this.wolves);
+  setupThreeScene(this.game, this.player, this.wolves);
 };
 Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground);
   this.game.physics.arcade.collide(this.wolves, this.foreground);
+
+  this.game.physics.arcade.overlap(this.player, this.wolves, function (player, wolf) {
+    player.kill();
+  }, undefined, this);
 
   if (this.player.currentState === PlayerState.ATTACK) {
     this.game.physics.arcade.overlap(this.player.targetPt, this.wolves, function (target, wolf) {

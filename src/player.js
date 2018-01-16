@@ -36,6 +36,10 @@ var Player = function(game, x, y) {
   this.currentState = PlayerState.MOVING;
   this.facingDirection = new Phaser.Point(0.0, 1.0);
 
+  this.events.onKilled.add(function() {
+    this.data.threeSprite.visible = false;
+  }, this);
+
   this.targetPt = this.game.add.sprite(32, 32, 'jesseSheet1_32x32', 27);
   this.targetPt.tint = 0xFF4466;
   this.targetPt.anchor.set(0.5, 0.5);

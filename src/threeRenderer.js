@@ -45,7 +45,7 @@ var setupThree = function () {
   ThreeCamera.position.y = 130;
 };
 
-var setupThreeScene= function (game, wolves) {
+var setupThreeScene= function (game, player, wolves) {
   var grass = JesseSheetTexture.clone();
   grass.needsUpdate = true;
   grass.magFilter = THREE.NearestFilter;
@@ -92,6 +92,7 @@ var setupThreeScene= function (game, wolves) {
   sprite = new THREE.Sprite(material3);
   sprite.scale.set(32, 64, 32);
   ThreeScene.add(sprite);
+  player.data.threeSprite = sprite;
 
   target = new THREE.Mesh(sphere, material4);
   ThreeScene.add(target);
