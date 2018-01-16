@@ -6,6 +6,7 @@ var ThreeCamera = null;
 var ThreeRenderer = null;
 
 var JesseSheetTexture = null;
+var TileMaterialMap = {};
 
 var GameplayCameraAngle = 0;
 
@@ -17,6 +18,21 @@ var loadThreeTextures = function () {
   var tl = new THREE.TextureLoader();
   tl.load('asset/img/finalrenderfordaniel1.png', function (loadedTexture) {
     JesseSheetTexture = loadedTexture;
+
+    for (var x = 0; x < JesseSheetTexture.image.width / 32; x++) {
+      for (var y = 0; y < JesseSheetTexture.image.height / 32; y++) {
+        var texture = JesseSheetTexture.clone();
+        texture.needsUpdate = true;
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(32 / JesseSheetTexture.image.width, 32 / JesseSheetTexture.image.height);
+        texture.offset.x = (x - 1) / (JesseSheetTexture.image.width / 32);
+        texture.offset.y = ((JesseSheetTexture.image.height / 32 - 1) - y) / (JesseSheetTexture.image.height / 32);
+        var material = new THREE.MeshLambertMaterial( { map: texture, transparent: true } );
+        TileMaterialMap[(x + (y * (JesseSheetTexture.image.width / 32)))] = material;
+      }
+    }
   });
 };
 
@@ -46,29 +62,11 @@ var setupThree = function () {
 };
 
 var setupThreeScene= function (game, player, wolves) {
-  var grass = JesseSheetTexture.clone();
-  grass.needsUpdate = true;
-  grass.magFilter = THREE.NearestFilter;
-  grass.minFilter = THREE.NearestFilter;
-  grass.wrapS = grass.wrapT = THREE.RepeatWrapping;
-  grass.repeat.set(32 / 256, 32 / 256);
-  grass.offset.x = 6 / 8;
-  grass.offset.y = 1 / 8;
-
-  var stone = JesseSheetTexture.clone();
-  stone.needsUpdate = true;
-  stone.magFilter = THREE.NearestFilter;
-  stone.minFilter = THREE.NearestFilter;
-  stone.wrapS = grass.wrapT = THREE.RepeatWrapping;
-  stone.repeat.set(32 / 256, 32 / 256);
-  stone.offset.x = 4 / 8;
-  stone.offset.y = 6 / 8;
-
   var playerSprite = JesseSheetTexture.clone();
   playerSprite.needsUpdate = true;
   playerSprite.magFilter = THREE.NearestFilter;
   playerSprite.minFilter = THREE.NearestFilter;
-  playerSprite.wrapS = grass.wrapT = THREE.RepeatWrapping;
+  playerSprite.wrapS = playerSprite.wrapT = THREE.RepeatWrapping;
   playerSprite.repeat.set(32 / 256, 64 / 256);
   playerSprite.offset.x = 0 / 8;
   playerSprite.offset.y = 3 / 4;
@@ -77,15 +75,13 @@ var setupThreeScene= function (game, player, wolves) {
   targetSprite.needsUpdate = true;
   targetSprite.magFilter = THREE.NearestFilter;
   targetSprite.minFilter = THREE.NearestFilter;
-  targetSprite.wrapS = grass.wrapT = THREE.RepeatWrapping;
+  targetSprite.wrapS = targetSprite.wrapT = THREE.RepeatWrapping;
   targetSprite.repeat.set(32 / 256, 32 / 256);
   targetSprite.offset.x = 0 / 8;
   targetSprite.offset.y = 0 / 8;
 
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
   var sphere = new THREE.SphereGeometry(32, 3, 3);
-  var material = new THREE.MeshLambertMaterial( { map: grass, transparent: true } );
-  var material2 = new THREE.MeshLambertMaterial( { map: stone, transparent: true } );
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
   var material4 = new THREE.MeshLambertMaterial( { map: targetSprite, transparent: false } );
  
@@ -105,14 +101,14 @@ var setupThreeScene= function (game, player, wolves) {
       for (var ty = 0; ty < map.height; ty++) {
       	var tile = map.getTile(tx, ty, background);
       	if (tile) {
-      	  var cube = new THREE.Mesh( geometry, material );
+      	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 0, ty * 32 + 16);
       	}
       	
       	var tile = map.getTile(tx, ty, foreground);
       	if (tile) {
-      	  var cube = new THREE.Mesh( geometry, material2 );
+      	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
       	}
@@ -124,7 +120,7 @@ var setupThreeScene= function (game, player, wolves) {
     wolfSpriteTexture.needsUpdate = true;
     wolfSpriteTexture.magFilter = THREE.NearestFilter;
     wolfSpriteTexture.minFilter = THREE.NearestFilter;
-    wolfSpriteTexture.wrapS = grass.wrapT = THREE.RepeatWrapping;
+    wolfSpriteTexture.wrapS = wolfSpriteTexture.wrapT = THREE.RepeatWrapping;
     wolfSpriteTexture.repeat.set(32 / 256, 64 / 256);
     wolfSpriteTexture.offset.x = 0 / 8;
     wolfSpriteTexture.offset.y = 3 / 4;
