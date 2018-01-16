@@ -13,6 +13,7 @@ const WolfSightRadius = 128;
 const WolfPauseTime = 300;
 const WolfLeapSpeed = 400;
 const WolfLeapTime = 180;
+const WolfDazeTime = 500;
 
 var Wolf = function (game, x, y, player, pathSetup, nodeMap) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
@@ -34,6 +35,7 @@ var Wolf = function (game, x, y, player, pathSetup, nodeMap) {
 
   this.currentState = WolfState.PATROL;
   this.player = player;
+  this.nextEvent = null;
 
   this.kill();
 
@@ -58,6 +60,35 @@ Wolf.prototype.isPlayerInSight = function () {
 
   return false;
 };
+Wolf.prototype.removeNextEvent = function () {
+  if (this.nextEvent !== null) {
+    this.game.time.events.remove(this.nextEvent);
+    this.nextEvent = null;
+  }
+};
+Wolf.prototype.confuse = function () {
+  this.removeNextEvent();
+
+  this.currentState = WolfState.CONFUSED;
+  this.nextEvent = this.game.time.events.add(WolfDazeTime, function () {
+    this.removeNextEvent();
+
+    this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
+  }, this);
+};
+Wolf.prototype.leapFunc = function () {
+  if (this.isPlayerInSight()) {
+    this.currentState = WolfState.LEAPING;
+    this.facing = this.position.angle(this.player.position);
+
+    this.nextEvent = this.game.time.events.add(WolfLeapTime, function () {
+      this.currentState = WolfState.ALERT;
+      this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
+    }, this);
+  } else {
+    this.currentState = WolfState.PATROL;
+  }
+};
 Wolf.prototype.update = function () {
 
   if (this.currentState === WolfState.PATROL) {
@@ -71,27 +102,16 @@ Wolf.prototype.update = function () {
 
     if (this.isPlayerInSight()) {
       this.currentState = WolfState.ALERT;
-
-      var leapFunc = function () {
-        if (this.isPlayerInSight()) {
-          this.currentState = WolfState.LEAPING;
-          this.facing = this.position.angle(this.player.position);
-
-          this.game.time.events.add(WolfLeapTime, function () {
-            this.currentState = WolfState.ALERT;
-            this.game.time.events.add(WolfPauseTime, leapFunc, this);
-          }, this);
-        } else {
-          this.currentState = WolfState.PATROL;
-        }
-      };
-      this.game.time.events.add(WolfPauseTime, leapFunc, this);
+      this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
     }
   } else if (this.currentState === WolfState.ALERT) {
     this.body.velocity.set(0);
   } else if (this.currentState === WolfState.LEAPING) {
     this.body.velocity.set(WolfLeapSpeed * Math.cos(this.facing), WolfLeapSpeed * Math.sin(this.facing));
+  } else if (this.currentState === WolfState.CONFUSED) {
+    this.body.velocity.set(0);
   }
+
 
   // determine our sprite direction
   var theta = this.facing - GameplayCameraAngle - Math.PI * 0.5;

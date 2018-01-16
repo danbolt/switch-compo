@@ -52,7 +52,7 @@ Gameplay.prototype.update = function() {
 
   if (this.player.currentState === PlayerState.ATTACK) {
     this.game.physics.arcade.overlap(this.player.targetPt, this.wolves, function (target, wolf) {
-      wolf.kill();
+      wolf.confuse();
     }, undefined, this);
   }
 
