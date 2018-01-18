@@ -15,12 +15,16 @@ const WolfLeapSpeed = 400;
 const WolfLeapTime = 180;
 const WolfDazeTime = 500;
 
-var Wolf = function (game, x, y, player, pathSetup, nodeMap) {
+var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow, foregroundHigh) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
 
   this.tint = 0xFF0000;
 
   this.facing = 0.0;
+
+  this.map = map;
+  this.foregroundLow = foregroundLow;
+  this.foregroundHigh = foregroundHigh;
 
   this.currentPatrolNode = 0;
   this.patrolPath = [];
@@ -54,7 +58,12 @@ Wolf.prototype.isPlayerInSight = function () {
   var angleToPlayer = this.position.angle(this.player.position);
   if (Math.abs(Phaser.Math.getShortestAngle(angleToPlayer * Phaser.Math.RAD_TO_DEG, this.facing * Phaser.Math.RAD_TO_DEG) * Phaser.Math.DEG_TO_RAD) < WolfSightAngle) {
     if (this.position.distance(this.player.position) < WolfSightRadius) {
-      return true;
+      var testLine = new Phaser.Line(this.x, this.y, this.player.x, this.player.y);
+      var layerToCheck = this.player.crouch ? this.foregroundLow : this.foregroundHigh;
+
+      if (true) {
+        return true;
+      }
     }
   }
 

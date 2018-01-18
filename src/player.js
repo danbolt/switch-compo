@@ -35,6 +35,7 @@ var Player = function(game, x, y) {
 
   this.currentState = PlayerState.MOVING;
   this.facingDirection = new Phaser.Point(0.0, 1.0);
+  this.isCrouching = false;
 
   this.events.onKilled.add(function() {
     this.data.threeSprite.visible = false;
@@ -77,6 +78,7 @@ var Player = function(game, x, y) {
   }, this);
 
   // dash logic
+  /*
   this.game.input.keyboard.addKey(Phaser.KeyCode.C).onDown.add(function () {
     if (this.currentState === PlayerState.MOVING) {
       this.currentState = PlayerState.DASH;
@@ -88,6 +90,7 @@ var Player = function(game, x, y) {
       }, this);
     }
   }, this);
+  */
 };
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
@@ -117,6 +120,12 @@ Player.prototype.update = function() {
     if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
   }
 
+  if (this.game.input.keyboard.isDown(Phaser.KeyCode.C)) {
+    this.crouching = true;
+  } else {
+    this.crouching = false;
+  }
+
   var moving = (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01);
   if (moving) {
     this.facingDirection.set(inputX, inputY);
@@ -125,7 +134,7 @@ Player.prototype.update = function() {
   }
 
   if (this.currentState === PlayerState.MOVING) {
-    if (moving) {
+    if (moving && this.crouching === false) {
       this.body.velocity.set(this.walkSpeed * this.facingDirection.x, this.walkSpeed * this.facingDirection.y);
     } else {
       this.body.velocity.set(0);

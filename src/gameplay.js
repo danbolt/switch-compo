@@ -11,6 +11,7 @@ Gameplay.prototype.create = function() {
   this.map.addTilesetImage('set1', 'jesseSheet1_tile');
   this.background = this.map.createLayer('Background');
   this.foreground = this.map.createLayer('Foreground');
+  this.highForeground = this.map.createLayer('HighForeground');
   this.foreground.resizeWorld();
   this.map.setCollisionByExclusion([0], true, this.foreground);
   this.game.physics.enable(this.foreground, Phaser.Physics.ARCADE);
@@ -23,6 +24,7 @@ Gameplay.prototype.create = function() {
 
   this.background.renderable = false;
   this.foreground.renderable = false;
+  this.highForeground.renderable = false;
 
   this.player = this.game.add.existing(new Player(this.game, 100, 100));
   this.player.renderable = false;
@@ -31,7 +33,7 @@ Gameplay.prototype.create = function() {
   this.wolves = this.game.add.group();
 
   this.map.objects.wolves.forEach(function (wolfData) {
-    var wolf = this.game.add.existing(new Wolf(this.game, wolfData.x, wolfData.y, this.player, wolfData.properties.patrolPath, this.nodeMap));
+    var wolf = this.game.add.existing(new Wolf(this.game, wolfData.x, wolfData.y, this.player, wolfData.properties.patrolPath, this.nodeMap, this.map, this.foreground, this.highForeground));
     this.wolves.addChild(wolf);
     this.wolves.addToHash(wolf);
     wolf.revive();

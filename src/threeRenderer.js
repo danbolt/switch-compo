@@ -102,6 +102,7 @@ var setupThreeScene= function (game, player, wolves) {
   var map = game.state.getCurrentState().map;
   var background = game.state.getCurrentState().background;
   var foreground = game.state.getCurrentState().foreground;
+  var foreground2 = game.state.getCurrentState().highForeground;
   for (var tx = 0; tx < map.width; tx++) {
       for (var ty = 0; ty < map.height; ty++) {
       	var tile = map.getTile(tx, ty, background);
@@ -116,6 +117,14 @@ var setupThreeScene= function (game, player, wolves) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
+        }
+          
+        var tile = map.getTile(tx, ty, foreground2);
+      	if (tile) {
+      	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
+      	  ThreeScene.add(cube);
+      	  cube.position.set(tx * 32 + 16, 64, ty * 32 + 16);
+ 
       	}
       }
   }
@@ -149,7 +158,7 @@ var UpdateThreeScene = function (player, wolves) {
   ThreeCamera.position.z = player.y - 16 - GameplayCameraDistance * Math.sin(GameplayCameraAngle);
   ThreeCamera.lookAt(player.x, 16, player.y - 16);
 
-  sprite.position.set(player.x, 48, player.y - 16);
+  sprite.position.set(player.x, 48 + (player.crouching ? -20 : 0), player.y - 16);
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
   sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' ? -32 : 32, 64, 32);
