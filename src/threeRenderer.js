@@ -8,6 +8,7 @@ var ThreeRenderer = null;
 var JesseSheetTexture = null;
 var TileMaterialMap = {};
 
+var GameplayCameraDistance = 120;
 var GameplayCameraAngle = 0;
 
 var sprite = null; // TODO: rename me
@@ -144,8 +145,8 @@ var setupThreeScene= function (game, player, wolves) {
 };
 
 var UpdateThreeScene = function (player, wolves) {
-  ThreeCamera.position.x = player.x - 120 * Math.cos(GameplayCameraAngle);
-  ThreeCamera.position.z = player.y - 16 - 120 * Math.sin(GameplayCameraAngle);
+  ThreeCamera.position.x = player.x - GameplayCameraDistance * Math.cos(GameplayCameraAngle);
+  ThreeCamera.position.z = player.y - 16 - GameplayCameraDistance * Math.sin(GameplayCameraAngle);
   ThreeCamera.lookAt(player.x, 16, player.y - 16);
 
   sprite.position.set(player.x, 48, player.y - 16);
