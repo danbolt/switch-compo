@@ -58,16 +58,19 @@ Wolf.prototype.isPlayerInSight = function () {
   var angleToPlayer = this.position.angle(this.player.position);
   if (Math.abs(Phaser.Math.getShortestAngle(angleToPlayer * Phaser.Math.RAD_TO_DEG, this.facing * Phaser.Math.RAD_TO_DEG) * Phaser.Math.DEG_TO_RAD) < WolfSightAngle) {
     if (this.position.distance(this.player.position) < WolfSightRadius) {
-      var testLine = new Phaser.Line(this.x, this.y, this.player.x, this.player.y);
-      var layerToCheck = this.player.crouch ? this.foregroundLow : this.foregroundHigh;
+        var testLine = new Phaser.Line(this.x, this.y, this.player.x, this.player.y);
+        var layerToTest = this.player.crouching ? this.foregroundLow : this.foregroundHigh;
 
-      if (true) {
+        if (layerToTest.getRayCastTiles(testLine, 16, true).length > 0) {
+          return false;
+        }
+
         return true;
       }
     }
-  }
 
-  return false;
+    return false;
+
 };
 Wolf.prototype.removeNextEvent = function () {
   if (this.nextEvent !== null) {

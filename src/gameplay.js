@@ -14,6 +14,7 @@ Gameplay.prototype.create = function() {
   this.highForeground = this.map.createLayer('HighForeground');
   this.foreground.resizeWorld();
   this.map.setCollisionByExclusion([0], true, this.foreground);
+  this.map.setCollisionByExclusion([0], true, this.highForeground);
   this.game.physics.enable(this.foreground, Phaser.Physics.ARCADE);
 
   // get path nodes
