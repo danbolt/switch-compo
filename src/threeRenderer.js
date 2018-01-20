@@ -87,6 +87,7 @@ var setupThreeScene= function (game, player, wolves) {
 
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
   var sphere = new THREE.SphereGeometry(32, 3, 3);
+  var circle = new THREE.CircleGeometry(64, 8);
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
   var material4 = new THREE.MeshLambertMaterial( { map: targetSprite, transparent: false } );
  
@@ -97,6 +98,9 @@ var setupThreeScene= function (game, player, wolves) {
 
   target = new THREE.Mesh(sphere, material4);
   ThreeScene.add(target);
+  target.add(new THREE.Mesh(circle, material4));
+  target.children[0].position.y = 2;
+  target.children[0].rotation.x = Math.PI * -0.5;
 
   // populate small tilemap
   var map = game.state.getCurrentState().map;
