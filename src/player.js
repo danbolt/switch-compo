@@ -78,20 +78,62 @@ var Player = function(game, x, y) {
     }
   }, this);
 
-  // dash logic
-  /*
   this.game.input.keyboard.addKey(Phaser.KeyCode.C).onDown.add(function () {
-    if (this.currentState === PlayerState.MOVING) {
-      this.currentState = PlayerState.DASH;
-      this.body.velocity.set(this.facingDirection.x * this.dashSpeed, this.facingDirection.y * this.dashSpeed);
-
-      this.game.time.events.add(this.dashTime, function () {
-        this.currentState = PlayerState.MOVING;
-        this.body.velocity.set(0);
-      }, this);
+    if (GameplayFovChangeTween !== null) {
+      GameplayFovChangeTween.stop();
+      GameplayFovChangeTween = null;
     }
+
+    GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
+    GameplayFovChangeTween.to( { fov: GameplayCrouchingFov, zDist: 300, yDist: 120 }, 500, Phaser.Easing.Linear.None);
+    GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
+      ThreeCamera.fov = GameplayCameraData.fov;
+      ThreeCamera.updateProjectionMatrix();
+    }, this);
+    GameplayFovChangeTween.start();
   }, this);
-  */
+  this.game.input.keyboard.addKey(Phaser.KeyCode.C).onUp.add(function () {
+    if (GameplayFovChangeTween !== null) {
+      GameplayFovChangeTween.stop();
+      GameplayFovChangeTween = null;
+    }
+
+    GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
+    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 500, Phaser.Easing.Linear.None);
+    GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
+      ThreeCamera.fov = GameplayCameraData.fov;
+      ThreeCamera.updateProjectionMatrix();
+    }, this);
+    GameplayFovChangeTween.start();
+  }, this);
+  this.game.input.keyboard.addKey(Phaser.KeyCode.X).onDown.add(function () {
+    if (GameplayFovChangeTween !== null) {
+      GameplayFovChangeTween.stop();
+      GameplayFovChangeTween = null;
+    }
+
+    GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
+    GameplayFovChangeTween.to( { fov: GameplayPSIFov, zDist: 120, yDist: 340 }, 1000, Phaser.Easing.Linear.None);
+    GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
+      ThreeCamera.fov = GameplayCameraData.fov;
+      ThreeCamera.updateProjectionMatrix();
+    }, this);
+    GameplayFovChangeTween.start();
+  }, this);
+  this.game.input.keyboard.addKey(Phaser.KeyCode.X).onUp.add(function () {
+    if (GameplayFovChangeTween !== null) {
+      GameplayFovChangeTween.stop();
+      GameplayFovChangeTween = null;
+    }
+
+    GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
+    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 750, Phaser.Easing.Linear.None);
+    GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
+      ThreeCamera.fov = GameplayCameraData.fov;
+      ThreeCamera.updateProjectionMatrix();
+    }, this);
+    GameplayFovChangeTween.start();
+  }, this);
 };
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;

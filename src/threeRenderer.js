@@ -8,8 +8,13 @@ var ThreeRenderer = null;
 var JesseSheetTexture = null;
 var TileMaterialMap = {};
 
-var GameplayCameraDistance = 120;
+var GameplayCameraDistance = 250;
 var GameplayCameraAngle = 0;
+const GameplayWalkingFov = 50;
+const GameplayCrouchingFov = 40;
+const GameplayPSIFov = 70;
+var GameplayCameraData = { fov: GameplayWalkingFov, zDist: GameplayCameraDistance, yDist: 200 };
+var GameplayFovChangeTween = null;
 
 var sprite = null; // TODO: rename me
 var target = null;
@@ -43,7 +48,7 @@ var loadThreeTextures = function () {
 
 var setupThree = function () {
   ThreeScene = new THREE.Scene();
-  ThreeCamera = new THREE.PerspectiveCamera( 80, 320 / 240, 0.1, 1000 );
+  ThreeCamera = new THREE.PerspectiveCamera( GameplayCameraData.value, 320 / 240, 0.1, 1000 );
   ThreeRenderer = new THREE.WebGLRenderer( { alpha: false } );
   ThreeRenderer.setSize(320, 240);
 
@@ -58,12 +63,12 @@ var setupThree = function () {
 
   var backgroundColor = new THREE.Color( 0x3a4d51 );
   //ThreeScene.fog = new THREE.Fog(backgroundColor, 0.1, 1000);
-  ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.003);
+  ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.002);
   ThreeScene.background = backgroundColor;
 
   ThreeCamera.position.x = 100;
   ThreeCamera.position.z = 250;
-  ThreeCamera.position.y = 130;
+  ThreeCamera.position.y = GameplayCameraData.yDist;
 };
 
 var setupThreeScene= function (game, player, wolves) {
@@ -158,8 +163,9 @@ var setupThreeScene= function (game, player, wolves) {
 };
 
 var UpdateThreeScene = function (player, wolves) {
-  ThreeCamera.position.x = player.x - GameplayCameraDistance * Math.cos(GameplayCameraAngle);
-  ThreeCamera.position.z = player.y - 16 - GameplayCameraDistance * Math.sin(GameplayCameraAngle);
+  ThreeCamera.position.x = player.x - GameplayCameraData.zDist * Math.cos(GameplayCameraAngle);
+  ThreeCamera.position.y = GameplayCameraData.yDist;
+  ThreeCamera.position.z = player.y - 16 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
   ThreeCamera.lookAt(player.x, 16, player.y - 16);
 
   sprite.position.set(player.x, 38 + (player.crouching ? -20 : 0), player.y - 16);
