@@ -24,7 +24,7 @@ var Player = function(game, x, y) {
   this.dashSpeed = 400;
   this.dashTime = 200;
   this.targetMoveSpeed = 220;
-  this.attackDuration = 680;
+  this.attackDuration = 250;
   this.maxTargetDistance = 32 * 5;
   this.cameraMoveSpeed = 0.0025;
 
@@ -42,6 +42,7 @@ var Player = function(game, x, y) {
   }, this);
 
   this.targetPt = this.game.add.sprite(32, 32, 'jesseSheet1_32x32', 27);
+  this.targetPt.data.soundRange = 185;
   this.targetPt.tint = 0xFF4466;
   this.targetPt.anchor.set(0.5, 0.5);
   this.targetPt.update = function() {

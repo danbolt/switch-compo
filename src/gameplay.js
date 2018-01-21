@@ -54,9 +54,15 @@ Gameplay.prototype.update = function() {
   }, undefined, this);
 
   if (this.player.currentState === PlayerState.ATTACK) {
-    this.game.physics.arcade.overlap(this.player.targetPt, this.wolves, function (target, wolf) {
+    this.game.physics.arcade.overlap(this.player.targetPt, this.wolves, function (targetPt, wolf) {
       wolf.confuse();
     }, undefined, this);
+
+    this.wolves.forEachAlive(function (wolf) {
+      if (wolf.position.distance(this.player.targetPt.position) < this.player.targetPt.data.soundRange) {
+        wolf.noticePoint(this.player.targetPt.position);
+      }
+    }, this);
   }
 
   UpdateThreeScene(this.player, this. wolves);

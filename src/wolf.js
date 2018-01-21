@@ -4,13 +4,15 @@ var WolfState = {
   LEAPING: 2,
   CONFUSED: 3,
   RETURNING: 4,
-  DYING: 5
+  DYING: 5,
+  NOTICING: 6
 };
 
 const WolfWalkSpeed = 100;
 const WolfSightAngle = Math.PI * 0.4;
 const WolfSightRadius = 128;
 const WolfPauseTime = 300;
+const WolfQuestionTime = 1100;
 const WolfLeapSpeed = 400;
 const WolfLeapTime = 180;
 const WolfDazeTime = 500;
@@ -88,6 +90,20 @@ Wolf.prototype.confuse = function () {
     this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
   }, this);
 };
+Wolf.prototype.noticePoint = function (positionToNotice) {
+  // if we're confused or chasing the player, dont do this
+  if (this.currentState === WolfState.NOTICING || this.currentState === WolfState.CONFUSED || this.currentState === WolfState.LEAPING || this.currentState === WolfState.ALERT) {
+    return;
+  }
+
+  this.removeNextEvent();
+  this.currentState = WolfState.NOTICING;
+  this.facing = this.position.angle(positionToNotice);
+  this.nextEvent = this.game.time.events.add(WolfQuestionTime, function () {
+    this.removeNextEvent();
+    this.currentState = WolfState.PATROL;
+  }, this);
+};
 Wolf.prototype.leapFunc = function () {
   if (this.isPlayerInSight()) {
     this.currentState = WolfState.LEAPING;
@@ -121,6 +137,8 @@ Wolf.prototype.update = function () {
   } else if (this.currentState === WolfState.LEAPING) {
     this.body.velocity.set(WolfLeapSpeed * Math.cos(this.facing), WolfLeapSpeed * Math.sin(this.facing));
   } else if (this.currentState === WolfState.CONFUSED) {
+    this.body.velocity.set(0);
+  } else if (this.currentState === WolfState.NOTICING) {
     this.body.velocity.set(0);
   }
 
