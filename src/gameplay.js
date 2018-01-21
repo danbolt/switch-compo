@@ -27,7 +27,7 @@ Gameplay.prototype.create = function() {
   this.foreground.renderable = false;
   this.highForeground.renderable = false;
 
-  this.player = this.game.add.existing(new Player(this.game, 100, 100));
+  this.player = this.game.add.existing(new Player(this.game, 128, 128));
   this.player.renderable = false;
   this.player.targetPt.renderable = false;
 
@@ -41,7 +41,7 @@ Gameplay.prototype.create = function() {
     wolf.renderable = false;
   }, this);
   
-  this.game.add.bitmapText(32, 32, 'font', 'scene 2', 8);
+  this.game.add.bitmapText(32, 32, 'font', 'scene 3', 8);
 
   setupThreeScene(this.game, this.player, this.wolves);
 };

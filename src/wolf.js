@@ -9,8 +9,8 @@ var WolfState = {
 };
 
 const WolfWalkSpeed = 100;
-const WolfSightAngle = Math.PI * 0.4;
-const WolfSightRadius = 134;
+const WolfSightAngle = Math.PI * 0.7;
+const WolfSightRadius = 164;
 const WolfPauseTime = 300;
 const WolfQuestionTime = 1100;
 const WolfLeapSpeed = 400;

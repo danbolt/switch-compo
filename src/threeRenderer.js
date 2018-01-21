@@ -62,8 +62,7 @@ var setupThree = function () {
   ThreeScene.add(directional);
 
   var backgroundColor = new THREE.Color( 0x3a4d51 );
-  //ThreeScene.fog = new THREE.Fog(backgroundColor, 0.1, 1000);
-  ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.002);
+  ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.0024);
   ThreeScene.background = backgroundColor;
 
   ThreeCamera.position.x = 100;

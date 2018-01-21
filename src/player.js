@@ -85,7 +85,7 @@ var Player = function(game, x, y) {
     }
 
     GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
-    GameplayFovChangeTween.to( { fov: GameplayCrouchingFov, zDist: 300, yDist: 120 }, 500, Phaser.Easing.Linear.None);
+    GameplayFovChangeTween.to( { fov: GameplayCrouchingFov, zDist: 300, yDist: 120 }, 500, Phaser.Easing.Cubic.InOut);
     GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
       ThreeCamera.fov = GameplayCameraData.fov;
       ThreeCamera.updateProjectionMatrix();
@@ -99,7 +99,7 @@ var Player = function(game, x, y) {
     }
 
     GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
-    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 500, Phaser.Easing.Linear.None);
+    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 500, Phaser.Easing.Cubic.InOut);
     GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
       ThreeCamera.fov = GameplayCameraData.fov;
       ThreeCamera.updateProjectionMatrix();
@@ -127,7 +127,7 @@ var Player = function(game, x, y) {
     }
 
     GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
-    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 750, Phaser.Easing.Linear.None);
+    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 750, Phaser.Easing.Cubic.InOut);
     GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
       ThreeCamera.fov = GameplayCameraData.fov;
       ThreeCamera.updateProjectionMatrix();
