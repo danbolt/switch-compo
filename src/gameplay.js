@@ -31,6 +31,12 @@ Gameplay.prototype.create = function() {
   this.player.renderable = false;
   this.player.targetPt.renderable = false;
 
+  this.player.events.onKilled.add(function () {
+    this.game.time.events.add(2000, function () {
+      this.game.state.start('Gameplay');
+    }, this);
+  }, this);
+
   this.wolves = this.game.add.group();
 
   this.map.objects.wolves.forEach(function (wolfData) {
@@ -44,6 +50,7 @@ Gameplay.prototype.create = function() {
   this.game.add.bitmapText(32, 32, 'font', 'scene 3', 8);
 
   setupThreeScene(this.game, this.player, this.wolves);
+  GameplayCameraAngle = 0;
 };
 Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground);
@@ -71,6 +78,8 @@ Gameplay.prototype.preRender = function () {
   ThreeRenderer.render(ThreeScene, ThreeCamera);
 };
 Gameplay.prototype.shutdown = function() {
+  UnloadThreeScene(this.wolves);
+
   this.player = null;
   this.wolves = null;
   this.map = null;

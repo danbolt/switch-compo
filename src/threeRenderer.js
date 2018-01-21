@@ -56,11 +56,6 @@ var setupThree = function () {
 
   ThreeJSCanvas = ThreeRenderer.domElement;
 
-  var ambient = new THREE.AmbientLight(0x888888);
-  ThreeScene.add(ambient);
-  var directional = new THREE.DirectionalLight(0xFFFFFF, 0.3);
-  ThreeScene.add(directional);
-
   var backgroundColor = new THREE.Color( 0x3a4d51 );
   ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.0024);
   ThreeScene.background = backgroundColor;
@@ -71,6 +66,11 @@ var setupThree = function () {
 };
 
 var setupThreeScene= function (game, player, wolves) {
+  var ambient = new THREE.AmbientLight(0x888888);
+  ThreeScene.add(ambient);
+  var directional = new THREE.DirectionalLight(0xFFFFFF, 0.3);
+  ThreeScene.add(directional);
+
   var playerSprite = JesseSheetTexture.clone();
   playerSprite.needsUpdate = true;
   playerSprite.magFilter = THREE.NearestFilter;
@@ -80,29 +80,19 @@ var setupThreeScene= function (game, player, wolves) {
   playerSprite.offset.x = 0 / 8;
   playerSprite.offset.y = 3 / 4;
 
-  var targetSprite = JesseSheetTexture.clone();
-  targetSprite.needsUpdate = true;
-  targetSprite.magFilter = THREE.NearestFilter;
-  targetSprite.minFilter = THREE.NearestFilter;
-  targetSprite.wrapS = targetSprite.wrapT = THREE.RepeatWrapping;
-  targetSprite.repeat.set(32 / 256, 32 / 256);
-  targetSprite.offset.x = 0 / 8;
-  targetSprite.offset.y = 0 / 8;
-
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
   var sphere = new THREE.SphereGeometry(32, 3, 3);
   var circle = new THREE.CircleGeometry(player.targetPt.data.soundRange, 8);
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
-  var material4 = new THREE.MeshLambertMaterial( { map: targetSprite, transparent: false } );
  
   sprite = new THREE.Sprite(material3);
   sprite.scale.set(32, 64, 32);
   ThreeScene.add(sprite);
   player.data.threeSprite = sprite;
 
-  target = new THREE.Mesh(sphere, material4);
+  target = new THREE.Mesh(sphere, TileMaterialMap[57]);
   ThreeScene.add(target);
-  target.add(new THREE.Mesh(circle, material4));
+  target.add(new THREE.Mesh(circle, TileMaterialMap[57]));
   target.children[0].position.y = 2;
   target.children[0].rotation.x = Math.PI * -0.5;
 
@@ -181,5 +171,19 @@ var UpdateThreeScene = function (player, wolves) {
     w.data.threeSprite.material.map.offset.y = (3 - ~~(w.animations.frame / 8)) / 4;
     w.data.threeSprite.position.set(w.x, 48, w.y - 16);
   });
+};
+
+var UnloadThreeScene = function(wolves) {
+  sprite.material.map.dispose();
+  sprite.material.dispose();
+
+  wolves.forEach(function (wolf) {
+    wolf.data.threeSprite.material.map.dispose();
+    wolf.data.threeSprite.material.dispose();
+  }, this);
+
+  while (ThreeScene.children.length) {
+    ThreeScene.remove(ThreeScene.children[0]);
+  }
 };
 
