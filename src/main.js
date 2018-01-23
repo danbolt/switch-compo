@@ -30,7 +30,9 @@ Preload.prototype.preload = function() {
   this.game.load.spritesheet('jesseSheet1_32x32', 'asset/img/finalrenderfordaniel1.png', 32, 32);
 
   this.game.load.spritesheet('jesseSheet1_tile', 'asset/img/finalrenderfordaniel1.png');
-  this.game.load.tilemap('level1', 'asset/map/map1.json', undefined, Phaser.Tilemap.TILED_JSON);
+  this.game.load.tilemap('map1', 'asset/map/map1.json', undefined, Phaser.Tilemap.TILED_JSON);
+  this.game.load.tilemap('map2', 'asset/map/map2.json', undefined, Phaser.Tilemap.TILED_JSON);
+  this.game.load.tilemap('map3', 'asset/map/map3.json', undefined, Phaser.Tilemap.TILED_JSON);
 };
 Preload.prototype.create = function() {
   this.game.scale.onSizeChange.add(function () {
@@ -50,7 +52,7 @@ Preload.prototype.create = function() {
 };
 Preload.prototype.update = function () {
   if (JesseSheetTexture !== null) {
-    this.game.state.start('Gameplay');
+    this.game.state.start('Gameplay', true, false, 'map1', 'south');
   }
 };
 
