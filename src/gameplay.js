@@ -7,7 +7,6 @@ var Gameplay = function () {
   this.background = null;
   this.mapKey = null;
   this.directionFrom = null;
-  this.nodeMap = null;
   this.fading = false;
 };
 Gameplay.prototype.init = function (mapKey, directionFrom) {
@@ -26,11 +25,18 @@ Gameplay.prototype.create = function() {
   this.map.setCollisionByExclusion([0], true, this.highForeground);
   this.game.physics.enable(this.foreground, Phaser.Physics.ARCADE);
 
-  // get path nodes
-  this.nodeMap = {};
-  this.map.objects.pathNodes.forEach(function(node) {
-    this.nodeMap[node.name] = node;
+  var navArray = this.foreground.layer.data.map(function (row) {
+    return row.map(function(cell) {
+      return cell.index === -1 ? 0 : 1;
+    }, this);
   }, this);
+  this.map.data = {};
+  this.map.data.navGrid = new PF.Grid(navArray);
+  this.map.data.navFinder = new PF.AStarFinder({
+    allowDiagonal: true,
+    dontCrossCorners: true,
+    heuristic: PF.Heuristic.manhattan
+  });
 
   this.background.renderable = false;
   this.foreground.renderable = false;
@@ -44,7 +50,7 @@ Gameplay.prototype.create = function() {
 
   this.player.events.onKilled.add(function () {
     this.game.time.events.add(2000, function () {
-      this.game.state.start('Gameplay');
+      this.game.state.start('Gameplay', true, false, this.mapKey, this.directionFrom);
     }, this);
   }, this);
 
@@ -152,6 +158,5 @@ Gameplay.prototype.shutdown = function() {
   this.background = null;
   this.mapKey = null;
   this.directionFrom = null;
-  this.nodeMap = null;
   this.fading = false;
 };

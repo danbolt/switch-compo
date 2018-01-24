@@ -28,11 +28,11 @@ var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow,
   this.foregroundLow = foregroundLow;
   this.foregroundHigh = foregroundHigh;
 
+  this.currentPath = [];
+  this.currentPathNextNode = 0;
+  this.patrolPath = JSON.parse(pathSetup);
   this.currentPatrolNode = 0;
-  this.patrolPath = [];
-  JSON.parse(pathSetup).forEach(function (nodeName) {
-    this.patrolPath.push(new Phaser.Point(nodeMap[nodeName].x + nodeMap[nodeName].width / 2, nodeMap[nodeName].y + nodeMap[nodeName].height / 2));
-  }, this);
+  this.setPathToPoint(new Phaser.Point(this.patrolPath[this.currentPatrolNode][0] * 32, this.patrolPath[this.currentPatrolNode][1] * 32));
 
   this.game.physics.enable(this, Phaser.Physics.ARCADE);
   this.anchor.set(0.5, 1);
@@ -44,15 +44,6 @@ var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow,
   this.nextEvent = null;
 
   this.kill();
-
-  this.events.onRevived.add(function () {
-    //
-  }, this);
-
-  this.events.onKilled.add(function() {
-    console.log('died!');
-    this.data.threeSprite.visible = false;
-  }, this);
 };
 Wolf.prototype = Object.create(Phaser.Sprite.prototype);
 Wolf.prototype.constructor = Wolf;
@@ -115,17 +106,32 @@ Wolf.prototype.leapFunc = function () {
     }, this);
   } else {
     this.currentState = WolfState.PATROL;
+    this.setPathToPoint(new Phaser.Point(this.patrolPath[this.currentPatrolNode][0] * 32, this.patrolPath[this.currentPatrolNode][1] * 32));
   }
 };
+Wolf.prototype.computePath = function (destX, destY) {
+  var gridClone = this.map.data.navGrid.clone();
+  return this.map.data.navFinder.findPath(~~(this.position.x / 32), ~~(this.position.y / 32), destX, destY, gridClone);
+};
+Wolf.prototype.setPathToPoint = function(position) {
+  var path = this.computePath(~~(position.x / 32), ~~(position.y / 32));
+  this.currentPath = path.map(function (p) { return new Phaser.Point(p[0] * 32 + 16, p[1] * 32 + 16) });
+  this.currentPathNextNode = 0;
+}
 Wolf.prototype.update = function () {
 
   if (this.currentState === WolfState.PATROL) {
     // if distance to node is close, go to next node
-    if (this.position.distance(this.patrolPath[this.currentPatrolNode]) < 4) {
-      this.currentPatrolNode = (this.currentPatrolNode + 1) % this.patrolPath.length;
+    if (this.position.distance(this.currentPath[this.currentPathNextNode]) < 3) {
+      this.currentPathNextNode++;
+
+      if (this.currentPathNextNode === this.currentPath.length) {
+        this.currentPatrolNode = (this.currentPatrolNode + 1) % this.patrolPath.length;
+        this.setPathToPoint(new Phaser.Point(this.patrolPath[this.currentPatrolNode][0] * 32, this.patrolPath[this.currentPatrolNode][1] * 32));
+      }
     }
 
-    this.facing = this.position.angle(this.patrolPath[this.currentPatrolNode]);
+    this.facing = this.position.angle(this.currentPath[this.currentPathNextNode]);
     this.body.velocity.set(Math.cos(this.facing) * WolfWalkSpeed, Math.sin(this.facing) * WolfWalkSpeed);
 
     if (this.isPlayerInSight()) {
