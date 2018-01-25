@@ -3,19 +3,19 @@ var WolfState = {
   ALERT: 1,
   LEAPING: 2,
   CONFUSED: 3,
-  RETURNING: 4,
-  DYING: 5,
-  NOTICING: 6
+  NOTICING: 4,
+  CHASING: 5,
 };
 
 const WolfWalkSpeed = 100;
-const WolfSightAngle = Math.PI * 0.7;
-const WolfSightRadius = 164;
-const WolfPauseTime = 300;
+const WolfChaseSpeed = 200;
+const WolfSightAngle = Math.PI * 0.5;
+const WolfSightRadius = 250;
+const WolfPauseTime = 400;
 const WolfQuestionTime = 1100;
-const WolfLeapSpeed = 400;
+const WolfLeapSpeed = 450;
 const WolfLeapTime = 180;
-const WolfDazeTime = 500;
+const WolfDazeTime = 800;
 
 var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow, foregroundHigh) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
@@ -117,7 +117,11 @@ Wolf.prototype.setPathToPoint = function(position) {
   var path = this.computePath(~~(position.x / 32), ~~(position.y / 32));
   this.currentPath = path.map(function (p) { return new Phaser.Point(p[0] * 32 + 16, p[1] * 32 + 16) });
   this.currentPathNextNode = 0;
-}
+};
+Wolf.prototype.chasePlayer = function() {
+  this.setPathToPoint(this.player.position);
+  this.currentState = WolfState.CHASING;
+};
 Wolf.prototype.update = function () {
 
   if (this.currentState === WolfState.PATROL) {
@@ -135,8 +139,7 @@ Wolf.prototype.update = function () {
     this.body.velocity.set(Math.cos(this.facing) * WolfWalkSpeed, Math.sin(this.facing) * WolfWalkSpeed);
 
     if (this.isPlayerInSight()) {
-      this.currentState = WolfState.ALERT;
-      this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
+      this.chasePlayer();
     }
   } else if (this.currentState === WolfState.ALERT) {
     this.body.velocity.set(0);
@@ -146,8 +149,32 @@ Wolf.prototype.update = function () {
     this.body.velocity.set(0);
   } else if (this.currentState === WolfState.NOTICING) {
     this.body.velocity.set(0);
-  }
 
+    if (this.isPlayerInSight()) {
+      this.chasePlayer();
+    }
+  } else if (this.currentState === WolfState.CHASING) {
+    // if distance to node is close, go to next node
+    if (this.position.distance(this.currentPath[this.currentPathNextNode]) < 3) {
+      this.currentPathNextNode++;
+
+      if (this.currentPathNextNode === this.currentPath.length) {
+        if (this.isPlayerInSight()) {
+          this.chasePlayer();
+        } else {
+          this.currentState = WolfState.PATROL;
+          this.setPathToPoint(new Phaser.Point(this.patrolPath[this.currentPatrolNode][0] * 32, this.patrolPath[this.currentPatrolNode][1] * 32));
+        }
+      }
+    }
+
+    this.facing = this.position.angle(this.currentPath[this.currentPathNextNode]);
+    this.body.velocity.set(Math.cos(this.facing) * WolfChaseSpeed, Math.sin(this.facing) * WolfChaseSpeed);
+
+    if (this.position.distance(this.player.position) < 96) {
+      this.leapFunc();
+    }
+  }
 
   // determine our sprite direction
   var theta = this.facing - GameplayCameraAngle - Math.PI * 0.5;

@@ -81,7 +81,7 @@ var setupThreeScene= function (game, player, wolves) {
   playerSprite.offset.y = 3 / 4;
 
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
-  var sphere = new THREE.SphereGeometry(32, 3, 3);
+  var sphere = new THREE.SphereGeometry(player.targetPt.data.radius, 3, 3);
   var circle = new THREE.CircleGeometry(player.targetPt.data.soundRange, 8);
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
  
@@ -154,15 +154,15 @@ var setupThreeScene= function (game, player, wolves) {
 var UpdateThreeScene = function (player, wolves) {
   ThreeCamera.position.x = player.x - GameplayCameraData.zDist * Math.cos(GameplayCameraAngle);
   ThreeCamera.position.y = GameplayCameraData.yDist;
-  ThreeCamera.position.z = player.y - 16 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
+  ThreeCamera.position.z = player.y + 16 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
   ThreeCamera.lookAt(player.x, 16, player.y - 16);
 
-  sprite.position.set(player.x, 38 + (player.crouching ? -20 : 0), player.y - 16);
+  sprite.position.set(player.x, 42 + (player.crouching ? -20 : 0), player.y + 16);
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
   sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' ? -32 : 32, 64, 32);
 
-  target.position.set(player.targetPt.x, 16, player.targetPt.y);
+  target.position.set(player.targetPt.x, 16.1, player.targetPt.y);
   target.rotation.y = player.targetPt.rotation;
   target.visible = player.targetPt.alive;
 

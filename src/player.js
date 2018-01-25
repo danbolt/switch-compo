@@ -29,7 +29,7 @@ var Player = function(game, x, y) {
   this.cameraMoveSpeed = 0.0025;
 
   this.game.physics.enable(this, Phaser.Physics.ARCADE);
-  this.anchor.set(0.5, 1);
+  this.anchor.set(0.5, 0.5);
   this.body.setSize(30, 32);
   this.body.offset.set(1, 32);
 
@@ -43,12 +43,14 @@ var Player = function(game, x, y) {
 
   this.targetPt = this.game.add.sprite(32, 32, 'jesseSheet1_32x32', 27);
   this.targetPt.data.soundRange = 185;
+  this.targetPt.data.radius = 48;
   this.targetPt.tint = 0xFF4466;
   this.targetPt.anchor.set(0.5, 0.5);
   this.targetPt.update = function() {
     this.rotation += this.game.time.elapsed * 0.01;
   }
   this.game.physics.enable(this.targetPt, Phaser.Physics.ARCADE);
+  this.targetPt.body.setSize(this.targetPt.data.radius * 2, this.targetPt.data.radius * 2);
   this.targetPt.kill();
 
   // charge logic
