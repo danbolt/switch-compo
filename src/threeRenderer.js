@@ -148,6 +148,16 @@ var setupThreeScene= function (game, player, wolves) {
     w.data.threeTexture = wolfSpriteTexture;
     w.data.threeMaterial = wolfSpriteMaterial;
     w.data.threeSprite = sprite;
+
+    var losDebugGeom = new THREE.CircleBufferGeometry(WolfSightRadius, 32);
+    var losWireframeGeom = new THREE.WireframeGeometry(losDebugGeom);
+    var lines = new THREE.LineSegments(losWireframeGeom);
+    lines.material.depthTest = false;
+    lines.material.transparent = true;
+    lines.scale.set(1 / sprite.scale.x, 2 / sprite.scale.y, 1 / sprite.scale.z)
+    lines.rotation.x = Math.PI / 2;
+    lines.position.y = 0.3
+    sprite.add(lines);
   }, this);
 };
 
