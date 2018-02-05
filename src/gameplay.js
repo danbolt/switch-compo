@@ -71,7 +71,7 @@ Gameplay.prototype.create = function() {
     wolf.renderable = false;
   }, this);
   
-  this.game.add.bitmapText(32, 32, 'font', this.mapKey, 8);
+  this.game.add.bitmapText(32, 32, 'font', this.mapKey, 16);
 
   setupThreeScene(this.game, this.player, this.wolves);
 
@@ -186,7 +186,7 @@ Interstitial.prototype.create = function() {
   backgroundColor.generateTexture();
 
   if (TransitionTable[this.prevMapKey + this.mapKey] !== undefined) {
-    var textToShow = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', TransitionTable[this.prevMapKey + this.mapKey], 8);
+    var textToShow = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', TransitionTable[this.prevMapKey + this.mapKey], 16);
     textToShow.anchor.set(0.5);
     textToShow.align = 'center';
     textToShow.alpha = 0.0;
