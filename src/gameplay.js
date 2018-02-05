@@ -12,8 +12,15 @@ var Gameplay = function () {
 Gameplay.prototype.init = function (mapKey, directionFrom) {
   this.mapKey = mapKey;
   this.directionFrom = directionFrom;
-}
+};
+Gameplay.prototype.preload = function() {
+  this.game.load.tilemap(this.mapKey, 'asset/map/' + this.mapKey + '.json', undefined, Phaser.Tilemap.TILED_JSON);
+};
 Gameplay.prototype.create = function() {
+  // When we load from an interstital, we don't destroy the world to make fading consistent in Phaser.
+  // Once we've rendered though, we can get rid of everything.
+  this.game.world.children.forEach(function (child) { child.destroy(); }, this);
+
   // create map
   this.map = this.game.add.tilemap(this.mapKey);
   this.map.addTilesetImage('set1', 'jesseSheet1_tile');
@@ -117,7 +124,7 @@ Gameplay.prototype.update = function() {
     if (exit !== undefined && exitDirection !== undefined) {
       this.game.camera.onFadeComplete.add(function () {
         this.fading = false;
-        this.game.state.start('Gameplay', true, false, exit, exitDirection);
+        this.game.state.start('Interstitial', true, false, this.mapKey, exit, exitDirection);
         this.game.camera.onFadeComplete.removeAll();
       }, this);
       this.fading = true;
@@ -150,6 +157,8 @@ Gameplay.prototype.directionFromToPlayerDirection  = function(directionFrom) {
 Gameplay.prototype.shutdown = function() {
   UnloadThreeScene(this.wolves);
 
+  this.game.cache.removeTilemap(this.mapKey);
+
   this.player = null;
   this.wolves = null;
   this.map = null;
@@ -160,3 +169,49 @@ Gameplay.prototype.shutdown = function() {
   this.directionFrom = null;
   this.fading = false;
 };
+
+var Interstitial = function () {
+  this.mapKey = null;
+  this.directionFrom = null;
+};
+Interstitial.prototype.init = function(prevMapKey, mapKey, directionFrom) {
+  this.mapKey = mapKey;
+  this.prevMapKey = prevMapKey;
+  this.directionFrom = directionFrom;
+}
+Interstitial.prototype.create = function() {
+  var backgroundColor = this.game.add.graphics(0, 0);
+  backgroundColor.beginFill(0x3a4d51);
+  backgroundColor.drawRect(0, 0, this.game.width, this.game.height);
+  backgroundColor.generateTexture();
+
+  if (TransitionTable[this.prevMapKey + this.mapKey] !== undefined) {
+    var textToShow = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', TransitionTable[this.prevMapKey + this.mapKey], 8);
+    textToShow.anchor.set(0.5);
+    textToShow.align = 'center';
+    textToShow.alpha = 0.0;
+
+    var t1 = this.game.add.tween(textToShow);
+    t1.to( {alpha : 1.0}, 1000, Phaser.Easing.Linear.None, false, 0);
+    var t2 = this.game.add.tween(textToShow);
+    t2.to( {alpha : 0.0}, 850, Phaser.Easing.Linear.None, false, 1000);
+    t1.chain(t2);
+
+    t2.onComplete.add(function () {
+      this.game.time.events.add(150, function () {
+        this.game.state.start('Gameplay', false, false, this.mapKey, this.directionFrom);
+      }, this);
+    }, this);
+
+    t1.start();
+  } else {
+    this.game.time.events.add(150, function () {
+      this.game.state.start('Gameplay', false, false, this.mapKey, this.directionFrom);
+    }, this);
+  }
+};
+Interstitial.prototype.shutdown = function () {
+  this.mapKey = null;
+  this.prevMapKey;
+  this.directionFrom = null;
+}
