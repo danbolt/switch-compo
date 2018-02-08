@@ -91,7 +91,8 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "southExit":"first_room"
+     "southExit":"first_room",
+     "westExit":"enter_ruins"
     },
  "renderorder":"right-down",
  "tileheight":32,
