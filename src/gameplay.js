@@ -70,7 +70,7 @@ Gameplay.prototype.create = function() {
     wolf.revive();
     wolf.renderable = false;
   }, this);
-  
+
   this.game.add.bitmapText(32, 32, 'font', this.mapKey, 16);
 
   setupThreeScene(this.game, this.player, this.wolves);

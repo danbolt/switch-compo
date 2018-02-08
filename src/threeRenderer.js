@@ -9,7 +9,7 @@ var JesseSheetTexture = null;
 var TileMaterialMap = {};
 
 var GameplayCameraDistance = 250;
-var GameplayCameraAngle = 0;
+var GameplayCameraAngle = -Math.PI / 2;
 const GameplayWalkingFov = 50;
 const GameplayCrouchingFov = 40;
 const GameplayPSIFov = 70;

@@ -52,7 +52,7 @@ Preload.prototype.create = function() {
 };
 Preload.prototype.update = function () {
   if (JesseSheetTexture !== null) {
-    this.game.state.start('Gameplay', true, false, 'map1', 'south');
+    this.game.state.start('Gameplay', true, false, 'first_room', 'north');
   }
 };
 
