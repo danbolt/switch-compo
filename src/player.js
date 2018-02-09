@@ -36,6 +36,7 @@ var Player = function(game, x, y) {
   this.currentState = PlayerState.MOVING;
   this.facingDirection = new Phaser.Point(0.0, 1.0);
   this.isCrouching = false;
+  this.gamepadAxis = new Phaser.Point(0, 0);
 
   this.events.onKilled.add(function() {
     this.data.threeSprite.visible = false;
@@ -138,12 +139,32 @@ var Player = function(game, x, y) {
   this.game.input.keyboard.addKey(Phaser.KeyCode.X).onUp.add(chargeUpCallback, this);
   this.game.input.keyboard.addKey(Phaser.KeyCode.C).onDown.add(crouchDownCallback, this);
   this.game.input.keyboard.addKey(Phaser.KeyCode.C).onUp.add(crouchUpCallback, this);
+
+  this.game.input.gamepad.callbackContext = this;
+  this.game.input.gamepad.onDownCallback = function (buttonCode) {
+    if (buttonCode === Phaser.Gamepad.XBOX360_A) {
+      chargeDownCallback.call(this);
+    } else if (buttonCode === Phaser.Gamepad.XBOX360_B) {
+      crouchDownCallback.call(this);
+    }
+  };
+  this.game.input.gamepad.onUpCallback = function (buttonCode) {
+    if (buttonCode === Phaser.Gamepad.XBOX360_A) {
+      chargeUpCallback.call(this);
+    } else if (buttonCode === Phaser.Gamepad.XBOX360_B) {
+      crouchUpCallback.call(this);
+    }
+  };
+  this.game.input.gamepad.onAxisCallback = function (pad, padIndex) {
+    this.gamepadAxis.x = pad.axis(0) ? pad.axis(0) : 0;
+    this.gamepadAxis.y = pad.axis(1) ? pad.axis(1) : 0;
+  };
 };
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 Player.prototype.update = function() {
 
-  // Used to get the directions of the directional input.
+  // Used to get directional input from either keyboard or gamepad
   var inputX = 0.0;
   var inputY = 0.0;
   if (this.game.input.keyboard.isDown(Phaser.KeyCode.D)) {
@@ -156,18 +177,22 @@ Player.prototype.update = function() {
   } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.W)) {
     inputY = -1.0;
   }
+  if (this.gamepadAxis.getMagnitude() > 0.1) {
+    inputX = this.gamepadAxis.x;
+    inputY = this.gamepadAxis.y;
+  }
 
-  if (this.game.input.keyboard.isDown(Phaser.KeyCode.Q)) {
+  if (this.game.input.keyboard.isDown(Phaser.KeyCode.Q) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_LEFT_TRIGGER)) {
     GameplayCameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed;
 
     if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
-  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.E)) {
+  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.E) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER)) {
     GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed;
 
     if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
   }
 
-  if (this.game.input.keyboard.isDown(Phaser.KeyCode.C)) {
+  if (this.game.input.keyboard.isDown(Phaser.KeyCode.C) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_B)) {
     this.crouching = true;
   } else {
     this.crouching = false;
