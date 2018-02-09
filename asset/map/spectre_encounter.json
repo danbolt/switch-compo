@@ -106,7 +106,8 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "eastExit":"enter_ruins"
+     "eastExit":"enter_ruins",
+     "southExit":"crouching1"
     },
  "renderorder":"right-down",
  "tileheight":32,
