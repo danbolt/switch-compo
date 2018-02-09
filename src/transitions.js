@@ -4,4 +4,5 @@ var TransitionTable = {
   "map3map1": "map3 to map1",
   "first_roomsecond_room": "the first piece of dialogue",
   "second_roomenter_ruins": "enter the ruins",
+  "enter_ruinsspectre_encounter": "Here I felt my flesh become the food of my fears."
 };

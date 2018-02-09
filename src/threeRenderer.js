@@ -13,12 +13,15 @@ var GameplayCameraAngle = -Math.PI / 2;
 const GameplayWalkingFov = 50;
 const GameplayCrouchingFov = 40;
 const GameplayPSIFov = 70;
-var GameplayCameraData = { fov: GameplayWalkingFov, zDist: GameplayCameraDistance, yDist: 200 };
+var GameplayCameraData = { fov: GameplayWalkingFov, zDist: GameplayCameraDistance, yDist: 220 };
 var GameplayFovChangeTween = null;
 
 var sprite = null; // TODO: rename me
 var target = null;
 var wolves = null;
+
+var sightLinePool = [];
+var activeSightLines = [];
 
 var loadThreeTextures = function () {
   var tl = new THREE.TextureLoader();
@@ -149,16 +152,55 @@ var setupThreeScene= function (game, player, wolves) {
     w.data.threeMaterial = wolfSpriteMaterial;
     w.data.threeSprite = sprite;
 
+    /*
     var losDebugGeom = new THREE.CircleBufferGeometry(WolfSightRadius, 32);
     var losWireframeGeom = new THREE.WireframeGeometry(losDebugGeom);
     var lines = new THREE.LineSegments(losWireframeGeom);
-    lines.material.depthTest = false;
+    
     lines.material.transparent = true;
     lines.scale.set(1 / sprite.scale.x, 2 / sprite.scale.y, 1 / sprite.scale.z)
     lines.rotation.x = Math.PI / 2;
     lines.position.y = 0.3
     sprite.add(lines);
+    */
   }, this);
+
+  // setup sight lines
+  var material = new THREE.MeshLambertMaterial({ color: 0xFF2222, emissive: 0xFFFFFF });
+  for (var i = 0; i < 10; i++) {
+    var newSightLineGeom = new THREE.Geometry();
+    newSightLineGeom.vertices.push(
+      new THREE.Vector3(39 * 32, 64, 27 * 32),
+      new THREE.Vector3(41 * 32, 64, 27 * 32)
+    );
+    var newSightLine = new THREE.Line(newSightLineGeom, material);
+    newSightLine.visible = false;
+
+    ThreeScene.add(newSightLine);
+    sightLinePool.push(newSightLine);
+  }
+};
+
+var PopSightLine = function (x1, y1, x2, y2) {
+  if (sightLinePool.length < 1) {
+    return null;
+  }
+
+  var newLine = sightLinePool.pop();
+  newLine.geometry.vertices[0].x = x1;
+  newLine.geometry.vertices[0].z = y1;
+  newLine.geometry.vertices[1].x = x2;
+  newLine.geometry.vertices[1].z = y2;
+  newLine.geometry.verticesNeedUpdate = true;
+  newLine.visible = true;
+  activeSightLines.push(newLine);
+
+  return newLine;
+};
+var ReturnSightLine = function (sightLine) {
+  sightLine.visible = false;
+  sightLinePool.push(sightLine);
+  activeSightLines.splice(activeSightLines.indexOf(sightLine), 1);
 };
 
 var UpdateThreeScene = function (player, wolves) {
@@ -179,7 +221,7 @@ var UpdateThreeScene = function (player, wolves) {
   wolves.forEach(function (w) {
     w.data.threeSprite.material.map.offset.x = (w.animations.frame % 8) / 8;
     w.data.threeSprite.material.map.offset.y = (3 - ~~(w.animations.frame / 8)) / 4;
-    w.data.threeSprite.position.set(w.x, 48, w.y - 16);
+    w.data.threeSprite.position.set(w.x, 48, w.y);
   });
 };
 
@@ -195,5 +237,8 @@ var UnloadThreeScene = function(wolves) {
   while (ThreeScene.children.length) {
     ThreeScene.remove(ThreeScene.children[0]);
   }
+
+  sightLinePool = [];
+  activeSightLines = [];
 };
 

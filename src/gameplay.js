@@ -74,7 +74,7 @@ Gameplay.prototype.create = function() {
   this.game.add.bitmapText(32, 32, 'font', this.mapKey, 16);
 
   setupThreeScene(this.game, this.player, this.wolves);
-
+  
   this.game.camera.flash(0x3a4d51, 700);
 };
 Gameplay.prototype.update = function() {
@@ -190,6 +190,7 @@ Interstitial.prototype.create = function() {
     textToShow.anchor.set(0.5);
     textToShow.align = 'center';
     textToShow.alpha = 0.0;
+    textToShow.maxWidth = 290;
 
     var t1 = this.game.add.tween(textToShow);
     t1.to( {alpha : 1.0}, 1000, Phaser.Easing.Linear.None, false, 0);

@@ -8,14 +8,14 @@ var WolfState = {
 };
 
 const WolfWalkSpeed = 100;
-const WolfChaseSpeed = 200;
-const WolfSightAngle = Math.PI * 0.5;
+const WolfChaseSpeed = 220;
+const WolfSightAngle = Math.PI * 0.432;
 const WolfSightRadius = 200;
 const WolfPauseTime = 400;
 const WolfQuestionTime = 1100;
-const WolfLeapSpeed = 450;
+const WolfLeapSpeed = 540;
 const WolfLeapTime = 180;
-const WolfDazeTime = 800;
+const WolfDazeTime = 1000;
 
 var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow, foregroundHigh) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
@@ -47,15 +47,24 @@ var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow,
 };
 Wolf.prototype = Object.create(Phaser.Sprite.prototype);
 Wolf.prototype.constructor = Wolf;
-Wolf.prototype.isPlayerInSight = function () {
+Wolf.prototype.isPlayerInSight = function (showSightLine) {
+  if (this.player.alive === false) {
+    return false;
+  }
+
   var angleToPlayer = this.position.angle(this.player.position);
   if (Math.abs(Phaser.Math.getShortestAngle(angleToPlayer * Phaser.Math.RAD_TO_DEG, this.facing * Phaser.Math.RAD_TO_DEG) * Phaser.Math.DEG_TO_RAD) < WolfSightAngle) {
     if (this.position.distance(this.player.position) < WolfSightRadius) {
         var testLine = new Phaser.Line(this.x, this.y, this.player.x, this.player.y);
         var layerToTest = this.player.crouching ? this.foregroundLow : this.foregroundHigh;
 
-        if (layerToTest.getRayCastTiles(testLine, 16, true).length > 0) {
+        if (layerToTest.getRayCastTiles(testLine, 8, true).length > 0) {
           return false;
+        }
+
+        if (showSightLine === true) {
+          var sightLine = PopSightLine(this.x, this.y, this.player.x, this.player.y);
+          this.game.time.events.add(1000, function () { ReturnSightLine(sightLine); }, this);
         }
 
         return true;
@@ -96,7 +105,7 @@ Wolf.prototype.noticePoint = function (positionToNotice) {
   }, this);
 };
 Wolf.prototype.leapFunc = function () {
-  if (this.isPlayerInSight()) {
+  if (this.isPlayerInSight(false)) {
     this.currentState = WolfState.LEAPING;
     this.facing = this.position.angle(this.player.position);
 
@@ -138,7 +147,7 @@ Wolf.prototype.update = function () {
     this.facing = this.position.angle(this.currentPath[this.currentPathNextNode]);
     this.body.velocity.set(Math.cos(this.facing) * WolfWalkSpeed, Math.sin(this.facing) * WolfWalkSpeed);
 
-    if (this.isPlayerInSight()) {
+    if (this.isPlayerInSight(true)) {
       this.chasePlayer();
     }
   } else if (this.currentState === WolfState.ALERT) {
@@ -150,7 +159,7 @@ Wolf.prototype.update = function () {
   } else if (this.currentState === WolfState.NOTICING) {
     this.body.velocity.set(0);
 
-    if (this.isPlayerInSight()) {
+    if (this.isPlayerInSight(true)) {
       this.chasePlayer();
     }
   } else if (this.currentState === WolfState.CHASING) {
@@ -159,7 +168,7 @@ Wolf.prototype.update = function () {
       this.currentPathNextNode++;
 
       if (this.currentPathNextNode === this.currentPath.length) {
-        if (this.isPlayerInSight()) {
+        if (this.isPlayerInSight(false)) {
           this.chasePlayer();
         } else {
           this.currentState = WolfState.PATROL;
