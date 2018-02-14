@@ -37,6 +37,7 @@ var Player = function(game, x, y) {
   this.facingDirection = new Phaser.Point(0.0, 1.0);
   this.isCrouching = false;
   this.gamepadAxis = new Phaser.Point(0, 0);
+  this.gamepadAxisCStick = new Phaser.Point(0, 0);
 
   this.events.onKilled.add(function() {
     this.data.threeSprite.visible = false;
@@ -158,6 +159,8 @@ var Player = function(game, x, y) {
   this.game.input.gamepad.onAxisCallback = function (pad, padIndex) {
     this.gamepadAxis.x = pad.axis(0) ? pad.axis(0) : 0;
     this.gamepadAxis.y = pad.axis(1) ? pad.axis(1) : 0;
+    this.gamepadAxisCStick.x = pad.axis(2) ? pad.axis(2) : 0;
+    this.gamepadAxisCStick.y = pad.axis(3) ? pad.axis(3) : 0;
   };
 };
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -188,6 +191,14 @@ Player.prototype.update = function() {
     if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
   } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.E) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER)) {
     GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed;
+
+    if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
+  } else if (this.gamepadAxisCStick.x < -0.1) {
+    GameplayCameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed * Math.abs(this.gamepadAxisCStick.x);
+
+    if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
+  } else if (this.gamepadAxisCStick.x > 0.1) {
+    GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed * Math.abs(this.gamepadAxisCStick.x);
 
     if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
   }

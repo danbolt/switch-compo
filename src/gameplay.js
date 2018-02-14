@@ -64,6 +64,9 @@ Gameplay.prototype.create = function() {
   this.wolves = this.game.add.group();
 
   this.map.objects.wolves.forEach(function (wolfData) {
+    if (wolfData.polyline) {
+      wolfData.properties.patrolPath = JSON.stringify(wolfData.polyline.map(function (node) { return [~~((node[0] + wolfData.x) / 32), ~~((node[1] + wolfData.y) / 32)]; }));
+    }
     var wolf = this.game.add.existing(new Wolf(this.game, wolfData.x, wolfData.y, this.player, wolfData.properties.patrolPath, this.nodeMap, this.map, this.foreground, this.highForeground));
     this.wolves.addChild(wolf);
     this.wolves.addToHash(wolf);
