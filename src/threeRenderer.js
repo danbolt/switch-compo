@@ -150,14 +150,15 @@ var setupThreeScene= function (game, player, wolves) {
     w.data.threeSprite = sprite;
 
     var viewGeom = new THREE.Geometry();
+    var sightRadius = WolfSightRadius + 96;
     viewGeom.vertices.push(
       new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / 2), 0, WolfSightRadius * Math.sin(WolfSightAngle / 2)),
-      new THREE.Vector3(WolfSightRadius * Math.cos(0), 0, WolfSightRadius * Math.sin(0)),
-      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / -2), 0, WolfSightRadius * Math.sin(WolfSightAngle / -2)),
-      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / 2), 62, WolfSightRadius * Math.sin(WolfSightAngle / 2)),
-      new THREE.Vector3(WolfSightRadius * Math.cos(0), 62, WolfSightRadius * Math.sin(0)),
-      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / -2), 62, WolfSightRadius * Math.sin(WolfSightAngle / -2)),
+      new THREE.Vector3(sightRadius * Math.cos(WolfSightAngle / 1), 0, sightRadius * Math.sin(WolfSightAngle / 1)),
+      new THREE.Vector3(sightRadius * Math.cos(0), 0, sightRadius * Math.sin(0)),
+      new THREE.Vector3(sightRadius * Math.cos(WolfSightAngle / -1), 0, sightRadius * Math.sin(WolfSightAngle / -1)),
+      new THREE.Vector3(sightRadius * Math.cos(WolfSightAngle / 1), 62, sightRadius * Math.sin(WolfSightAngle / 1)),
+      new THREE.Vector3(sightRadius * Math.cos(0), 62, sightRadius * Math.sin(0)),
+      new THREE.Vector3(sightRadius * Math.cos(WolfSightAngle / -1), 62, sightRadius * Math.sin(WolfSightAngle / -1)),
     );
     viewGeom.faces.push(new THREE.Face3(0, 2, 1), new THREE.Face3(0, 3, 2),
                         //new THREE.Face3(0, 1, 4), new THREE.Face3(0, 6, 3),

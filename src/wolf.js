@@ -62,10 +62,9 @@ Wolf.prototype.isPlayerInSight = function () {
         var testLine = new Phaser.Line(this.centerX, this.centerY, this.player.body.center.x, this.player.body.center.y);
         var layerToTest = this.player.crouching ? this.foregroundLow : this.foregroundHigh;
 
-        if (layerToTest.getRayCastTiles(testLine, 8, true).length > 0) {
+        if (layerToTest.getRayCastTiles(testLine, 2, true).length > 0) {
           return false;
         }
-
         return true;
       }
     }
@@ -113,7 +112,6 @@ Wolf.prototype.leapFunc = function () {
       this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
     }, this);
   } else {
-    console.log('leaping, can\'t see');
     this.currentState = WolfState.PATROL;
     this.setPathToPoint(new Phaser.Point(this.patrolPath[this.currentPatrolNode][0] * 32, this.patrolPath[this.currentPatrolNode][1] * 32));
   }
