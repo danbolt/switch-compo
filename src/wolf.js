@@ -47,7 +47,7 @@ var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow,
 };
 Wolf.prototype = Object.create(Phaser.Sprite.prototype);
 Wolf.prototype.constructor = Wolf;
-Wolf.prototype.isPlayerInSight = function (showSightLine) {
+Wolf.prototype.isPlayerInSight = function () {
   if (this.player.alive === false) {
     return false;
   }
@@ -62,13 +62,8 @@ Wolf.prototype.isPlayerInSight = function (showSightLine) {
         var testLine = new Phaser.Line(this.centerX, this.centerY, this.player.body.center.x, this.player.body.center.y);
         var layerToTest = this.player.crouching ? this.foregroundLow : this.foregroundHigh;
 
-        if (layerToTest.getRayCastTiles(testLine, 1, true).length > 0) {
+        if (layerToTest.getRayCastTiles(testLine, 8, true).length > 0) {
           return false;
-        }
-
-        if (showSightLine === true) {
-          var sightLine = PopSightLine(this.centerX, this.centerY, this.player.body.center.x, this.player.body.center.y);
-          this.game.time.events.add(1000, function () { ReturnSightLine(sightLine); }, this);
         }
 
         return true;
@@ -118,6 +113,7 @@ Wolf.prototype.leapFunc = function () {
       this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
     }, this);
   } else {
+    console.log('leaping, can\'t see');
     this.currentState = WolfState.PATROL;
     this.setPathToPoint(new Phaser.Point(this.patrolPath[this.currentPatrolNode][0] * 32, this.patrolPath[this.currentPatrolNode][1] * 32));
   }
@@ -172,7 +168,7 @@ Wolf.prototype.update = function () {
       this.currentPathNextNode++;
 
       if (this.currentPathNextNode === this.currentPath.length) {
-        if (this.isPlayerInSight(false)) {
+        if (this.isPlayerInSight()) {
           this.chasePlayer();
         } else {
           this.currentState = WolfState.PATROL;

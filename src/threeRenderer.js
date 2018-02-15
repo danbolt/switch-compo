@@ -20,9 +20,6 @@ var sprite = null; // TODO: rename me
 var target = null;
 var wolves = null;
 
-var sightLinePool = [];
-var activeSightLines = [];
-
 var loadThreeTextures = function () {
   var tl = new THREE.TextureLoader();
   tl.load('asset/img/finalrenderfordaniel1.png', function (loadedTexture) {
@@ -42,7 +39,7 @@ var loadThreeTextures = function () {
         texture.offset.y = ((JesseSheetTexture.image.height / 32 - 1) - y) / (JesseSheetTexture.image.height / 32);
 
         
-        var material = new THREE.MeshLambertMaterial( { map: texture, transparent: true } );
+        var material = new THREE.MeshLambertMaterial( { map: texture, transparent: false } );
         TileMaterialMap[(x + (y * (JesseSheetTexture.image.width / 32)))] = material;
       }
     }
@@ -152,6 +149,29 @@ var setupThreeScene= function (game, player, wolves) {
     w.data.threeMaterial = wolfSpriteMaterial;
     w.data.threeSprite = sprite;
 
+    var viewGeom = new THREE.Geometry();
+    viewGeom.vertices.push(
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / 2), 0, WolfSightRadius * Math.sin(WolfSightAngle / 2)),
+      new THREE.Vector3(WolfSightRadius * Math.cos(0), 0, WolfSightRadius * Math.sin(0)),
+      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / -2), 0, WolfSightRadius * Math.sin(WolfSightAngle / -2)),
+      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / 2), 62, WolfSightRadius * Math.sin(WolfSightAngle / 2)),
+      new THREE.Vector3(WolfSightRadius * Math.cos(0), 62, WolfSightRadius * Math.sin(0)),
+      new THREE.Vector3(WolfSightRadius * Math.cos(WolfSightAngle / -2), 62, WolfSightRadius * Math.sin(WolfSightAngle / -2)),
+    );
+    viewGeom.faces.push(new THREE.Face3(0, 2, 1), new THREE.Face3(0, 3, 2),
+                        //new THREE.Face3(0, 1, 4), new THREE.Face3(0, 6, 3),
+                        //new THREE.Face3(0, 4, 5), new THREE.Face3(0, 5, 6),
+    );
+    var viewMatieral = new THREE.MeshLambertMaterial({side: THREE.BackSide, color: 0x770000, transparent: true, opacity: 0.145}) /*new THREE.ShaderMaterial( {fragmentShader: `precision mediump float;
+          void main() {
+             gl_FragColor = vec4(0.0, 2.0, 0.2, 0.0);
+          }`});*/
+    viewMatieral.blending = THREE.AdditiveBlending;
+    var viewMesh = new THREE.Mesh(viewGeom, viewMatieral);
+    ThreeScene.add(viewMesh);
+    w.data.threeViewMesh = viewMesh;
+
     /*
     var losDebugGeom = new THREE.CircleBufferGeometry(WolfSightRadius, 32);
     var losWireframeGeom = new THREE.WireframeGeometry(losDebugGeom);
@@ -164,43 +184,6 @@ var setupThreeScene= function (game, player, wolves) {
     sprite.add(lines);
     */
   }, this);
-
-  // setup sight lines
-  var material = new THREE.MeshLambertMaterial({ color: 0xFF2222, emissive: 0xFFFFFF });
-  for (var i = 0; i < 10; i++) {
-    var newSightLineGeom = new THREE.Geometry();
-    newSightLineGeom.vertices.push(
-      new THREE.Vector3(39 * 32, 64, 27 * 32),
-      new THREE.Vector3(41 * 32, 64, 27 * 32)
-    );
-    var newSightLine = new THREE.Line(newSightLineGeom, material);
-    newSightLine.visible = false;
-
-    ThreeScene.add(newSightLine);
-    sightLinePool.push(newSightLine);
-  }
-};
-
-var PopSightLine = function (x1, y1, x2, y2) {
-  if (sightLinePool.length < 1) {
-    return null;
-  }
-
-  var newLine = sightLinePool.pop();
-  newLine.geometry.vertices[0].x = x1;
-  newLine.geometry.vertices[0].z = y1;
-  newLine.geometry.vertices[1].x = x2;
-  newLine.geometry.vertices[1].z = y2;
-  newLine.geometry.verticesNeedUpdate = true;
-  newLine.visible = true;
-  activeSightLines.push(newLine);
-
-  return newLine;
-};
-var ReturnSightLine = function (sightLine) {
-  sightLine.visible = false;
-  sightLinePool.push(sightLine);
-  activeSightLines.splice(activeSightLines.indexOf(sightLine), 1);
 };
 
 var UpdateThreeScene = function (player, wolves) {
@@ -222,6 +205,8 @@ var UpdateThreeScene = function (player, wolves) {
     w.data.threeSprite.material.map.offset.x = (w.animations.frame % 8) / 8;
     w.data.threeSprite.material.map.offset.y = (3 - ~~(w.animations.frame / 8)) / 4;
     w.data.threeSprite.position.set(w.x, 48, w.y);
+    w.data.threeViewMesh.position.set(w.data.threeSprite.position.x, 17, w.data.threeSprite.position.z)
+    w.data.threeViewMesh.rotation.y = w.facing * -1;
   });
 };
 
@@ -237,8 +222,5 @@ var UnloadThreeScene = function(wolves) {
   while (ThreeScene.children.length) {
     ThreeScene.remove(ThreeScene.children[0]);
   }
-
-  sightLinePool = [];
-  activeSightLines = [];
 };
 
