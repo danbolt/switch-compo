@@ -52,18 +52,22 @@ Wolf.prototype.isPlayerInSight = function (showSightLine) {
     return false;
   }
 
-  var angleToPlayer = this.position.angle(this.player.position);
+  if (this.position.distance(this.player.body.center) < 64) {
+    return true;
+  }
+
+  var angleToPlayer = this.position.angle(this.player.body.center);
   if (Math.abs(Phaser.Math.getShortestAngle(angleToPlayer * Phaser.Math.RAD_TO_DEG, this.facing * Phaser.Math.RAD_TO_DEG) * Phaser.Math.DEG_TO_RAD) < WolfSightAngle) {
-    if (this.position.distance(this.player.position) < WolfSightRadius) {
-        var testLine = new Phaser.Line(this.x, this.y, this.player.x, this.player.y);
+    if (this.position.distance(this.player.body.center) < WolfSightRadius) {
+        var testLine = new Phaser.Line(this.centerX, this.centerY, this.player.body.center.x, this.player.body.center.y);
         var layerToTest = this.player.crouching ? this.foregroundLow : this.foregroundHigh;
 
-        if (layerToTest.getRayCastTiles(testLine, 8, true).length > 0) {
+        if (layerToTest.getRayCastTiles(testLine, 1, true).length > 0) {
           return false;
         }
 
         if (showSightLine === true) {
-          var sightLine = PopSightLine(this.x, this.y, this.player.x, this.player.y);
+          var sightLine = PopSightLine(this.centerX, this.centerY, this.player.body.center.x, this.player.body.center.y);
           this.game.time.events.add(1000, function () { ReturnSightLine(sightLine); }, this);
         }
 

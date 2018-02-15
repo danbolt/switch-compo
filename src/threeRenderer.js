@@ -206,7 +206,7 @@ var ReturnSightLine = function (sightLine) {
 var UpdateThreeScene = function (player, wolves) {
   ThreeCamera.position.x = player.x - GameplayCameraData.zDist * Math.cos(GameplayCameraAngle);
   ThreeCamera.position.y = GameplayCameraData.yDist;
-  ThreeCamera.position.z = player.y + 16 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
+  ThreeCamera.position.z = player.y - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
   ThreeCamera.lookAt(player.x, 16, player.y - 16);
 
   sprite.position.set(player.x, 42 + (player.crouching ? -20 : 0), player.y + 16);
