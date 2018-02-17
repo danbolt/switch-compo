@@ -150,7 +150,7 @@ var setupThreeScene= function (game, player, wolves) {
     w.data.threeSprite = sprite;
 
     var viewGeom = new THREE.Geometry();
-    var sightRadius = WolfSightRadius + 96;
+    var sightRadius = WolfSightRadius + 16;
     viewGeom.vertices.push(
       new THREE.Vector3(0, 0, 0),
       new THREE.Vector3(sightRadius * Math.cos(WolfSightAngle / 1), 0, sightRadius * Math.sin(WolfSightAngle / 1)),
