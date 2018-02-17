@@ -188,10 +188,10 @@ var setupThreeScene= function (game, player, wolves) {
 };
 
 var UpdateThreeScene = function (player, wolves) {
-  ThreeCamera.position.x = player.x - GameplayCameraData.zDist * Math.cos(GameplayCameraAngle);
+  ThreeCamera.position.x = (player.x + player.targetPt.x) / 2 - GameplayCameraData.zDist * Math.cos(GameplayCameraAngle);
   ThreeCamera.position.y = GameplayCameraData.yDist;
-  ThreeCamera.position.z = player.y - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
-  ThreeCamera.lookAt(player.x, 16, player.y - 16);
+  ThreeCamera.position.z = (player.y + player.targetPt.y) / 2 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
+  ThreeCamera.lookAt((player.x + player.targetPt.x) / 2, 16, (player.y + player.targetPt.y) / 2);
 
   sprite.position.set(player.x, 42 + (player.crouching ? -20 : 0), player.y + 16);
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;

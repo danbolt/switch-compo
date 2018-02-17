@@ -25,7 +25,7 @@ var Player = function(game, x, y) {
   this.dashTime = 200;
   this.targetMoveSpeed = 220;
   this.attackDuration = 250;
-  this.maxTargetDistance = 32 * 5;
+  this.maxTargetDistance = 32 * 8;
   this.cameraMoveSpeed = 0.0025;
 
   this.game.physics.enable(this, Phaser.Physics.ARCADE);
@@ -54,6 +54,7 @@ var Player = function(game, x, y) {
   this.game.physics.enable(this.targetPt, Phaser.Physics.ARCADE);
   this.targetPt.body.setSize(this.targetPt.data.radius * 2, this.targetPt.data.radius * 2);
   this.targetPt.kill();
+  this.returnTargetTween = null;
 
   var chargeDownCallback = function () {
     if (this.currentState === PlayerState.MOVING) {
@@ -67,6 +68,11 @@ var Player = function(game, x, y) {
       if (GameplayFovChangeTween !== null) {
         GameplayFovChangeTween.stop();
         GameplayFovChangeTween = null;
+      }
+
+      if (this.returnTargetTween !== null) {
+        this.returnTargetTween.stop();
+        this.returnTargetTween = null;
       }
 
       GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
@@ -91,6 +97,14 @@ var Player = function(game, x, y) {
 
         this.currentState = PlayerState.MOVING;
       }, this);
+
+      this.returnTargetTween = this.game.add.tween(this.targetPt);
+      this.targetPt.moves = false;
+      this.returnTargetTween.to({x: this.x, y: this.y}, 700, Phaser.Easing.Linear.None);
+      this.returnTargetTween.onComplete.add(function () {
+        this.returnTargetTween = null;
+      }, this);
+      this.returnTargetTween.start();
 
       if (GameplayFovChangeTween !== null) {
         GameplayFovChangeTween.stop();
@@ -221,6 +235,11 @@ Player.prototype.update = function() {
       this.body.velocity.set(this.walkSpeed * this.facingDirection.x, this.walkSpeed * this.facingDirection.y);
     } else {
       this.body.velocity.set(0);
+    }
+
+    if (this.returnTargetTween === null) {
+      this.targetPt.x = this.x;
+      this.targetPt.y = this.y;
     }
   } else if (this.currentState === PlayerState.CHARGE) {
     this.body.velocity.set(0);

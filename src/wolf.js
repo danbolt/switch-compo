@@ -12,10 +12,10 @@ const WolfChaseSpeed = 220;
 const WolfSightAngle = Math.PI * 0.432 * 0.75;
 const WolfSightRadius = 200;
 const WolfPauseTime = 400;
-const WolfQuestionTime = 1100;
+const WolfQuestionTime = 1800;
 const WolfLeapSpeed = 540;
 const WolfLeapTime = 180;
-const WolfDazeTime = 1000;
+const WolfDazeTime = 2800;
 
 var Wolf = function (game, x, y, player, pathSetup, nodeMap, map, foregroundLow, foregroundHigh) {
   Phaser.Sprite.call(this, game, x, y, 'jesseSheet1_32x64', 0);
