@@ -150,10 +150,10 @@ var Player = function(game, x, y) {
   };
 
   // charge logic
-  this.game.input.keyboard.addKey(Phaser.KeyCode.X).onDown.add(chargeDownCallback, this);
-  this.game.input.keyboard.addKey(Phaser.KeyCode.X).onUp.add(chargeUpCallback, this);
-  this.game.input.keyboard.addKey(Phaser.KeyCode.C).onDown.add(crouchDownCallback, this);
-  this.game.input.keyboard.addKey(Phaser.KeyCode.C).onUp.add(crouchUpCallback, this);
+  this.game.input.keyboard.addKey(Phaser.KeyCode.N).onDown.add(chargeDownCallback, this);
+  this.game.input.keyboard.addKey(Phaser.KeyCode.N).onUp.add(chargeUpCallback, this);
+  this.game.input.keyboard.addKey(Phaser.KeyCode.M).onDown.add(crouchDownCallback, this);
+  this.game.input.keyboard.addKey(Phaser.KeyCode.M).onUp.add(crouchUpCallback, this);
 
   this.game.input.gamepad.callbackContext = this;
   this.game.input.gamepad.onDownCallback = function (buttonCode) {
@@ -217,7 +217,7 @@ Player.prototype.update = function() {
     if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
   }
 
-  if (this.game.input.keyboard.isDown(Phaser.KeyCode.C) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_B)) {
+  if (this.game.input.keyboard.isDown(Phaser.KeyCode.M) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_B)) {
     this.crouching = true;
   } else {
     this.crouching = false;
