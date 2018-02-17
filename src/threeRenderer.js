@@ -206,7 +206,7 @@ var UpdateThreeScene = function (player, wolves) {
     w.data.threeSprite.material.map.offset.x = (w.animations.frame % 8) / 8;
     w.data.threeSprite.material.map.offset.y = (3 - ~~(w.animations.frame / 8)) / 4;
     w.data.threeSprite.position.set(w.x, 48, w.y);
-    w.data.threeViewMesh.position.set(w.data.threeSprite.position.x, 17, w.data.threeSprite.position.z)
+    w.data.threeViewMesh.position.set(w.data.threeSprite.position.x, w.currentState === WolfState.CONFUSED ? 2000 : 17, w.data.threeSprite.position.z)
     w.data.threeViewMesh.rotation.y = w.facing * -1;
   });
 };
