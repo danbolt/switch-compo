@@ -87,7 +87,7 @@ Gameplay.prototype.update = function() {
   if (this.fading === false) {
     this.game.physics.arcade.overlap(this.player, this.wolves, function (player, wolf) {
       player.kill();
-    }, undefined, this);
+    }, function (player, wolf) { return wolf.currentState !== WolfState.CONFUSED; } , this);
   }
 
   if (this.player.currentState === PlayerState.ATTACK) {

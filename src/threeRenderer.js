@@ -198,7 +198,7 @@ var UpdateThreeScene = function (player, wolves) {
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
   sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' ? -32 : 32, 64, 32);
 
-  target.position.set(player.targetPt.x, 16.1, player.targetPt.y);
+  target.position.set(player.targetPt.x, 16.1, player.targetPt.y + 16);
   target.rotation.y = player.targetPt.rotation;
   target.visible = player.targetPt.alive;
 
