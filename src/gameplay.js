@@ -82,7 +82,6 @@ Gameplay.prototype.create = function() {
 };
 Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground);
-  //this.game.physics.arcade.collide(this.wolves, this.foreground);
 
   if (this.fading === false) {
     this.game.physics.arcade.overlap(this.player, this.wolves, function (player, wolf) {
@@ -95,11 +94,13 @@ Gameplay.prototype.update = function() {
       wolf.confuse();
     }, undefined, this);
 
+    /*
     this.wolves.forEachAlive(function (wolf) {
       if (wolf.position.distance(this.player.targetPt.position) < this.player.targetPt.data.soundRange) {
         wolf.noticePoint(this.player.targetPt.position);
       }
     }, this);
+    */
   }
 
   // update the three.js scene to match gameplay

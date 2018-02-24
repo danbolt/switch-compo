@@ -92,9 +92,9 @@ var setupThreeScene= function (game, player, wolves) {
 
   target = new THREE.Mesh(sphere, TileMaterialMap[57]);
   ThreeScene.add(target);
-  target.add(new THREE.Mesh(circle, TileMaterialMap[57]));
-  target.children[0].position.y = 2;
-  target.children[0].rotation.x = Math.PI * -0.5;
+  //target.add(new THREE.Mesh(circle, TileMaterialMap[57]));
+  //target.children[0].position.y = 2;
+  //target.children[0].rotation.x = Math.PI * -0.5;
 
   // populate small tilemap
   var map = game.state.getCurrentState().map;
