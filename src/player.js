@@ -52,7 +52,7 @@ var Player = function(game, x, y) {
     this.rotation += this.game.time.elapsed * 0.01;
   }
   this.game.physics.enable(this.targetPt, Phaser.Physics.ARCADE);
-  this.targetPt.body.setSize(this.targetPt.data.radius * 2, this.targetPt.data.radius * 2);
+  this.targetPt.body.setSize(this.targetPt.data.radius, this.targetPt.data.radius);
   this.targetPt.kill();
   this.returnTargetTween = null;
 
