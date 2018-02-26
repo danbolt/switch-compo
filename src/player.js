@@ -217,6 +217,8 @@ Player.prototype.update = function() {
     if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
   }
 
+  GameplayCameraData.yPush = Math.pow(this.gamepadAxisCStick.y * 128, 3) / 15000;
+
   if (this.game.input.keyboard.isDown(Phaser.KeyCode.M) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_B)) {
     this.crouching = true;
   } else {
