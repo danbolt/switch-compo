@@ -6,7 +6,9 @@ var ThreeCamera = null;
 var ThreeRenderer = null;
 
 var JesseSheetTexture = null;
+var TreesTexture = null;
 var TileMaterialMap = {};
+var TreesMaterialMap = {};
 
 var GameplayCameraDistance = 250;
 var GameplayCameraAngle = -Math.PI / 2;
@@ -42,6 +44,25 @@ var loadThreeTextures = function () {
         var material = new THREE.MeshLambertMaterial( { map: texture, transparent: false } );
         TileMaterialMap[(x + (y * (JesseSheetTexture.image.width / 32)))] = material;
       }
+    }
+  });
+
+  tl.load('asset/img/trees.png', function (loadedTexture) {
+    TreesTexture = loadedTexture;
+
+    for (var i = 0; i < 10; i++) {
+      var texture = TreesTexture.clone();
+      texture.needsUpdate = true;
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.NearestFilter;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(96 / TreesTexture.image.width, 160 / TreesTexture.image.height);
+      texture.offset.x =  (i % 5) * (96 / (TreesTexture.image.width));
+      texture.offset.y = 1 - (~~(i / 5) + 1) * (160 / TreesTexture.image.height) ;
+
+      var material = new THREE.SpriteMaterial( { map: texture, fog: true } );
+      TreesMaterialMap[i] = material;
     }
   });
 };
@@ -127,6 +148,23 @@ var setupThreeScene= function (game, player, wolves) {
       }
   }
 
+  map.objects.decor.forEach(function (item) {
+    if (item.type === "tree") {
+      var material = TreesMaterialMap[0];
+      var scaleFactor = 1.0;
+      if (item.properties.index && isNaN(Number.parseInt(item.properties.index)) === false) {
+        material = TreesMaterialMap[Number.parseInt(item.properties.index)];
+      }
+      if (item.properties.scale && isNaN(Number.parseFloat(item.properties.scale)) === false) {
+        scaleFactor = Number.parseFloat(item.properties.scale);
+      }
+      var sprite = new THREE.Sprite(material);
+      sprite.position.set(item.x, (160 * scaleFactor) / 2 + 8, item.y);
+      sprite.scale.set(96 * scaleFactor, 160 * scaleFactor, 160 * scaleFactor);
+      ThreeScene.add(sprite);
+    }
+  }, this);
+
   wolves.children.forEach(function (w) {
     var wolfSpriteTexture = JesseSheetTexture.clone();
     wolfSpriteTexture.needsUpdate = true;
@@ -164,26 +202,11 @@ var setupThreeScene= function (game, player, wolves) {
                         //new THREE.Face3(0, 1, 4), new THREE.Face3(0, 6, 3),
                         //new THREE.Face3(0, 4, 5), new THREE.Face3(0, 5, 6),
     );
-    var viewMatieral = new THREE.MeshLambertMaterial({side: THREE.BackSide, color: 0x770000, transparent: true, opacity: 0.145}) /*new THREE.ShaderMaterial( {fragmentShader: `precision mediump float;
-          void main() {
-             gl_FragColor = vec4(0.0, 2.0, 0.2, 0.0);
-          }`});*/
+    var viewMatieral = new THREE.MeshLambertMaterial({side: THREE.BackSide, color: 0x770000, transparent: true, opacity: 0.145});
     viewMatieral.blending = THREE.AdditiveBlending;
     var viewMesh = new THREE.Mesh(viewGeom, viewMatieral);
     ThreeScene.add(viewMesh);
     w.data.threeViewMesh = viewMesh;
-
-    /*
-    var losDebugGeom = new THREE.CircleBufferGeometry(WolfSightRadius, 32);
-    var losWireframeGeom = new THREE.WireframeGeometry(losDebugGeom);
-    var lines = new THREE.LineSegments(losWireframeGeom);
-    
-    lines.material.transparent = true;
-    lines.scale.set(1 / sprite.scale.x, 2 / sprite.scale.y, 1 / sprite.scale.z)
-    lines.rotation.x = Math.PI / 2;
-    lines.position.y = 0.3
-    sprite.add(lines);
-    */
   }, this);
 };
 
