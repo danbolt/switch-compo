@@ -56,8 +56,21 @@ var Player = function(game, x, y) {
   this.targetPt.kill();
   this.returnTargetTween = null;
 
+  var backing = this.game.add.sprite(0, 0, 'jesseSheet1_32x32', 21);
+  backing.tint = 0x111111;
+  backing.fixedToCamera = true;
+  this.timerSprite = this.game.add.sprite(0, 0, 'jesseSheet1_32x32', 21);
+  this.timerSprite.fixedToCamera = true;
+  this.stamina = 1.0;
+  this.punishRecharging = false;
+
   var chargeDownCallback = function () {
-    if (this.currentState === PlayerState.MOVING) {
+    if (this.currentState === PlayerState.MOVING && this.stamina > 0 && this.punishRecharging === false) {
+      this.stamina -= 0.6;
+      if (this.stamina < 0) {
+        this.punishRecharging = true;
+      }
+
       this.currentState = PlayerState.CHARGE;
       this.body.velocity.set(0);
 
@@ -224,6 +237,16 @@ Player.prototype.update = function() {
   } else {
     this.crouching = false;
   }
+
+  if (this.currentState === PlayerState.MOVING) {
+    this.stamina = Math.min(1.0, this.stamina + this.game.time.elapsed * 0.0001);
+
+    if (this.stamina > 0.99) {
+      this.punishRecharging = false;
+    }
+  }
+  this.timerSprite.tint = this.punishRecharging ? 0xDD0000 : 0x00DD00;
+  this.timerSprite.width = this.stamina * 32;
 
   var moving = (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01);
   if (moving) {
