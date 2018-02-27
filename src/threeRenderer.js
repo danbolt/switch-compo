@@ -159,8 +159,10 @@ var setupThreeScene= function (game, player, wolves) {
         scaleFactor = Number.parseFloat(item.properties.scale);
       }
       var sprite = new THREE.Sprite(material);
-      sprite.position.set(item.x, (160 * scaleFactor) / 2 + 8, item.y);
+      sprite.position.set(item.x + 16, 14, item.y + 16);
       sprite.scale.set(96 * scaleFactor, 160 * scaleFactor, 96 * scaleFactor);
+      sprite.center.x = 0.575;
+      sprite.center.y = 0;
       ThreeScene.add(sprite);
     }
   }, this);
