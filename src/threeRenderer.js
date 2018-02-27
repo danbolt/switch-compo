@@ -50,7 +50,7 @@ var loadThreeTextures = function () {
   tl.load('asset/img/trees.png', function (loadedTexture) {
     TreesTexture = loadedTexture;
 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 15; i++) {
       var texture = TreesTexture.clone();
       texture.needsUpdate = true;
       texture.magFilter = THREE.NearestFilter;
@@ -125,21 +125,21 @@ var setupThreeScene= function (game, player, wolves) {
   for (var tx = 0; tx < map.width; tx++) {
       for (var ty = 0; ty < map.height; ty++) {
       	var tile = map.getTile(tx, ty, background);
-      	if (tile) {
+      	if (tile && tile.index !== 1) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 0, ty * 32 + 16);
       	}
       	
       	var tile = map.getTile(tx, ty, foreground);
-      	if (tile) {
+      	if (tile && tile.index !== 1) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
         }
           
         var tile = map.getTile(tx, ty, foreground2);
-      	if (tile) {
+      	if (tile && tile.index !== 1) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 64, ty * 32 + 16);
@@ -160,7 +160,7 @@ var setupThreeScene= function (game, player, wolves) {
       }
       var sprite = new THREE.Sprite(material);
       sprite.position.set(item.x, (160 * scaleFactor) / 2 + 8, item.y);
-      sprite.scale.set(96 * scaleFactor, 160 * scaleFactor, 160 * scaleFactor);
+      sprite.scale.set(96 * scaleFactor, 160 * scaleFactor, 96 * scaleFactor);
       ThreeScene.add(sprite);
     }
   }, this);
