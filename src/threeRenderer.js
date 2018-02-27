@@ -21,6 +21,18 @@ var GameplayFovChangeTween = null;
 var sprite = null; // TODO: rename me
 var target = null;
 var wolves = null;
+var rainDrops = [];
+
+var rainMat = new THREE.LineBasicMaterial({
+    color: 0x0000ff
+  });
+var rainGeom = new THREE.Geometry();
+  rainGeom.vertices.push(
+    new THREE.Vector3( 0, -10, 0 ),
+    new THREE.Vector3( 0,  10, 0 ),
+  );
+var rainGeomBuffer = new THREE.BufferGeometry();
+rainGeomBuffer.fromGeometry(rainGeom);
 
 var loadThreeTextures = function () {
   var tl = new THREE.TextureLoader();
@@ -148,24 +160,36 @@ var setupThreeScene= function (game, player, wolves) {
       }
   }
 
-  map.objects.decor.forEach(function (item) {
-    if (item.type === "tree") {
-      var material = TreesMaterialMap[0];
-      var scaleFactor = 1.0;
-      if (item.properties.index && isNaN(Number.parseInt(item.properties.index)) === false) {
-        material = TreesMaterialMap[Number.parseInt(item.properties.index)];
-      }
-      if (item.properties.scale && isNaN(Number.parseFloat(item.properties.scale)) === false) {
-        scaleFactor = Number.parseFloat(item.properties.scale);
-      }
-      var sprite = new THREE.Sprite(material);
-      sprite.position.set(item.x + 16, 14, item.y + 16);
-      sprite.scale.set(96 * scaleFactor, 160 * scaleFactor, 96 * scaleFactor);
-      sprite.center.x = 0.575;
-      sprite.center.y = 0;
-      ThreeScene.add(sprite);
+
+  if (map.properties.raining) {
+    for (var i = 0; i < 48; i++) {
+      var rainDrop = new THREE.Line( rainGeom, rainMat );
+      rainDrop.position.set(64 * i, 64, 1250 + ~~(Math.random() * 250));
+      ThreeScene.add(rainDrop); 
+      rainDrops.push(rainDrop);
     }
-  }, this);
+  }
+
+  if (map.objects.decor) {
+    map.objects.decor.forEach(function (item) {
+      if (item.type === "tree") {
+        var material = TreesMaterialMap[0];
+        var scaleFactor = 1.0;
+        if (item.properties.index && isNaN(Number.parseInt(item.properties.index)) === false) {
+          material = TreesMaterialMap[Number.parseInt(item.properties.index)];
+        }
+        if (item.properties.scale && isNaN(Number.parseFloat(item.properties.scale)) === false) {
+          scaleFactor = Number.parseFloat(item.properties.scale);
+        }
+        var sprite = new THREE.Sprite(material);
+        sprite.position.set(item.x + 16, 14, item.y + 16);
+        sprite.scale.set(96 * scaleFactor, 160 * scaleFactor, 96 * scaleFactor);
+        sprite.center.x = 0.575;
+        sprite.center.y = 0;
+        ThreeScene.add(sprite);
+      }
+    }, this);
+  }
 
   wolves.children.forEach(function (w) {
     var wolfSpriteTexture = JesseSheetTexture.clone();
@@ -234,6 +258,16 @@ var UpdateThreeScene = function (player, wolves) {
     w.data.threeViewMesh.position.set(w.data.threeSprite.position.x, w.currentState === WolfState.CONFUSED ? 2000 : 17, w.data.threeSprite.position.z)
     w.data.threeViewMesh.rotation.y = w.facing * -1;
   });
+
+  rainDrops.forEach(function (rainDrop) {
+    rainDrop.translateY(player.game.time.elapsed / -1.25 );
+
+    if (rainDrop.position.y < 0) {
+      rainDrop.position.x = sprite.position.x - 512 + ~~(Math.random() * 1024);
+      rainDrop.position.z = sprite.position.z - 512 + ~~(Math.random() * 1024);
+      rainDrop.translateY(128 + Math.random() * 64);
+    }
+  }, this);
 };
 
 var UnloadThreeScene = function(wolves) {
@@ -248,5 +282,7 @@ var UnloadThreeScene = function(wolves) {
   while (ThreeScene.children.length) {
     ThreeScene.remove(ThreeScene.children[0]);
   }
+
+  rainDrops = [];
 };
 

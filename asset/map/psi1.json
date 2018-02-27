@@ -116,7 +116,8 @@
  "properties":
     {
      "eastExit":"interlude1",
-     "northExit":"psi2"
+     "northExit":"psi2",
+     "raining":"true"
     },
  "renderorder":"right-down",
  "tileheight":32,

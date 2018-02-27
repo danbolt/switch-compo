@@ -244,6 +244,7 @@
  "properties":
     {
      "eastExit":"psi2",
+     "raining":"true",
      "westExit":"interlude2"
     },
  "renderorder":"right-down",
