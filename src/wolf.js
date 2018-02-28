@@ -87,6 +87,23 @@ Wolf.prototype.confuse = function () {
 
     this.nextEvent = this.game.time.events.add(WolfPauseTime, this.leapFunc, this);
   }, this);
+
+  this.data.threeSprite.visible = false;
+  this.data.particles.forEach(function (p) {
+    var gx = this.data.threeSprite.position.x + Math.random() * 24 - 12;
+    var gy = this.data.threeSprite.position.y + Math.random() * 64 - 32;
+    var gz = this.data.threeSprite.position.z + Math.random() * 24 - 12;
+    p.position.set(gx, gy, gz);
+
+    var d = 512;
+    var t = this.game.add.tween(p.position);
+    t.to({x: [gx + Math.random() * d - (d*0.5), gx], y: [gy + Math.random() * d - (d*0.5), gy], z: [gz + Math.random() * d - (d*0.5), gz]}, WolfDazeTime, Phaser.Easing.Quartic.Out);
+    t.onComplete.add(function () {
+      p.position.y = 2000;
+      this.data.threeSprite.visible = true;
+    }, this);
+    t.start();
+  }, this);
 };
 Wolf.prototype.noticePoint = function (positionToNotice) {
   // if we're confused or chasing the player, dont do this
@@ -189,16 +206,16 @@ Wolf.prototype.update = function () {
   if (theta < -Math.PI) { theta += Math.PI * 2; }
 
   if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
-    this.frame = 0;
+    this.frame = 11;
     this.data.threeSprite.scale.x = 32;
   } else if (Math.abs(theta) > Math.PI * 0.75) {
-    this.frame = 2;
+    this.frame = 13;
     this.data.threeSprite.scale.x = 32;
   } else if (Math.abs(theta) < Math.PI * 0.25) {
-    this.frame = 2;
+    this.frame = 13;
     this.data.threeSprite.scale.x = -32;
   } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
-    this.frame = 1;
+    this.frame = 12;
     this.data.threeSprite.scale.x = 32;
   }
 };

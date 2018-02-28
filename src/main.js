@@ -51,7 +51,7 @@ Preload.prototype.create = function() {
   loadThreeTextures();
 };
 Preload.prototype.update = function () {
-  if (JesseSheetTexture !== null && TreesTexture !== null) {
+  if (TilesTexture !== null && TreesTexture !== null && CharactersTexture !== null) {
     this.game.state.start('Gameplay', true, false, 'first_room', 'north');
   }
 };

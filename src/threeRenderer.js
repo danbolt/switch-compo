@@ -5,8 +5,9 @@ var ThreeScene = null;
 var ThreeCamera = null;
 var ThreeRenderer = null;
 
-var JesseSheetTexture = null;
+var TilesTexture = null;
 var TreesTexture = null;
+var CharactersTexture = null;
 var TileMaterialMap = {};
 var TreesMaterialMap = {};
 
@@ -37,24 +38,24 @@ rainGeomBuffer.fromGeometry(rainGeom);
 var loadThreeTextures = function () {
   var tl = new THREE.TextureLoader();
   tl.load('asset/img/finalrenderfordaniel1.png', function (loadedTexture) {
-    JesseSheetTexture = loadedTexture;
+    TilesTexture = loadedTexture;
 
     // create a hash table of materials for each block texture
-    for (var x = 0; x < JesseSheetTexture.image.width / 32; x++) {
-      for (var y = 0; y < JesseSheetTexture.image.height / 32; y++) {
-        var texture = JesseSheetTexture.clone();
+    for (var x = 0; x < TilesTexture.image.width / 32; x++) {
+      for (var y = 0; y < TilesTexture.image.height / 32; y++) {
+        var texture = TilesTexture.clone();
         texture.needsUpdate = true;
         texture.magFilter = THREE.NearestFilter;
         texture.minFilter = THREE.NearestFilter;
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(32 / JesseSheetTexture.image.width, 32 / JesseSheetTexture.image.height);
-        texture.offset.x = (x - 1) / (JesseSheetTexture.image.width / 32);
-        texture.offset.y = ((JesseSheetTexture.image.height / 32 - 1) - y) / (JesseSheetTexture.image.height / 32);
+        texture.repeat.set(32 / TilesTexture.image.width, 32 / TilesTexture.image.height);
+        texture.offset.x = (x - 1) / (TilesTexture.image.width / 32);
+        texture.offset.y = ((TilesTexture.image.height / 32 - 1) - y) / (TilesTexture.image.height / 32);
 
         
         var material = new THREE.MeshLambertMaterial( { map: texture, transparent: false } );
-        TileMaterialMap[(x + (y * (JesseSheetTexture.image.width / 32)))] = material;
+        TileMaterialMap[(x + (y * (TilesTexture.image.width / 32)))] = material;
       }
     }
   });
@@ -76,6 +77,10 @@ var loadThreeTextures = function () {
       var material = new THREE.SpriteMaterial( { map: texture, fog: true } );
       TreesMaterialMap[i] = material;
     }
+  });
+
+  tl.load('asset/img/playerSprite.png', function (loadedTexture) {
+    CharactersTexture = loadedTexture;
   });
 };
 
@@ -104,7 +109,7 @@ var setupThreeScene= function (game, player, wolves) {
   var directional = new THREE.DirectionalLight(0xFFFFFF, 0.3);
   ThreeScene.add(directional);
 
-  var playerSprite = JesseSheetTexture.clone();
+  var playerSprite = CharactersTexture.clone();
   playerSprite.needsUpdate = true;
   playerSprite.magFilter = THREE.NearestFilter;
   playerSprite.minFilter = THREE.NearestFilter;
@@ -192,7 +197,7 @@ var setupThreeScene= function (game, player, wolves) {
   }
 
   wolves.children.forEach(function (w) {
-    var wolfSpriteTexture = JesseSheetTexture.clone();
+    var wolfSpriteTexture = CharactersTexture.clone();
     wolfSpriteTexture.needsUpdate = true;
     wolfSpriteTexture.magFilter = THREE.NearestFilter;
     wolfSpriteTexture.minFilter = THREE.NearestFilter;
@@ -202,7 +207,7 @@ var setupThreeScene= function (game, player, wolves) {
     wolfSpriteTexture.offset.y = 3 / 4;
 
     var wolfSpriteMaterial = new THREE.SpriteMaterial( {fog: true, map: wolfSpriteTexture });
-    wolfSpriteMaterial.color = new THREE.Color(0xDD4444);
+    wolfSpriteMaterial.color = new THREE.Color(0xDDAAAA);
 
     var sprite = new THREE.Sprite(wolfSpriteMaterial);
     sprite.position.set(w.x, 48, w.y);
@@ -233,6 +238,14 @@ var setupThreeScene= function (game, player, wolves) {
     var viewMesh = new THREE.Mesh(viewGeom, viewMatieral);
     ThreeScene.add(viewMesh);
     w.data.threeViewMesh = viewMesh;
+    w.data.particles = [];
+
+    for (var i = 0; i < 48; i++) {
+      var particle = new THREE.Mesh( new THREE.PlaneGeometry( 4, 5, 1, 1 ), new THREE.MeshBasicMaterial({color: [0x1b2b32, 0x1b2b32, 0x1b2b32, 0x1b2b32, 0x1b2b32][~~(5 * Math.random())], side: THREE.DoubleSide}) );
+      particle.position.set(64 * i, 2000, 1250 + ~~(Math.random() * 250));
+      w.data.particles.push(particle);
+      ThreeScene.add(particle);
+    }
   }, this);
 };
 
@@ -242,10 +255,10 @@ var UpdateThreeScene = function (player, wolves) {
   ThreeCamera.position.z = (player.y + player.targetPt.y) / 2 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
   ThreeCamera.lookAt((player.x + player.targetPt.x) / 2, 16, (player.y + player.targetPt.y) / 2);
 
-  sprite.position.set(player.x, 42 + (player.crouching ? -20 : 0), player.y + 16);
+  sprite.position.set(player.x, 42, player.y + 16);
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
-  sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' ? -32 : 32, 64, 32);
+  sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' || player.animations.currentAnim.name === 'idle_right_focus' ? -32 : 32, 64, 32);
 
   target.position.set(player.targetPt.x, 16.1, player.targetPt.y + 16);
   target.rotation.y = player.targetPt.rotation;

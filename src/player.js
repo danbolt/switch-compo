@@ -18,7 +18,12 @@ var Player = function(game, x, y) {
   this.animations.add('idle_down', [0], 8, true);
   this.animations.add('idle_left', [2], 8, true);
   this.animations.add('idle_up', [1], 8, true);
-  this.animations.play('run_down');
+  this.animations.add('idle_right_focus', [25], 8, true);
+  this.animations.add('idle_down_focus', [24], 8, true);
+  this.animations.add('idle_left_focus', [25], 8, true);
+  this.animations.add('idle_up_focus', [1], 8, true);
+  this.animations.add('crouch', [3], 8, true);
+  this.animations.add('crouch_focus', [4], 8, true);
 
   this.walkSpeed = 150;
   this.dashSpeed = 400;
@@ -286,13 +291,34 @@ Player.prototype.update = function() {
   var theta = Math.atan2(this.facingDirection.y, this.facingDirection.x) - GameplayCameraAngle - Math.PI * 0.5;
   if (theta > Math.PI) { theta -= Math.PI * 2; }
   if (theta < -Math.PI) { theta += Math.PI * 2; }
-  if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
-    this.animations.play(moving ? 'run_down' : 'idle_down');
-  } else if (Math.abs(theta) > Math.PI * 0.75) {
-    this.animations.play(moving ? 'run_left' : 'idle_left');
-  } else if (Math.abs(theta) < Math.PI * 0.25) {
-    this.animations.play(moving ? 'run_right' : 'idle_right');
-  } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
-    this.animations.play(moving ? 'run_up' : 'idle_up' );
+
+  if (this.currentState !== PlayerState.CHARGE) {
+    if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
+      this.animations.play(moving ? 'run_down' : 'idle_down');
+    } else if (Math.abs(theta) > Math.PI * 0.75) {
+      this.animations.play(moving ? 'run_left' : 'idle_left');
+    } else if (Math.abs(theta) < Math.PI * 0.25) {
+      this.animations.play(moving ? 'run_right' : 'idle_right');
+    } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
+      this.animations.play(moving ? 'run_up' : 'idle_up' );
+    }
+  } else {
+    if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
+      this.animations.play('idle_down_focus');
+    } else if (Math.abs(theta) > Math.PI * 0.75) {
+      this.animations.play('idle_left_focus');
+    } else if (Math.abs(theta) < Math.PI * 0.25) {
+      this.animations.play('idle_right_focus');
+    } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
+      this.animations.play('idle_up_focus' );
+    }
+  }
+
+  if (this.crouching) {
+    if (this.currentState === PlayerState.CHARGE) {
+      this.animations.play('crouch_focus');
+    } else {
+      this.animations.play('crouch');
+    }
   }
 };
