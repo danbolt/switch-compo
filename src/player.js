@@ -95,9 +95,6 @@ var Player = function(game, x, y) {
   this.stamina = 1.0;
   this.punishRecharging = false;
 
-  this.timerSprite.renderable = false;
-  backing.renderable = false;
-
   var chargeDownCallback = function () {
     if (this.alive && this.currentState === PlayerState.MOVING && this.stamina > 0 && this.punishRecharging === false) {
       this.stamina -= 0.6;
