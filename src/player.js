@@ -45,7 +45,7 @@ var Player = function(game, x, y) {
   this.gamepadAxisCStick = new Phaser.Point(0, 0);
 
   this.events.onKilled.add(function() {
-    this.data.threeSprite.visible = false;
+    this.frame = 19;
   }, this);
 
   this.events.onKilled.add(function() {
@@ -95,8 +95,11 @@ var Player = function(game, x, y) {
   this.stamina = 1.0;
   this.punishRecharging = false;
 
+  this.timerSprite.renderable = false;
+  backing.renderable = false;
+
   var chargeDownCallback = function () {
-    if (this.currentState === PlayerState.MOVING && this.stamina > 0 && this.punishRecharging === false) {
+    if (this.alive && this.currentState === PlayerState.MOVING && this.stamina > 0 && this.punishRecharging === false) {
       this.stamina -= 0.6;
       if (this.stamina < 0) {
         this.punishRecharging = true;
@@ -318,33 +321,37 @@ Player.prototype.update = function() {
   if (theta > Math.PI) { theta -= Math.PI * 2; }
   if (theta < -Math.PI) { theta += Math.PI * 2; }
 
-  if (this.currentState !== PlayerState.CHARGE) {
-    if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
-      this.animations.play(moving ? 'run_down' : 'idle_down');
-    } else if (Math.abs(theta) > Math.PI * 0.75) {
-      this.animations.play(moving ? 'run_left' : 'idle_left');
-    } else if (Math.abs(theta) < Math.PI * 0.25) {
-      this.animations.play(moving ? 'run_right' : 'idle_right');
-    } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
-      this.animations.play(moving ? 'run_up' : 'idle_up' );
+  if (this.alive) {
+    if (this.currentState !== PlayerState.CHARGE) {
+      if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
+        this.animations.play(moving ? 'run_down' : 'idle_down');
+      } else if (Math.abs(theta) > Math.PI * 0.75) {
+        this.animations.play(moving ? 'run_left' : 'idle_left');
+      } else if (Math.abs(theta) < Math.PI * 0.25) {
+        this.animations.play(moving ? 'run_right' : 'idle_right');
+      } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
+        this.animations.play(moving ? 'run_up' : 'idle_up' );
+      }
+    } else {
+      if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
+        this.animations.play('idle_down_focus');
+      } else if (Math.abs(theta) > Math.PI * 0.75) {
+        this.animations.play('idle_left_focus');
+      } else if (Math.abs(theta) < Math.PI * 0.25) {
+        this.animations.play('idle_right_focus');
+      } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
+        this.animations.play('idle_up_focus' );
+      }
+    }
+
+    if (this.crouching) {
+      if (this.currentState === PlayerState.CHARGE) {
+        this.animations.play('crouch_focus');
+      } else {
+        this.animations.play('crouch');
+      }
     }
   } else {
-    if (theta >= Math.PI * 0.25 && theta <= Math.PI * 0.75) {
-      this.animations.play('idle_down_focus');
-    } else if (Math.abs(theta) > Math.PI * 0.75) {
-      this.animations.play('idle_left_focus');
-    } else if (Math.abs(theta) < Math.PI * 0.25) {
-      this.animations.play('idle_right_focus');
-    } else if (theta <= Math.PI * -0.25 && theta > Math.PI * -0.75) {
-      this.animations.play('idle_up_focus' );
-    }
-  }
-
-  if (this.crouching) {
-    if (this.currentState === PlayerState.CHARGE) {
-      this.animations.play('crouch_focus');
-    } else {
-      this.animations.play('crouch');
-    }
+    this.frame = 19;
   }
 };
