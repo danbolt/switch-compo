@@ -128,6 +128,21 @@ var setupThreeScene= function (game, player, wolves) {
   ThreeScene.add(sprite);
   player.data.threeSprite = sprite;
 
+  var bloodMaterial = TileMaterialMap[57].clone();
+  bloodMaterial.transparent = true;
+  bloodMaterial.needsUpdate = true;
+  var bloodGeometry = new THREE.PlaneGeometry( 32, 32, 1, 1 )
+  player.data.bloods = [];
+  for (var i = 0; i < 6; i++) {
+    var particle = new THREE.Mesh( bloodGeometry, bloodMaterial );
+    particle.scale.set(2.0, 2.0, 1.0);
+    particle.position.set(400 + 32*i, 2000, 1500);
+    particle.rotateY(Math.PI * Math.random() * 2);
+    particle.rotateX(Math.PI * -0.5);
+    ThreeScene.add(particle);
+    player.data.bloods.push(particle);
+  }
+
   target = new THREE.Mesh(sphere, TileMaterialMap[57]);
   ThreeScene.add(target);
   //target.add(new THREE.Mesh(circle, TileMaterialMap[57]));

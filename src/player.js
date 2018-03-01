@@ -48,6 +48,32 @@ var Player = function(game, x, y) {
     this.data.threeSprite.visible = false;
   }, this);
 
+  this.events.onKilled.add(function() {
+    this.data.bloods.forEach(function (bloodSprite, i, a) {
+      bloodSprite.position.set(this.x, 24, this.y);
+      bloodSprite.scale.set(0.7 + 0.2 * Math.random(), 0.7 + 0.2 * Math.random(), 1.0);
+
+      if (i === 0) {
+        bloodSprite.position.y = 17;
+
+        var ts = this.game.add.tween(bloodSprite.scale);
+        ts.to({ x: 4, y: 4, z:4}, 200, Phaser.Easing.Cubic.Out);
+        ts.start();
+      } else {
+        var l = (64 +  12 * Math.random())
+        var tp = this.game.add.tween(bloodSprite.position);
+        tp.to({ x: this.x + (l * Math.cos(i / (a.length-1) * Math.PI * 2 + 0.41 * Math.random())), y: [21, 17 + i*0.8], z: this.y + (l * Math.sin(i / (a.length-1) * Math.PI * 2 + 0.41 * Math.random())) }, 300, Phaser.Easing.Cubic.Out);
+        tp.start();
+        
+        var ts = this.game.add.tween(bloodSprite.scale);
+        var rs = ~~(2 * Math.random())
+        ts.to({ x: 0.8 + rs, y: 0.8 + rs}, 200, Phaser.Easing.Cubic.Out);
+        ts.start();
+      }
+      
+    }, this);
+  }, this);
+
   this.targetPt = this.game.add.sprite(32, 32, 'jesseSheet1_32x32', 27);
   this.targetPt.data.soundRange = 185;
   this.targetPt.data.radius = 48;
