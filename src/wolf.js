@@ -91,17 +91,20 @@ Wolf.prototype.confuse = function () {
   this.data.threeSprite.visible = false;
   this.data.particles.forEach(function (p) {
     var gx = this.data.threeSprite.position.x + Math.random() * 24 - 12;
-    var gy = this.data.threeSprite.position.y + Math.random() * 64 - 32;
+    var gy = this.data.threeSprite.position.y + Math.random() * 64 - 42;
     var gz = this.data.threeSprite.position.z + Math.random() * 24 - 12;
     p.position.set(gx, gy, gz);
 
     var d = 512;
     var t = this.game.add.tween(p.position);
-    t.to({x: [gx + Math.random() * d - (d*0.5), gx], y: [gy + Math.random() * d - (d*0.5), gy], z: [gz + Math.random() * d - (d*0.5), gz]}, WolfDazeTime, Phaser.Easing.Quartic.Out);
+    t.to({x: [gx + Math.random() * d - (d*0.5), gx], y: [gy + Math.random() * d - (d*0.5), gy], z: [gz + Math.random() * d - (d*0.5), gz]}, WolfDazeTime - 150, Phaser.Easing.Quartic.Out);
     t.onComplete.add(function () {
       p.position.y = 2000;
       this.data.threeSprite.visible = true;
     }, this);
+    t.start();
+    var t = this.game.add.tween(p.rotation);
+    t.to({x: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2], y: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2], z: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2]}, WolfDazeTime + 150, Phaser.Easing.Quartic.InOut);
     t.start();
   }, this);
 };

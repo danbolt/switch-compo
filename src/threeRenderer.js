@@ -240,8 +240,8 @@ var setupThreeScene= function (game, player, wolves) {
     w.data.threeViewMesh = viewMesh;
     w.data.particles = [];
 
-    for (var i = 0; i < 48; i++) {
-      var particle = new THREE.Mesh( new THREE.PlaneGeometry( 4, 5, 1, 1 ), new THREE.MeshBasicMaterial({color: [0x1b2b32, 0x1b2b32, 0x1b2b32, 0x1b2b32, 0x1b2b32][~~(5 * Math.random())], side: THREE.DoubleSide}) );
+    for (var i = 0; i < 96; i++) {
+      var particle = new THREE.Mesh( new THREE.PlaneGeometry( 4, 5, 1, 1 ), new THREE.MeshBasicMaterial({color: [0x1b2b32, 0x212c33, 0x3e343b, 0x2e2e36, 0x413b42][~~(5 * Math.random())], side: THREE.DoubleSide}) );
       particle.position.set(64 * i, 2000, 1250 + ~~(Math.random() * 250));
       w.data.particles.push(particle);
       ThreeScene.add(particle);
