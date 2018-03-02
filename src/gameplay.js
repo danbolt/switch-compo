@@ -21,6 +21,22 @@ Gameplay.prototype.create = function() {
   // Once we've rendered though, we can get rid of everything.
   this.game.world.children.forEach(function (child) { child.destroy(); }, this);
 
+  if (audioTransitionTable[this.mapKey] !== undefined && audioTransitionTable[this.mapKey] !== bgms.currentlyPlaying) {
+    if (bgms.currentlyPlaying !== null) {
+      var oldAudio = bgms[bgms.currentlyPlaying];
+      var vot = this.game.add.tween(oldAudio);
+      vot.to( {volume: 0}, 1800);
+      vot.onComplete.add(function () { oldAudio.stop(); }, this);
+      vot.start();
+    }
+    bgms[audioTransitionTable[this.mapKey]].stop();
+    bgms[audioTransitionTable[this.mapKey]].play(undefined, 0, 0, true);
+    var vt = this.game.add.tween(bgms[audioTransitionTable[this.mapKey]]);
+    vt.to( {volume: 1}, 2500);
+    vt.start();
+    bgms.currentlyPlaying = audioTransitionTable[this.mapKey];
+  }
+
   // create map
   this.map = this.game.add.tilemap(this.mapKey);
   this.map.addTilesetImage('set1', 'jesseSheet1_tile');

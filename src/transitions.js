@@ -10,3 +10,15 @@ var TransitionTable = {
   "spectre_encountercrouching1": "Hold the A button to crouch.",
   "psi1psi2": "Use the center part of the circle to stun them."
 };
+
+var audioTransitionTable = {
+  "first_room": "outdoors",
+  "enter_ruins": "outdoors",
+  "spectre_encounter": "indoors",
+  "crouching3": "indoors",
+  "interlude1": "outdoors",
+  "psi3": "outdoors",
+  "interlude2": "indoors",
+  "overcoming": "indoors",
+  "leaving_ruins": "outdoors"
+};

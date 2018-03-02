@@ -1,3 +1,6 @@
+var HQ_AUDIO = false;
+var bgms = { outdoors: null, indoors: null, currentlyPlaying: null };
+
 var Preload = function () {
 	//
 };
@@ -33,6 +36,14 @@ Preload.prototype.preload = function() {
   //this.game.load.tilemap('map1', 'asset/map/map1.json', undefined, Phaser.Tilemap.TILED_JSON);
   //this.game.load.tilemap('map2', 'asset/map/map2.json', undefined, Phaser.Tilemap.TILED_JSON);
   //this.game.load.tilemap('map3', 'asset/map/map3.json', undefined, Phaser.Tilemap.TILED_JSON);
+
+  if (HQ_AUDIO) {
+    this.game.load.audio('outdoors', ['asset/bgm/wind_bgm.ogg']);
+    this.game.load.audio('indoors', ['asset/bgm/cave_bgm.ogg']);
+  } else {
+    this.game.load.audio('outdoors', ['asset/bgm/wind_bgm_lq.ogg', 'asset/bgm/wind_bgm_lq.mp3']);
+    this.game.load.audio('indoors', ['asset/bgm/cave_bgm_lq.ogg', 'asset/bgm/cave_bgm_lq.mp3']);
+  }
 };
 Preload.prototype.create = function() {
   this.game.scale.onSizeChange.add(function () {
@@ -46,6 +57,9 @@ Preload.prototype.create = function() {
   this.game.canvas = ThreeJSCanvas;
   this.game.scale.reflowCanvas();
   this.game.canvas = cv;
+
+  bgms.outdoors = this.game.add.audio('outdoors');
+  bgms.indoors = this.game.add.audio('indoors');
 
   // move this to loader later
   loadThreeTextures();
