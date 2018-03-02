@@ -1,5 +1,6 @@
 var HQ_AUDIO = false;
 var bgms = { outdoors: null, indoors: null, currentlyPlaying: null };
+var sfx = {};
 
 var Preload = function () {
 	//
@@ -33,9 +34,14 @@ Preload.prototype.preload = function() {
   this.game.load.spritesheet('jesseSheet1_32x32', 'asset/img/finalrenderfordaniel1.png', 32, 32);
 
   this.game.load.image('jesseSheet1_tile', 'asset/img/finalrenderfordaniel1.png');
-  //this.game.load.tilemap('map1', 'asset/map/map1.json', undefined, Phaser.Tilemap.TILED_JSON);
-  //this.game.load.tilemap('map2', 'asset/map/map2.json', undefined, Phaser.Tilemap.TILED_JSON);
-  //this.game.load.tilemap('map3', 'asset/map/map3.json', undefined, Phaser.Tilemap.TILED_JSON);
+
+  this.game.load.audio('psi_hover', 'asset/sfx/psi_hover.wav');
+  this.game.load.audio('psi_shatter0', 'asset/sfx/psi_shatter0.wav');
+  this.game.load.audio('psi_shatter1', 'asset/sfx/psi_shatter1.wav');
+  this.game.load.audio('psi_shatter2', 'asset/sfx/psi_shatter2.wav');
+  this.game.load.audio('crouch0', 'asset/sfx/crouch0.wav');
+  this.game.load.audio('crouch1', 'asset/sfx/crouch1.wav');
+  this.game.load.audio('crouch2', 'asset/sfx/crouch2.wav');
 
   if (HQ_AUDIO) {
     this.game.load.audio('outdoors', ['asset/bgm/wind_bgm.ogg']);
@@ -60,6 +66,14 @@ Preload.prototype.create = function() {
 
   bgms.outdoors = this.game.add.audio('outdoors');
   bgms.indoors = this.game.add.audio('indoors');
+
+  sfx['psi_hover'] = this.game.add.audio('psi_hover');
+  sfx['psi_shatter0'] = this.game.add.audio('psi_shatter0');
+  sfx['psi_shatter1'] = this.game.add.audio('psi_shatter1');
+  sfx['psi_shatter2'] = this.game.add.audio('psi_shatter2');
+  sfx['crouch0'] = this.game.add.audio('crouch0');
+  sfx['crouch1'] = this.game.add.audio('crouch1');
+  sfx['crouch2'] = this.game.add.audio('crouch2');
 
   // move this to loader later
   loadThreeTextures();

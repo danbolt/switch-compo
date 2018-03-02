@@ -108,6 +108,7 @@ var Player = function(game, x, y) {
       this.targetPt.x = this.x;
       this.targetPt.y = this.y;
       this.targetPt.revive();
+      sfx['psi_hover'].play(undefined, 0, 0.2, true);
 
       if (GameplayFovChangeTween !== null) {
         GameplayFovChangeTween.stop();
@@ -134,6 +135,9 @@ var Player = function(game, x, y) {
       this.targetPt.body.velocity.set(0);
 
       this.targetPt.tint = 0xFFFF00;
+
+      sfx['psi_hover'].stop();
+      sfx[['psi_shatter0', 'psi_shatter1', 'psi_shatter2'][~~(3 * Math.random())]].play(undefined, 0, 0.5, false);
 
       this.game.time.events.add(this.attackDuration, function () {
         this.targetPt.kill();
@@ -169,6 +173,8 @@ var Player = function(game, x, y) {
       GameplayFovChangeTween.stop();
       GameplayFovChangeTween = null;
     }
+
+    sfx[['crouch0', 'crouch1', 'crouch2'][~~(3 * Math.random())]].play(undefined, 0, 0.5, false);
 
     GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
     GameplayFovChangeTween.to( { fov: GameplayCrouchingFov, zDist: 300, yDist: 120 }, 500, Phaser.Easing.Cubic.InOut);
