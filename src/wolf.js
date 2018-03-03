@@ -81,6 +81,8 @@ Wolf.prototype.removeNextEvent = function () {
 Wolf.prototype.confuse = function () {
   this.removeNextEvent();
 
+  sfx['respawn'].play();
+
   this.currentState = WolfState.CONFUSED;
   this.nextEvent = this.game.time.events.add(WolfDazeTime, function () {
     this.removeNextEvent();
@@ -126,6 +128,7 @@ Wolf.prototype.leapFunc = function () {
   if (this.isPlayerInSight(false)) {
     this.currentState = WolfState.LEAPING;
     this.facing = this.position.angle(this.player.position);
+    sfx[['growl0', 'growl1', 'growl2', 'growl3'][~~(4 * Math.random())]].play();
 
     this.nextEvent = this.game.time.events.add(WolfLeapTime, function () {
       this.currentState = WolfState.ALERT;
@@ -148,6 +151,8 @@ Wolf.prototype.setPathToPoint = function(position) {
 Wolf.prototype.chasePlayer = function() {
   this.setPathToPoint(this.player.position);
   this.currentState = WolfState.CHASING;
+
+  sfx['grunt0'].play();
 };
 Wolf.prototype.update = function () {
 

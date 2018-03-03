@@ -42,6 +42,17 @@ Preload.prototype.preload = function() {
   this.game.load.audio('crouch0', 'asset/sfx/crouch0.wav');
   this.game.load.audio('crouch1', 'asset/sfx/crouch1.wav');
   this.game.load.audio('crouch2', 'asset/sfx/crouch2.wav');
+  this.game.load.audio('grunt0', 'asset/sfx/grunt0.wav');
+  this.game.load.audio('grunt1', 'asset/sfx/grunt1.wav');
+  this.game.load.audio('growl0', 'asset/sfx/growl0.wav');
+  this.game.load.audio('growl1', 'asset/sfx/growl1.wav');
+  this.game.load.audio('growl2', 'asset/sfx/growl2.wav');
+  this.game.load.audio('growl3', 'asset/sfx/growl3.wav');
+  this.game.load.audio('respawn', 'asset/sfx/respawn.wav');
+  this.game.load.audio('died0', 'asset/sfx/died0.wav');
+  this.game.load.audio('died1', 'asset/sfx/died1.wav');
+  this.game.load.audio('died2', 'asset/sfx/died2.wav');
+  this.game.load.audio('died3', 'asset/sfx/died3.wav');
 
   if (HQ_AUDIO) {
     this.game.load.audio('outdoors', ['asset/bgm/wind_bgm.ogg']);
@@ -74,6 +85,17 @@ Preload.prototype.create = function() {
   sfx['crouch0'] = this.game.add.audio('crouch0');
   sfx['crouch1'] = this.game.add.audio('crouch1');
   sfx['crouch2'] = this.game.add.audio('crouch2');
+  sfx['grunt0'] = this.game.add.audio('grunt0');
+  sfx['grunt1'] = this.game.add.audio('grunt1');
+  sfx['growl0'] = this.game.add.audio('growl0');
+  sfx['growl1'] = this.game.add.audio('growl1');
+  sfx['growl2'] = this.game.add.audio('growl2');
+  sfx['growl3'] = this.game.add.audio('growl3');
+  sfx['respawn'] = this.game.add.audio('respawn');
+  sfx['died0'] = this.game.add.audio('died0');
+  sfx['died1'] = this.game.add.audio('died1');
+  sfx['died2'] = this.game.add.audio('died2');
+  sfx['died3'] = this.game.add.audio('died3');
 
   // move this to loader later
   loadThreeTextures();

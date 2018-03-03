@@ -4,7 +4,7 @@ What time do I have left:
 Monday: Foilage decorations (trees/rocks)✔, rain✔
 Tuesday: Player crouch sprites✔, focus sprites✔, bloody death✔, enemy stun✔, ground tilesheets✔
 Wednesday: Enemy sprites✔, "goddess" sprite✔, others sprites✔
-Thursday: bgm✔, sound effects, Text content, dialogue overlay
+Thursday: bgm✔, sound effects,   Text content, dialogue overlay
 Friday: Decorate levels
 Saturday: Decorate levels and final polish and cry
 Sunday: Show Jesse the deal
@@ -18,3 +18,7 @@ http://www.noiseforfun.com/2014-sound-effects/wind-gust-2/
 http://www.noiseforfun.com/2012-sound-effects/woody-03/  <<-- Very PS1/PS2
 https://freesound.org/people/SocializedArtist45/sounds/266593/
 https://freesound.org/people/spookymodem/sounds/249819/
+https://freesound.org/people/TobiasKosmos/packs/10116/
+https://freesound.org/people/XxChr0nosxX/sounds/268227/
+https://freesound.org/people/Aleks41/sounds/406063/
+https://freesound.org/people/qubodup/sounds/219570/

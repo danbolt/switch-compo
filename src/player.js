@@ -46,6 +46,7 @@ var Player = function(game, x, y) {
 
   this.events.onKilled.add(function() {
     this.frame = 19;
+    sfx[['died0', 'died1', 'died2', 'died3'][~~(Math.random() * 4)]].play();
   }, this);
 
   this.events.onKilled.add(function() {
