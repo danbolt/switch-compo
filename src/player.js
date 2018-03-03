@@ -88,11 +88,15 @@ var Player = function(game, x, y) {
   this.targetPt.kill();
   this.returnTargetTween = null;
 
-  var backing = this.game.add.sprite(0, 0, 'jesseSheet1_32x32', 21);
+  var backing = this.game.add.sprite(16 - 1, 16 - 1, 'jesseSheet1_32x32', 21);
   backing.tint = 0x111111;
   backing.fixedToCamera = true;
-  this.timerSprite = this.game.add.sprite(0, 0, 'jesseSheet1_32x32', 21);
+  backing.width = 64 + 2;
+  backing.height = 16 + 2;
+  this.timerSprite = this.game.add.sprite(16, 16, 'jesseSheet1_32x32', 21);
   this.timerSprite.fixedToCamera = true;
+  this.timerSprite.width = 64;
+  this.timerSprite.height = 16;
   this.stamina = 1.0;
   this.punishRecharging = false;
 
@@ -283,8 +287,8 @@ Player.prototype.update = function() {
       this.punishRecharging = false;
     }
   }
-  this.timerSprite.tint = this.punishRecharging ? 0xDD0000 : 0x00DD00;
-  this.timerSprite.width = this.stamina * 32;
+  this.timerSprite.tint = this.punishRecharging ? 0x8c2e2e : 0x368c2e;
+  this.timerSprite.width = Math.max(0, this.stamina) * 64;
 
   var moving = (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01);
   if (moving) {
