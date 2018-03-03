@@ -178,6 +178,11 @@ Gameplay.prototype.shutdown = function() {
   UnloadThreeScene(this.wolves);
 
   this.game.cache.removeTilemap(this.mapKey);
+  
+  this.game.input.gamepad.callbackContext = undefined;
+  this.game.input.gamepad.onDownCallback = null;
+  this.game.input.gamepad.onUpCallback = null;
+  this.game.input.gamepad.onAxisCallback = null;
 
   this.player = null;
   this.wolves = null;
