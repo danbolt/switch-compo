@@ -38,6 +38,8 @@ var Player = function(game, x, y) {
   this.body.setSize(30, 32);
   this.body.offset.set(1, 32);
 
+  this.halt = false;
+
   this.currentState = PlayerState.MOVING;
   this.facingDirection = new Phaser.Point(0.0, 1.0);
   this.isCrouching = false;
@@ -101,6 +103,10 @@ var Player = function(game, x, y) {
   this.punishRecharging = false;
 
   var chargeDownCallback = function () {
+    if (this.halt === true) {
+      return; 
+    }
+
     if (this.alive && this.currentState === PlayerState.MOVING && this.stamina > 0 && this.punishRecharging === false) {
       this.stamina -= 0.6;
       if (this.stamina < 0) {
@@ -135,6 +141,10 @@ var Player = function(game, x, y) {
     }
   };
   var chargeUpCallback = function () {
+    if (this.halt === true) {
+      return; 
+    }
+
     if (this.currentState === PlayerState.CHARGE) {
       this.currentState = PlayerState.ATTACK;
       this.targetPt.body.velocity.set(0);
@@ -184,6 +194,10 @@ var Player = function(game, x, y) {
     }
   };
   var crouchDownCallback = function () {
+    if (this.halt === true) {
+      return; 
+    }
+
     if (GameplayFovChangeTween !== null) {
       GameplayFovChangeTween.stop();
       GameplayFovChangeTween = null;
@@ -200,6 +214,10 @@ var Player = function(game, x, y) {
     GameplayFovChangeTween.start();
   };
   var crouchUpCallback = function () {
+    if (this.halt === true) {
+      return; 
+    }
+
     if (GameplayFovChangeTween !== null) {
       GameplayFovChangeTween.stop();
       GameplayFovChangeTween = null;
@@ -264,27 +282,34 @@ Player.prototype.update = function() {
     inputY = this.gamepadAxis.y;
   }
 
-  if (this.game.input.keyboard.isDown(Phaser.KeyCode.Q) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_LEFT_TRIGGER)) {
-    GameplayCameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed;
-
-    if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
-  } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.E) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER)) {
-    GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed;
-
-    if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
-  } else if (this.gamepadAxisCStick.x < -0.1) {
-    GameplayCameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed * Math.abs(this.gamepadAxisCStick.x);
-
-    if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
-  } else if (this.gamepadAxisCStick.x > 0.1) {
-    GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed * Math.abs(this.gamepadAxisCStick.x);
-
-    if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
+  if (this.halt === true) {
+    inputX = 0;
+    inputY = 0;
   }
 
-  GameplayCameraData.yPush = Math.pow(this.gamepadAxisCStick.y * 128, 3) / 15000;
+  if (this.halt === false) {
+    if (this.game.input.keyboard.isDown(Phaser.KeyCode.Q) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_LEFT_TRIGGER)) {
+      GameplayCameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed;
 
-  if (this.game.input.keyboard.isDown(Phaser.KeyCode.M) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_B)) {
+      if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
+    } else if (this.game.input.keyboard.isDown(Phaser.KeyCode.E) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_RIGHT_TRIGGER)) {
+      GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed;
+
+      if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
+    } else if (this.gamepadAxisCStick.x < -0.1) {
+      GameplayCameraAngle -= this.cameraMoveSpeed * this.game.time.elapsed * Math.abs(this.gamepadAxisCStick.x);
+
+      if (GameplayCameraAngle < -Math.PI) { GameplayCameraAngle = Math.PI; }
+    } else if (this.gamepadAxisCStick.x > 0.1) {
+      GameplayCameraAngle += this.cameraMoveSpeed * this.game.time.elapsed * Math.abs(this.gamepadAxisCStick.x);
+
+      if (GameplayCameraAngle > Math.PI) { GameplayCameraAngle = -Math.PI; }
+    }
+
+    GameplayCameraData.yPush = Math.pow(this.gamepadAxisCStick.y * 128, 3) / 15000;
+  }
+
+  if (this.halt === false && this.game.input.keyboard.isDown(Phaser.KeyCode.M) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_B)) {
     this.crouching = true;
   } else {
     this.crouching = false;

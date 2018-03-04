@@ -1555,6 +1555,7 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "message":"Run away.",
      "northExit":"second_room"
     },
  "renderorder":"right-down",

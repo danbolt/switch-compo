@@ -122,6 +122,7 @@
  "properties":
     {
      "eastExit":"enter_ruins",
+     "message":"Don't be seen.",
      "southExit":"crouching1"
     },
  "renderorder":"right-down",

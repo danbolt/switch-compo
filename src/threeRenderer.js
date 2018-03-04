@@ -12,7 +12,7 @@ var TileMaterialMap = {};
 var TreesMaterialMap = {};
 
 var GameplayCameraDistance = 250;
-var GameplayCameraAngle = -Math.PI / 2;
+var GameplayCameraAngle = -Math.PI / 2 + 0.1;
 const GameplayWalkingFov = 50;
 const GameplayCrouchingFov = 40;
 const GameplayPSIFov = 70;
@@ -260,7 +260,6 @@ var setupThreeScene= function (game, player, wolves) {
         sprite.scale.set(32 * scaleFactor, 64 * scaleFactor, 32 * scaleFactor);
         ThreeScene.add(sprite);
       } else if (item.type === 'light') {
-        console.log(Phaser.Color.hexToColor(item.properties.hue).color);
         var light = new THREE.PointLight(0x770000 , 5, 100, Number.MIN_VALUE * 5 );
         light.position.set(item.x, 32, item.y);
         ThreeScene.add(light);

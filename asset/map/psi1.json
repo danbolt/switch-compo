@@ -1366,6 +1366,7 @@
  "properties":
     {
      "eastExit":"interlude1",
+     "message":"Hold <PSI> to focus your mind.",
      "northExit":"psi2",
      "raining":"true"
     },

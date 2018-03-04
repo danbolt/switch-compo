@@ -163,6 +163,7 @@
  "orientation":"orthogonal",
  "properties":
     {
+     "message":"Hold <CROUCH> to stay low.",
      "northExit":"spectre_encounter",
      "westExit":"crouching2"
     },

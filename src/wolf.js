@@ -81,7 +81,7 @@ Wolf.prototype.removeNextEvent = function () {
 Wolf.prototype.confuse = function () {
   this.removeNextEvent();
 
-  sfx['respawn'].play(undefined, undefined, 0.6);
+  sfx['respawn'].play(undefined, undefined, 0.3);
 
   this.currentState = WolfState.CONFUSED;
   this.nextEvent = this.game.time.events.add(WolfDazeTime, function () {

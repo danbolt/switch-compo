@@ -47,7 +47,7 @@ Gameplay.prototype.create = function() {
   this.map.setCollisionByExclusion([0], true, this.foreground);
   this.map.setCollisionByExclusion([0], true, this.highForeground);
   this.game.physics.enable(this.foreground, Phaser.Physics.ARCADE);
-  
+
   if (this.map.properties.godMode) {
     hl2GodMode = true;
   }
@@ -95,6 +95,19 @@ Gameplay.prototype.create = function() {
   }, this);
 
   //this.game.add.bitmapText(32, 32, 'font', this.mapKey, 16);
+  this.dialogueText = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', 'the quick brown fox jumps over the lazy dog', 16);
+  this.dialogueText.anchor.set(0.5);
+  this.dialogueText.align = 'center';
+  this.dialogueText.alpha = 0.0;
+  this.dialogueText.maxWidth = 290;
+  this.dialogueText.fixedToCamera = true;
+  this.dialogueTextTween = null;
+
+  if (this.map.properties.message && visited[this.mapKey] !== true) {
+    this.showText([this.map.properties.message], false, 1000);
+  }
+
+  visited[this.mapKey] = true;
 
   setupThreeScene(this.game, this.player, this.wolves);
 
@@ -203,6 +216,42 @@ Gameplay.prototype.shutdown = function() {
   this.mapKey = null;
   this.directionFrom = null;
   this.fading = false;
+  this.dialogueText = null;
+  this.dialogueTextTween = null;
+};
+Gameplay.prototype.showText = function(lines, haltPlayer, delay) {
+  if (this.dialogueTextTween !== null) {
+    return;
+  }
+
+  if (delay === undefined) {
+    delay = 0;
+  }
+
+  if (haltPlayer === true) {
+    this.player.halt = true;
+  }
+
+  this.dialogueText.text = lines[0];
+  var t1 = this.game.add.tween(this.dialogueText);
+  t1.to( {alpha : 1.0}, 1000, Phaser.Easing.Linear.None, false, delay);
+  var t2 = this.game.add.tween(this.dialogueText);
+  t2.to( {alpha : 0.0}, 850, Phaser.Easing.Linear.None, false, 1000);
+  t1.chain(t2);
+
+  t2.onComplete.add(function () {
+    this.dialogueTextTween = null;
+
+    var next = lines.slice(1);
+    if (next.length > 0) {
+      this.showText(next, haltPlayer, 0);
+    } else {
+      this.player.halt = false;
+    }
+  }, this);
+
+  this.dialogueTextTween = t1;
+  t1.start();
 };
 
 var Interstitial = function () {
