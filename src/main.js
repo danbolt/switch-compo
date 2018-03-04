@@ -102,7 +102,7 @@ Preload.prototype.create = function() {
 };
 Preload.prototype.update = function () {
   if (TilesTexture !== null && TreesTexture !== null && CharactersTexture !== null) {
-    this.game.state.start('Gameplay', true, false, 'psi2', 'north');
+    this.game.state.start('Gameplay', true, false, 'interlude2', 'west');
   }
 };
 

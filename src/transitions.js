@@ -18,7 +18,8 @@ var audioTransitionTable = {
   "crouching3": "indoors",
   "interlude1": "outdoors",
   "psi3": "outdoors",
-  "interlude2": "indoors",
+  "interlude2": "outdoors",
+  "synthesis1": "indoors",
   "overcoming": "indoors",
   "leaving_ruins": "outdoors"
 };
