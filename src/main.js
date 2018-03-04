@@ -55,6 +55,7 @@ Preload.prototype.preload = function() {
   this.game.load.audio('died1', 'asset/sfx/died1.wav');
   this.game.load.audio('died2', 'asset/sfx/died2.wav');
   this.game.load.audio('died3', 'asset/sfx/died3.wav');
+  this.game.load.audio('burning', 'asset/sfx/burning.wav');
 
   if (HQ_AUDIO) {
     this.game.load.audio('outdoors', ['asset/bgm/wind_bgm.ogg']);
@@ -79,6 +80,7 @@ Preload.prototype.create = function() {
 
   bgms.outdoors = this.game.add.audio('outdoors');
   bgms.indoors = this.game.add.audio('indoors');
+  bgms.burning = this.game.add.audio('burning');
 
   sfx['psi_hover'] = this.game.add.audio('psi_hover');
   sfx['psi_shatter0'] = this.game.add.audio('psi_shatter0');
