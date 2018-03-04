@@ -37,7 +37,31 @@
          "draworder":"topdown",
          "height":0,
          "name":"wolves",
-         "objects":[],
+         "objects":[
+                {
+                 "height":0,
+                 "id":35,
+                 "name":"",
+                 "polyline":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":114.699667974645,
+                         "y":33.2025354663447
+                        }],
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":298.822819197102,
+                 "y":878.357983700574
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -87,7 +111,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":35,
+ "nextobjectid":36,
  "orientation":"orthogonal",
  "properties":
     {

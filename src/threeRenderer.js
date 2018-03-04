@@ -253,10 +253,11 @@ var setupThreeScene= function (game, player, wolves) {
 
         var wolfSpriteMaterial = new THREE.SpriteMaterial( {fog: true, map: wolfSpriteTexture });
 
+        var scaleFactor = item.properties.scale ? item.properties.scale : 1;
         var sprite = new THREE.Sprite(wolfSpriteMaterial);
         sprite.position.set(item.x, 15, item.y);
         sprite.center.y = 0;
-        sprite.scale.set(32, 64, 32);
+        sprite.scale.set(32 * scaleFactor, 64 * scaleFactor, 32 * scaleFactor);
         ThreeScene.add(sprite);
       }
     }, this);

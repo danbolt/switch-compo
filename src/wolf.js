@@ -99,11 +99,21 @@ Wolf.prototype.confuse = function () {
 
     var d = 512;
     var t = this.game.add.tween(p.position);
-    t.to({x: [gx + Math.random() * d - (d*0.5), gx], y: [gy + Math.random() * d - (d*0.5), gy], z: [gz + Math.random() * d - (d*0.5), gz]}, WolfDazeTime - 150, Phaser.Easing.Quartic.Out);
-    t.onComplete.add(function () {
-      p.position.y = 2000;
-      this.data.threeSprite.visible = true;
-    }, this);
+    if (hl2GodMode === false) {
+     t.to({x: [gx + Math.random() * d - (d*0.5), gx], y: [gy + Math.random() * d - (d*0.5), gy], z: [gz + Math.random() * d - (d*0.5), gz]}, WolfDazeTime - 150, Phaser.Easing.Quartic.Out);
+     t.onComplete.add(function () {
+        p.position.y = 2000;
+        this.data.threeSprite.visible = true;
+      }, this);
+    } else {
+      t.to({x: [gx + Math.random() * d - (d*0.5)], y: [gy + Math.random() * d - (d*0.5)], z: [gz + Math.random() * d - (d*0.5)]}, WolfDazeTime - 150, Phaser.Easing.Quartic.Out);
+      t.onComplete.add(function () {
+        p.position.y = 2000;
+        this.kill();
+        this.removeNextEvent();
+        this.data.threeViewMesh.y = 2000;
+      }, this);
+    }
     t.start();
     var t = this.game.add.tween(p.rotation);
     t.to({x: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2], y: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2], z: [Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2]}, WolfDazeTime + 150, Phaser.Easing.Quartic.InOut);
@@ -155,7 +165,6 @@ Wolf.prototype.chasePlayer = function() {
   sfx['grunt0'].play();
 };
 Wolf.prototype.update = function () {
-
   if (this.currentState === WolfState.PATROL) {
     // if distance to node is close, go to next node
     if (this.position.distance(this.currentPath[this.currentPathNextNode]) < 3) {

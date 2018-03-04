@@ -101,7 +101,11 @@ Gameplay.prototype.update = function() {
 
   if (this.fading === false) {
     this.game.physics.arcade.overlap(this.player, this.wolves, function (player, wolf) {
-      player.kill();
+      if (hl2GodMode === false) {
+        player.kill();
+      } else {
+        wolf.confuse();
+      }
     }, function (player, wolf) { return wolf.currentState !== WolfState.CONFUSED; } , this);
   }
 

@@ -179,7 +179,7 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "eastExit":"synthesis3",
+     "eastExit":"synthesis2",
      "westExit":"interlude3"
     },
  "renderorder":"right-down",

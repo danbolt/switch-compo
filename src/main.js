@@ -2,6 +2,8 @@ var HQ_AUDIO = false;
 var bgms = { outdoors: null, indoors: null, currentlyPlaying: null };
 var sfx = {};
 
+var hl2GodMode = false;
+
 var Preload = function () {
 	//
 };
@@ -102,7 +104,7 @@ Preload.prototype.create = function() {
 };
 Preload.prototype.update = function () {
   if (TilesTexture !== null && TreesTexture !== null && CharactersTexture !== null) {
-    this.game.state.start('Gameplay', true, false, 'interlude2', 'west');
+    this.game.state.start('Gameplay', true, false, 'overcoming', 'west');
   }
 };
 
