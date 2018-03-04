@@ -62,9 +62,11 @@ Preload.prototype.preload = function() {
   if (HQ_AUDIO) {
     this.game.load.audio('outdoors', ['asset/bgm/wind_bgm.ogg']);
     this.game.load.audio('indoors', ['asset/bgm/cave_bgm.ogg']);
+    this.game.load.audio('ambient', ['asset/bgm/ambient_bgm.ogg']);
   } else {
     this.game.load.audio('outdoors', ['asset/bgm/wind_bgm_lq.ogg', 'asset/bgm/wind_bgm_lq.mp3']);
     this.game.load.audio('indoors', ['asset/bgm/cave_bgm_lq.ogg', 'asset/bgm/cave_bgm_lq.mp3']);
+    this.game.load.audio('ambient', ['asset/bgm/ambient_bgm_lq.ogg', 'asset/bgm/ambient_bgm_lq.mp3']);
   }
 };
 Preload.prototype.create = function() {
@@ -83,6 +85,7 @@ Preload.prototype.create = function() {
   bgms.outdoors = this.game.add.audio('outdoors');
   bgms.indoors = this.game.add.audio('indoors');
   bgms.burning = this.game.add.audio('burning');
+  bgms.ambient = this.game.add.audio('ambient');
 
   sfx['psi_hover'] = this.game.add.audio('psi_hover');
   sfx['psi_shatter0'] = this.game.add.audio('psi_shatter0');

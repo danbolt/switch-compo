@@ -91,7 +91,7 @@
  "orientation":"orthogonal",
  "properties":
     {
-     "eastExit":"interlude4",
+     "eastExit":"interlude3",
      "westExit":"interlude5"
     },
  "renderorder":"right-down",

@@ -25,6 +25,8 @@ var audioTransitionTable = {
   "psi3": "outdoors",
   "interlude2": "outdoors",
   "synthesis1": "indoors",
+  "interlude3": "indoors",
+  "interlude4": "ambient",
   "overcoming": "indoors",
   "leaving_ruins": "outdoors"
 };

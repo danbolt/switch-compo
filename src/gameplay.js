@@ -187,7 +187,7 @@ Gameplay.prototype.update = function() {
 
     var spectreSpeak = ['I am the last of the caretakers of old,\n\nwho once built and walked along these halls.',
                         'From the ethers I can I hear the voices of those who have departed.\n\nLike the stars above, they call to this world from afar.',
-                        'Child, know that your those who love you miss you dearly.\n\nDo not doubt the warmth you brought them.',
+                        'Child, know that your those who love you miss you dearly.\n\nDo not doubt the warmth you have brought them.',
                         'Your mother and father want you to know not only that,\n\nbut also for you to remember that in times of need.',
                         'As you go along in your journey,\n\nremember to care for yourself and nourish your kindness.'];
     this.showText(spectreSpeak, true, 200);
