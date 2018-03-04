@@ -4,6 +4,8 @@ var sfx = {};
 
 var hl2GodMode = false;
 
+var usingGamepad = false;
+
 var Preload = function () {
 	//
 };

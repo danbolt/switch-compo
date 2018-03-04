@@ -38,6 +38,8 @@ Gameplay.prototype.create = function() {
     bgms.currentlyPlaying = audioTransitionTable[this.mapKey];
   }
 
+  this.game.input.keyboard.onDownCallback = function () { usingGamepad = false };
+
   // create map
   this.map = this.game.add.tilemap(this.mapKey);
   this.map.addTilesetImage('set1', 'jesseSheet1_tile');
@@ -105,7 +107,7 @@ Gameplay.prototype.create = function() {
   this.dialogueTextTween = null;
 
   if (this.map.properties.message && visited[this.mapKey] !== true) {
-    this.showText([this.map.properties.message], false, 1000);
+    this.showText([this.map.properties.message.replace("<RIGHTSTICK>", usingGamepad ? "RS" : "Q/E").replace("<CROUCH>", usingGamepad ? "B" : "M").replace("<PSI>", usingGamepad ? "A" : "N")], false, 1000);
   }
 
   visited[this.mapKey] = true;
@@ -226,6 +228,7 @@ Gameplay.prototype.shutdown = function() {
 
   this.game.cache.removeTilemap(this.mapKey);
   
+  this.game.input.keyboard.onDownCallback = null;
   this.game.input.gamepad.callbackContext = undefined;
   this.game.input.gamepad.onDownCallback = null;
   this.game.input.gamepad.onUpCallback = null;

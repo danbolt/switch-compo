@@ -245,6 +245,8 @@ var Player = function(game, x, y) {
     } else if (buttonCode === Phaser.Gamepad.XBOX360_B) {
       crouchDownCallback.call(this);
     }
+
+    usingGamepad = true;
   };
   this.game.input.gamepad.onUpCallback = function (buttonCode) {
     if (buttonCode === Phaser.Gamepad.XBOX360_A) {
@@ -252,12 +254,16 @@ var Player = function(game, x, y) {
     } else if (buttonCode === Phaser.Gamepad.XBOX360_B) {
       crouchUpCallback.call(this);
     }
+
+    usingGamepad = true;
   };
   this.game.input.gamepad.onAxisCallback = function (pad, padIndex) {
     this.gamepadAxis.x = pad.axis(0) ? pad.axis(0) : 0;
     this.gamepadAxis.y = pad.axis(1) ? pad.axis(1) : 0;
     this.gamepadAxisCStick.x = pad.axis(2) ? pad.axis(2) : 0;
     this.gamepadAxisCStick.y = pad.axis(3) ? pad.axis(3) : 0;
+
+    usingGamepad = true;
   };
 };
 Player.prototype = Object.create(Phaser.Sprite.prototype);
