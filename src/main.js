@@ -113,7 +113,7 @@ Preload.prototype.create = function() {
 };
 Preload.prototype.update = function () {
   if (TilesTexture !== null && TreesTexture !== null && CharactersTexture !== null) {
-    this.game.state.start('TitleScreen');
+    this.game.state.start('IntroSlide');
   }
 };
 
@@ -127,6 +127,7 @@ var main = function () {
 	game.state.add('Preload', Preload, false);
   game.state.add('Interstitial', Interstitial, false);
   game.state.add('TitleScreen', TitleScreen, false);
+  game.state.add('IntroSlide', IntroSlide, false);
   game.state.add('Gameplay', Gameplay, false);
 
 	game.state.start('Preload');
