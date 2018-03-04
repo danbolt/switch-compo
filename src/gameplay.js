@@ -193,7 +193,7 @@ Gameplay.prototype.update = function() {
 
         // Daniel: put this to credits
         hl2GodMode = false;
-        this.game.state.start('Interstitial', true, false, this.mapKey, 'first_room', 'north');
+        this.game.state.start('Interstitial', true, false, '', 'first_room', 'north');
     }, this);
   }
 };
@@ -291,34 +291,72 @@ Interstitial.prototype.create = function() {
   backgroundColor.drawRect(0, 0, this.game.width, this.game.height);
   backgroundColor.generateTexture();
 
+  this.dialogueText = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', 'the quick brown fox jumps over the lazy dog', 16);
+  this.dialogueText.anchor.set(0.5);
+  this.dialogueText.align = 'center';
+  this.dialogueText.alpha = 0.0;
+  this.dialogueText.maxWidth = 290;
+  this.dialogueText.fixedToCamera = true;
+  this.dialogueTextTween = null;
+
+  if (this.prevMapKey === '') {
+    if (bgms.currentlyPlaying !== null) {
+      var oldAudio = bgms[bgms.currentlyPlaying];
+      var vot = this.game.add.tween(oldAudio);
+      vot.to( {volume: 0}, 1800);
+      vot.onComplete.add(function () { oldAudio.stop(); }, this);
+      vot.start();
+    }
+    bgms[audioTransitionTable['first_room']].stop();
+    bgms[audioTransitionTable['first_room']].play(undefined, 0, 0, true);
+    var vt = this.game.add.tween(bgms[audioTransitionTable[this.mapKey]]);
+    vt.to( {volume: 1}, 2500);
+    vt.start();
+    bgms.currentlyPlaying = audioTransitionTable['first_room'];
+  }
+
   if (TransitionTable[this.prevMapKey + this.mapKey] !== undefined) {
-    var textToShow = this.game.add.bitmapText(this.game.width / 2, this.game.height / 2, 'font', TransitionTable[this.prevMapKey + this.mapKey], 16);
-    textToShow.anchor.set(0.5);
-    textToShow.align = 'center';
-    textToShow.alpha = 0.0;
-    textToShow.maxWidth = 290;
-
-    var t1 = this.game.add.tween(textToShow);
-    t1.to( {alpha : 1.0}, 1000, Phaser.Easing.Linear.None, false, 0);
-    var t2 = this.game.add.tween(textToShow);
-    t2.to( {alpha : 0.0}, 850, Phaser.Easing.Linear.None, false, 1000);
-    t1.chain(t2);
-
-    t2.onComplete.add(function () {
-      this.game.time.events.add(150, function () {
-        this.game.state.start('Gameplay', false, false, this.mapKey, this.directionFrom);
-      }, this);
-    }, this);
-
-    t1.start();
+    this.showText(TransitionTable[this.prevMapKey + this.mapKey], 0);
   } else {
     this.game.time.events.add(150, function () {
       this.game.state.start('Gameplay', false, false, this.mapKey, this.directionFrom);
     }, this);
   }
 };
+Interstitial.prototype.showText = function(lines, delay) {
+  if (this.dialogueTextTween !== null) {
+    return;
+  }
+
+  if (delay === undefined) {
+    delay = 0;
+  }
+
+  this.dialogueText.text = lines[0];
+  var t1 = this.game.add.tween(this.dialogueText);
+  t1.to( {alpha : 1.0}, 1000, Phaser.Easing.Linear.None, false, delay);
+  var t2 = this.game.add.tween(this.dialogueText);
+  t2.to( {alpha : 0.0}, 850, Phaser.Easing.Linear.None, false, 1000);
+  t1.chain(t2);
+
+  t2.onComplete.add(function () {
+    this.dialogueTextTween = null;
+
+    var next = lines.slice(1);
+    if (next.length > 0) {
+      this.showText(next, 0);
+    } else {
+      this.game.state.start('Gameplay', false, false, this.mapKey, this.directionFrom);
+    }
+  }, this);
+
+  this.dialogueTextTween = t1;
+  t1.start();
+};
 Interstitial.prototype.shutdown = function () {
   this.mapKey = null;
   this.prevMapKey;
   this.directionFrom = null;
+  this.dialogueText = null;
+  this.dialogueTextTween = null;
 }

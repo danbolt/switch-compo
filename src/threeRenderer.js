@@ -128,10 +128,6 @@ var setupThree = function () {
   var backgroundColor = new THREE.Color( 0x1e2d30 );
   ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.0024);
   ThreeScene.background = backgroundColor;
-
-  ThreeCamera.position.x = 100;
-  ThreeCamera.position.z = 250;
-  ThreeCamera.position.y = GameplayCameraData.yDist;
 };
 
 var setupThreeScene= function (game, player, wolves) {
@@ -325,6 +321,11 @@ var setupThreeScene= function (game, player, wolves) {
       ThreeScene.add(particle);
     }
   }, this);
+
+  ThreeCamera.position.x = (player.x + player.targetPt.x) / 2 - GameplayCameraData.zDist * Math.cos(GameplayCameraAngle);
+  ThreeCamera.position.y = GameplayCameraData.yDist + GameplayCameraData.yPush;
+  ThreeCamera.position.z = (player.y + player.targetPt.y) / 2 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
+  ThreeCamera.lookAt((player.x + player.targetPt.x) / 2, 16, (player.y + player.targetPt.y) / 2);
 };
 
 var UpdateThreeScene = function (player, wolves) {
