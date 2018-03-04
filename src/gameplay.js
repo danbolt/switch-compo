@@ -313,6 +313,7 @@ Interstitial.prototype.create = function() {
     vt.to( {volume: 1}, 2500);
     vt.start();
     bgms.currentlyPlaying = audioTransitionTable['first_room'];
+    GameplayCameraAngle = Math.PI / -2;
   }
 
   if (TransitionTable[this.prevMapKey + this.mapKey] !== undefined) {
