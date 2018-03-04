@@ -9,7 +9,7 @@ var TransitionTable = {
   "crouching2crouching3": ["\"I'm alone.\""],
   "interlude1psi1": ["\"There must be something wrong with me.\""],
   "interlude2synthesis1": ["\"Not a single person cares about me.\""],
-  "systhesis4interlude3": ["All I could feel in those moments,\n\nwas how cruel the world had become."],
+  "systhesis4interlude3": ["All I could feel in those moments,\n\nwas how cruel I thought the world had become to me."],
   "the_goddessinterlude6": ["\"I'm going to be okay.\""],
   "interlude6overcoming": ["\"I'm worth knowing,\n\neven if that's not known yet.\""],
   "overcomingleaving_ruins": ["Soon after that time,\n\nI came to learn that I can look after myself."]
