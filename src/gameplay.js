@@ -8,6 +8,7 @@ var Gameplay = function () {
   this.mapKey = null;
   this.directionFrom = null;
   this.fading = false;
+  this.hasVisitedSpirit = false;
 };
 Gameplay.prototype.init = function (mapKey, directionFrom) {
   this.mapKey = mapKey;
@@ -175,6 +176,26 @@ Gameplay.prototype.update = function() {
       this.player.update = function() {}; // quick/dirty hack to prevent player movement
     }
   }
+
+  // hacky stuff for ending dialogue
+  if (this.mapKey === 'the_goddess' && this.player.y < 8.5 * 32 && this.hasVisitedSpirit === false) {
+    this.hasVisitedSpirit = true;
+
+    var t = this.game.add.tween(window);
+    t.to( {GameplayCameraAngle: Math.PI / -2 }, 1000);
+    t.start();
+
+    this.showText(['hello world,', 'here some some a++ dialogue'], true, 200);
+  } else if (this.mapKey === 'green' && this.player.x < 13 * 32 && this.player.halt === false) {
+    this.player.halt = true;
+    this.game.camera.fade(0x1e2d30, 1, true);
+    this.game.time.events.add(2000, function () {
+
+        // Daniel: put this to credits
+        hl2GodMode = false;
+        this.game.state.start('Interstitial', true, false, this.mapKey, 'first_room', 'north');
+    }, this);
+  }
 };
 Gameplay.prototype.preRender = function () {
   ThreeRenderer.render(ThreeScene, ThreeCamera);
@@ -218,6 +239,7 @@ Gameplay.prototype.shutdown = function() {
   this.fading = false;
   this.dialogueText = null;
   this.dialogueTextTween = null;
+  this.hasVisitedSpirit = false;
 };
 Gameplay.prototype.showText = function(lines, haltPlayer, delay) {
   if (this.dialogueTextTween !== null) {
