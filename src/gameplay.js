@@ -188,12 +188,10 @@ Gameplay.prototype.update = function() {
     this.showText(['hello world,', 'here some some a++ dialogue'], true, 200);
   } else if (this.mapKey === 'green' && this.player.x < 13 * 32 && this.player.halt === false) {
     this.player.halt = true;
-    this.game.camera.fade(0x1e2d30, 1, true);
+    this.game.camera.fade(0x000000, 1, true);
     this.game.time.events.add(2000, function () {
-
-        // Daniel: put this to credits
         hl2GodMode = false;
-        this.game.state.start('Interstitial', true, false, '', 'first_room', 'north');
+        this.game.state.start('TitleScreen');
     }, this);
   }
 };

@@ -56,6 +56,8 @@ Preload.prototype.preload = function() {
   this.game.load.audio('died2', 'asset/sfx/died2.wav');
   this.game.load.audio('died3', 'asset/sfx/died3.wav');
   this.game.load.audio('burning', 'asset/sfx/burning.wav');
+  this.game.load.audio('enter', 'asset/sfx/enter.wav');
+  this.game.load.audio('back', 'asset/sfx/back.wav');
 
   if (HQ_AUDIO) {
     this.game.load.audio('outdoors', ['asset/bgm/wind_bgm.ogg']);
@@ -100,13 +102,15 @@ Preload.prototype.create = function() {
   sfx['died1'] = this.game.add.audio('died1');
   sfx['died2'] = this.game.add.audio('died2');
   sfx['died3'] = this.game.add.audio('died3');
+  sfx['enter'] = this.game.add.audio('enter');
+  sfx['back'] = this.game.add.audio('back');
 
   // move this to loader later
   loadThreeTextures();
 };
 Preload.prototype.update = function () {
   if (TilesTexture !== null && TreesTexture !== null && CharactersTexture !== null) {
-    this.game.state.start('Interstitial', true, false, '', 'first_room', 'north');
+    this.game.state.start('TitleScreen');
   }
 };
 
@@ -119,6 +123,7 @@ var main = function () {
 	var game = new Phaser.Game(320, 240, Phaser.WEBGL, undefined, undefined, true);
 	game.state.add('Preload', Preload, false);
   game.state.add('Interstitial', Interstitial, false);
+  game.state.add('TitleScreen', TitleScreen, false);
   game.state.add('Gameplay', Gameplay, false);
 
 	game.state.start('Preload');
