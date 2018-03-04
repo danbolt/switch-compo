@@ -47,6 +47,10 @@ Gameplay.prototype.create = function() {
   this.map.setCollisionByExclusion([0], true, this.foreground);
   this.map.setCollisionByExclusion([0], true, this.highForeground);
   this.game.physics.enable(this.foreground, Phaser.Physics.ARCADE);
+  
+  if (this.map.properties.godMode) {
+    hl2GodMode = true;
+  }
 
   var navArray = this.foreground.layer.data.map(function (row) {
     return row.map(function(cell) {
