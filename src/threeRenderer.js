@@ -35,6 +35,37 @@ var rainGeom = new THREE.Geometry();
 var rainGeomBuffer = new THREE.BufferGeometry();
 rainGeomBuffer.fromGeometry(rainGeom);
 
+var targetMaterial = new THREE.ShaderMaterial({uniforms: {
+      time: { type: "f", value: 1.0 }
+    }, transparent: true, vertexShader: `
+    varying float angle;
+    void main() {
+      vec4 vNormal = normalize(modelViewMatrix * vec4(normal, 0.0));
+      vec4 vPos = normalize(modelViewMatrix * vec4(position, 1.0));
+      vec4 vCamera = normalize(vec4(cameraPosition, 1.0));
+      angle = acos(dot(vNormal.xyz, normalize(vCamera.xyz - vPos.xyz))) / 3.141;
+
+      gl_Position = projectionMatrix *
+                    modelViewMatrix *
+                    vec4(position,1.0);
+    }
+    `, fragmentShader: `
+    varying float angle;
+    uniform float time;
+
+    void main() {
+      vec4 defaultColor = vec4(0.5, 0.5, 0.0, angle < 0.35 ? 0.5 : (angle - 0.35)/0.65);
+
+      float dist = 16.0;
+      float px = mod(gl_FragCoord.x + time * -4.0 * cos(time) * 4.0 * cos(time), dist) / dist;
+      float py = mod(gl_FragCoord.y + time * -4.0 * sin(time) * 4.0 * cos(time), dist) / dist;
+      float d = sqrt(pow(px - 0.5, 2.0) + pow(py - 0.5, 2.0));
+      defaultColor = defaultColor + vec4(d, d, d, 0.0);
+
+      gl_FragColor = defaultColor;
+    }
+    ` });
+
 var loadThreeTextures = function () {
   var tl = new THREE.TextureLoader();
   tl.load('asset/img/finalrenderfordaniel1.png', function (loadedTexture) {
@@ -119,7 +150,8 @@ var setupThreeScene= function (game, player, wolves) {
   playerSprite.offset.y = 3 / 4;
 
   var geometry = new THREE.BoxGeometry( 32, 32, 32 );
-  var sphere = new THREE.SphereGeometry(player.targetPt.data.radius, 3, 3);
+  var spherePieces = 20;
+  var sphere = new THREE.SphereBufferGeometry(player.targetPt.data.radius * 0.8, 8, 6, 0, 1 / spherePieces * Math.PI * 2, 0, 1.5);
   var circle = new THREE.CircleGeometry(player.targetPt.data.soundRange, 8);
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
  
@@ -143,11 +175,13 @@ var setupThreeScene= function (game, player, wolves) {
     player.data.bloods.push(particle);
   }
 
-  target = new THREE.Mesh(sphere, TileMaterialMap[57]);
+  target = new THREE.Group();
+  for (var i = 0; i < spherePieces; i++) {
+    var tChild = new THREE.Mesh(sphere, targetMaterial);
+    tChild.rotateY(i / spherePieces * Math.PI * 2);
+    target.add(tChild);
+  }
   ThreeScene.add(target);
-  //target.add(new THREE.Mesh(circle, TileMaterialMap[57]));
-  //target.children[0].position.y = 2;
-  //target.children[0].rotation.x = Math.PI * -0.5;
 
   // populate small tilemap
   var map = game.state.getCurrentState().map;
@@ -276,7 +310,9 @@ var UpdateThreeScene = function (player, wolves) {
   sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' || player.animations.currentAnim.name === 'idle_right_focus' ? -32 : 32, 64, 32);
 
   target.position.set(player.targetPt.x, 16.1, player.targetPt.y + 16);
-  target.rotation.y = player.targetPt.rotation;
+  target.rotation.y = player.game.time.now / 700;
+  var s = 0.8 + (Math.sin(player.game.time.now / 150) + 0.5) * 0.2;
+  target.scale.set(s, s, s)
   target.visible = player.targetPt.alive;
 
   wolves.forEach(function (w) {
@@ -296,6 +332,8 @@ var UpdateThreeScene = function (player, wolves) {
       rainDrop.translateY(128 + Math.random() * 64);
     }
   }, this);
+
+  targetMaterial.uniforms.time.value = player.game.time.now / 1000;
 };
 
 var UnloadThreeScene = function(wolves) {

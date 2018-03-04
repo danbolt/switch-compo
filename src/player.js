@@ -171,6 +171,16 @@ var Player = function(game, x, y) {
         ThreeCamera.updateProjectionMatrix();
       }, this);
       GameplayFovChangeTween.start();
+
+      target.children.forEach(function (piece, i, arr) {
+        var shatterLength = 96 + 32 * Math.random();
+        var t = this.game.add.tween(piece.position);
+        t.to({y: [10, 53, 25, 32], x: [shatterLength * Math.cos(i / arr.length * Math.PI * 2)], z: [shatterLength * Math.sin(i / arr.length * Math.PI * 2)] }, this.attackDuration, Phaser.Easing.Cubic.InOut);
+        t.onComplete.add(function () {
+          piece.position.set(0, 0, 0);
+        }, this);
+        t.start();
+      }, this);
     }
   };
   var crouchDownCallback = function () {
