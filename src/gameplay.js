@@ -93,8 +93,8 @@ Gameplay.prototype.create = function() {
   //this.game.add.bitmapText(32, 32, 'font', this.mapKey, 16);
 
   setupThreeScene(this.game, this.player, this.wolves);
-  
-  this.game.camera.flash(0x3a4d51, 700);
+
+  this.game.camera.flash(0x3a4d51, 1200);
 };
 Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground);
