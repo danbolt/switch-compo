@@ -241,6 +241,23 @@ var setupThreeScene= function (game, player, wolves) {
         sprite.center.x = 0.575;
         sprite.center.y = 0;
         ThreeScene.add(sprite);
+      } else if (item.type === "npc") {
+        var wolfSpriteTexture = CharactersTexture.clone();
+        wolfSpriteTexture.needsUpdate = true;
+        wolfSpriteTexture.magFilter = THREE.NearestFilter;
+        wolfSpriteTexture.minFilter = THREE.NearestFilter;
+        wolfSpriteTexture.wrapS = wolfSpriteTexture.wrapT = THREE.RepeatWrapping;
+        wolfSpriteTexture.repeat.set(32 / 256, 64 / 256);
+        wolfSpriteTexture.offset.x = (item.properties.frame % 8) / 8;
+        wolfSpriteTexture.offset.y = (3 - ~~(item.properties.frame / 8)) / 4;;
+
+        var wolfSpriteMaterial = new THREE.SpriteMaterial( {fog: true, map: wolfSpriteTexture });
+
+        var sprite = new THREE.Sprite(wolfSpriteMaterial);
+        sprite.position.set(item.x, 15, item.y);
+        sprite.center.y = 0;
+        sprite.scale.set(32, 64, 32);
+        ThreeScene.add(sprite);
       }
     }, this);
   }

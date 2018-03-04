@@ -4,7 +4,7 @@ What time do I have left:
 Monday: Foilage decorations (trees/rocks)✔, rain✔
 Tuesday: Player crouch sprites✔, focus sprites✔, bloody death✔, enemy stun✔, ground tilesheets✔
 Wednesday: Enemy sprites✔, "goddess" sprite✔, others sprites✔
-Thursday: bgm✔, sound effects,   Text content, dialogue overlay
+Thursday: bgm✔, sound effects✔, Text content, dialogue overlay
 Friday: Decorate levels
 Saturday: Decorate levels and final polish and cry
 Sunday: Show Jesse the deal
