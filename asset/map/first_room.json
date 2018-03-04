@@ -1387,6 +1387,158 @@
                  "width":40,
                  "x":755.467,
                  "y":171.65
+                }, 
+                {
+                 "height":42.6743,
+                 "id":184,
+                 "name":"",
+                 "properties":
+                    {
+                     "hue":"0xFF0000"
+                    },
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":40.3035,
+                 "x":229.403172327787,
+                 "y":1581.29805570342
+                }, 
+                {
+                 "height":42.6743,
+                 "id":185,
+                 "name":"",
+                 "properties":
+                    {
+                     "hue":"0xFF0000"
+                    },
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":40.3035,
+                 "x":608.373147782235,
+                 "y":1583.52493429644
+                }, 
+                {
+                 "height":42.6743,
+                 "id":188,
+                 "name":"",
+                 "properties":
+                    {
+                     "hue":"0xFF0000"
+                    },
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":40.3035,
+                 "x":426.865001364577,
+                 "y":1604.59663635358
+                }, 
+                {
+                 "height":37.9382522239666,
+                 "id":193,
+                 "name":"wow",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"blood",
+                 "visible":true,
+                 "width":37.9382522239665,
+                 "x":625.431038305715,
+                 "y":989.398636764421
+                }, 
+                {
+                 "height":34.0136054421769,
+                 "id":194,
+                 "name":"wow",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"blood",
+                 "visible":true,
+                 "width":41.8628990057562,
+                 "x":544.438653940199,
+                 "y":1307.95945586795
+                }, 
+                {
+                 "height":28.7807430664573,
+                 "id":195,
+                 "name":"wow",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"blood",
+                 "visible":true,
+                 "width":36.6300366300367,
+                 "x":507.384269177707,
+                 "y":1378.3668392502
+                }, 
+                {
+                 "height":40,
+                 "id":196,
+                 "name":"",
+                 "properties":
+                    {
+                     "index":"11",
+                     "scale":"1"
+                    },
+                 "rotation":0,
+                 "type":"tree",
+                 "visible":true,
+                 "width":40,
+                 "x":350.225013082156,
+                 "y":1156.08581894296
+                }, 
+                {
+                 "height":40,
+                 "id":197,
+                 "name":"",
+                 "properties":
+                    {
+                     "index":"11",
+                     "scale":"1"
+                    },
+                 "rotation":0,
+                 "type":"tree",
+                 "visible":true,
+                 "width":40,
+                 "x":608.0834914611,
+                 "y":988.53889943074
+                }, 
+                {
+                 "height":28.7807,
+                 "id":198,
+                 "name":"wow",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"blood",
+                 "visible":true,
+                 "width":36.63,
+                 "x":326.512586206897,
+                 "y":1360.53659330801
+                }, 
+                {
+                 "height":28.7807,
+                 "id":199,
+                 "name":"wow",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"blood",
+                 "visible":true,
+                 "width":36.63,
+                 "x":383.496805961426,
+                 "y":1164.7446587668
                 }],
          "opacity":1,
          "properties":
@@ -1399,7 +1551,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":183,
+ "nextobjectid":202,
  "orientation":"orthogonal",
  "properties":
     {

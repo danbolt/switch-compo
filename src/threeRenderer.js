@@ -259,6 +259,18 @@ var setupThreeScene= function (game, player, wolves) {
         sprite.center.y = 0;
         sprite.scale.set(32 * scaleFactor, 64 * scaleFactor, 32 * scaleFactor);
         ThreeScene.add(sprite);
+      } else if (item.type === 'light') {
+        console.log(Phaser.Color.hexToColor(item.properties.hue).color);
+        var light = new THREE.PointLight(0x770000 , 5, 100, Number.MIN_VALUE * 5 );
+        light.position.set(item.x, 32, item.y);
+        ThreeScene.add(light);
+      } else if (item.type === 'blood') {
+        var blood = new THREE.Mesh( bloodGeometry, bloodMaterial );
+        blood.scale.set(2.0, 2.0, 1.0);
+        blood.position.set(item.x, 17, item.y);
+        blood.rotateY(Math.PI * Math.random() * 2);
+        blood.rotateX(Math.PI * -0.5);
+        ThreeScene.add(blood);
       }
     }, this);
   }
