@@ -94,7 +94,7 @@ Gameplay.prototype.create = function() {
 
   setupThreeScene(this.game, this.player, this.wolves);
 
-  this.game.camera.flash(0x3a4d51, 1200);
+  this.game.camera.flash(0x1e2d30, 1200);
 };
 Gameplay.prototype.update = function() {
   this.game.physics.arcade.collide(this.player, this.foreground);
@@ -150,7 +150,7 @@ Gameplay.prototype.update = function() {
         this.game.camera.onFadeComplete.removeAll();
       }, this);
       this.fading = true;
-      this.game.camera.fade(0x3a4d51, 1000, true);
+      this.game.camera.fade(0x1e2d30, 1000, true);
       this.player.update = function() {}; // quick/dirty hack to prevent player movement
     }
   }
@@ -208,7 +208,7 @@ Interstitial.prototype.init = function(prevMapKey, mapKey, directionFrom) {
 }
 Interstitial.prototype.create = function() {
   var backgroundColor = this.game.add.graphics(0, 0);
-  backgroundColor.beginFill(0x3a4d51);
+  backgroundColor.beginFill(0x1e2d30);
   backgroundColor.drawRect(0, 0, this.game.width, this.game.height);
   backgroundColor.generateTexture();
 

@@ -125,7 +125,7 @@ var setupThree = function () {
 
   ThreeJSCanvas = ThreeRenderer.domElement;
 
-  var backgroundColor = new THREE.Color( 0x3a4d51 );
+  var backgroundColor = new THREE.Color( 0x1e2d30 );
   ThreeScene.fog = new THREE.FogExp2(backgroundColor, 0.0024);
   ThreeScene.background = backgroundColor;
 
