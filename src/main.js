@@ -6,10 +6,12 @@ var hl2GodMode = false;
 
 var usingGamepad = false;
 
-var Preload = function () {
-	//
+var loadingText = 'Loading';
+
+var BootstrapLoad = function () {
+  //
 };
-Preload.prototype.init = function() {
+BootstrapLoad.prototype.init = function () {
   this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
   this.game.scale.refresh();
 
@@ -28,12 +30,35 @@ Preload.prototype.init = function() {
 
   this.game.input.gamepad.start();
 };
-Preload.prototype.preload = function() {
-  // Font is Gamegirl Classic by freakyfonts
-  // License is for noncommercial use
-  // http://www.fontspace.com/freaky-fonts/gamegirl-classic
+BootstrapLoad.prototype.preload = function () {
+  // Font is Newsgeek by VØID
+  // https://arcade.itch.io/newsgeek
   this.game.load.bitmapFont('font', 'asset/font/newsgeek.png', 'asset/font/newsgeek.json');
+}
+BootstrapLoad.prototype.create = function () {
+  var loadingText = this.game.add.bitmapText(125.5, this.game.height / 2, 'font', loadingText, 16);
+  loadingText.align = 'left';
+  loadingText.anchor.set(0);
 
+  var loadText = this.game.state.start('Preload', false, false);
+};
+
+var Preload = function () {
+	this.lastNow = 0;
+  this.numberOfPeriods = 0;
+};
+Preload.prototype.init = function() {
+  this.lastNow = this.game.time.now;
+  this.numberOfPeriods = 0;
+};
+Preload.prototype.loadUpdate = function () {
+  if (this.game.time.now - this.lastNow > 400 + (50 * this.numberOfPeriods)) {
+    this.lastNow = this.game.time.now;
+    this.numberOfPeriods = (this.numberOfPeriods + 1) % 4;
+    this.game.world.children[0].text = loadingText + (function (n) { var out = ''; for (var i = 0; i < n; i++) { out = out + '.'; }; return out; })(this.numberOfPeriods);
+  }
+}
+Preload.prototype.preload = function() {
   this.game.load.spritesheet('jesseSheet1_32x64', 'asset/img/finalrenderfordaniel1.png', 32, 64);
   this.game.load.spritesheet('jesseSheet1_32x32', 'asset/img/finalrenderfordaniel1.png', 32, 32);
 
@@ -127,11 +152,12 @@ var main = function () {
   setupThree();
 
 	var game = new Phaser.Game(320, 240, Phaser.WEBGL, undefined, undefined, true);
+  game.state.add('BootstrapLoad', BootstrapLoad, false);
 	game.state.add('Preload', Preload, false);
   game.state.add('Interstitial', Interstitial, false);
   game.state.add('TitleScreen', TitleScreen, false);
   game.state.add('IntroSlide', IntroSlide, false);
   game.state.add('Gameplay', Gameplay, false);
 
-	game.state.start('Preload');
+	game.state.start('BootstrapLoad');
 };

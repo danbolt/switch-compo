@@ -47,18 +47,18 @@ TitleScreen.prototype.create = function() {
   pressStart.visible = false;
 
   var t1 = this.game.add.tween(logo);
-  t1.to( {alpha: 1.0}, 825, Phaser.Easing.Linear.None, false, 300);
+  t1.to( {alpha: 1.0}, 825, Phaser.Easing.Linear.None, false, 500);
   t1.onComplete.add(function () {
     this.game.time.events.add(200, function () {
       pressStart.visible = true;
+
+      this.game.input.keyboard.callbackContext = this;
+      this.game.input.keyboard.onUpCallback = this.startGame;
+      this.game.input.gamepad.callbackContext = this;
+      this.game.input.gamepad.onUpCallback = this.startGame;
     }, this);
   }, this);
   t1.start();
-
-  this.game.input.keyboard.callbackContext = this;
-  this.game.input.keyboard.onDownCallback = this.startGame;
-  this.game.input.gamepad.callbackContext = this;
-  this.game.input.gamepad.onDownCallback = this.startGame;
 };
 TitleScreen.prototype.startGame = function () {
   if (this.fading === true) {
@@ -68,9 +68,9 @@ TitleScreen.prototype.startGame = function () {
   sfx['enter'].play(undefined, undefined, 0.7);
 
   this.game.input.keyboard.callbackContext = null;
-  this.game.input.keyboard.onDownCallback = null;
+  this.game.input.keyboard.onUpCallback = null;
   this.game.input.gamepad.callbackContext = null;
-  this.game.input.gamepad.onDownCallback = null;
+  this.game.input.gamepad.onUpCallback = null;
 
   this.game.camera.onFadeComplete.add(function () {
     this.fading = false;
