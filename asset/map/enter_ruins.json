@@ -1044,7 +1044,7 @@
  "properties":
     {
      "eastExit":"second_room",
-     "message":"Use <RIGHTSTICK> to align the camera. (this is important!)",
+     "message":"Use <RIGHTSTICK> to look around.",
      "westExit":"spectre_encounter"
     },
  "renderorder":"right-down",

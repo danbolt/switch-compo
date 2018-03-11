@@ -36,13 +36,24 @@ TitleScreen.prototype.create = function() {
   backgroundColor.drawRect(0, 0, this.game.width, this.game.height);
   backgroundColor.generateTexture();
 
-  var logo = this.game.add.bitmapText(this.game.width / 2, this.game.height / 3, 'font', '(logo)', 16);
-  logo.align = 'center';
+  var logo = this.game.add.image(this.game.width / 2, this.game.height / 3, 'logo');
   logo.anchor.set(0.5);
+  logo.scale.set(0.85);
+  logo.alpha = 0.01;
 
-  var pressStart = this.game.add.bitmapText(this.game.width / 2, this.game.height / 3 * 2, 'font', 'Press any button to start.', 16);
+  var pressStart = this.game.add.bitmapText(this.game.width / 2, this.game.height / 4 * 3, 'font', 'Press any button to start.', 16);
   pressStart.align = 'center';
   pressStart.anchor.set(0.5);
+  pressStart.visible = false;
+
+  var t1 = this.game.add.tween(logo);
+  t1.to( {alpha: 1.0}, 825, Phaser.Easing.Linear.None, false, 300);
+  t1.onComplete.add(function () {
+    this.game.time.events.add(200, function () {
+      pressStart.visible = true;
+    }, this);
+  }, this);
+  t1.start();
 
   this.game.input.keyboard.callbackContext = this;
   this.game.input.keyboard.onDownCallback = this.startGame;

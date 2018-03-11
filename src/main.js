@@ -38,6 +38,7 @@ Preload.prototype.preload = function() {
   this.game.load.spritesheet('jesseSheet1_32x32', 'asset/img/finalrenderfordaniel1.png', 32, 32);
 
   this.game.load.image('jesseSheet1_tile', 'asset/img/finalrenderfordaniel1.png');
+  this.game.load.image('logo', 'asset/img/logo.png');
 
   this.game.load.audio('psi_hover', 'asset/sfx/psi_hover.wav');
   this.game.load.audio('psi_shatter0', 'asset/sfx/psi_shatter0.wav');
