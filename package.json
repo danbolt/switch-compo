@@ -1,11 +1,8 @@
 {
   "name": "spectres-of-the-cold",
   "version": "1.0.0",
-  "description": "",
+  "description": "A game by Daniel Savage.",
   "main": "main.js",
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
     "start": "electron ."
   },
@@ -19,6 +16,23 @@
   },
   "homepage": "https://github.com/danbolt/switch-compo",
   "devDependencies": {
-    "electron": "^1.8.3"
+    "electron": "^1.8.3",
+    "electron-builder": "^20.4.1"
+  },
+  "build": {
+    "appId": "com.danbolt.spectres",
+    "mac": {
+      "category":"public.app-category.games"
+    },
+    "files": [
+      "icon.*",
+      "index.html",
+      "asset/**/*",
+      "lib/**/*",
+      "package.json",
+      "main.js",
+      "src/**/*",
+      "node_modules/**/*"
+    ]
   }
 }

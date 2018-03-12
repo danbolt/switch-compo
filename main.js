@@ -4,7 +4,7 @@ const url = require('url');
 const path = require('path');
 
 let createWindow = function() {
-  let winIcon = nativeImage.createFromPath('icon.png');
+  let winIcon = nativeImage.createFromPath(path.join(__dirname,'icon.png'));
   let win = new BrowserWindow({width: 800, height: 600, icon: winIcon});
   win.setAutoHideMenuBar(true);
   win.setMenuBarVisibility(false);
