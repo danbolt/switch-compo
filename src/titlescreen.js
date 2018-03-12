@@ -8,7 +8,7 @@ IntroSlide.prototype.create = function() {
   backgroundColor.drawRect(0, 0, this.game.width, this.game.height);
   backgroundColor.generateTexture();
 
-  var text = this.game.add.text(this.game.width / 2, this.game.height / 2, 'Team Jesse/Daniel', { fontWeight: 'bold', fill:'white', font:'18pt Arial', align: 'center' });
+  var text = this.game.add.text(this.game.width / 2, this.game.height / 2, 'Flip Team', { fontWeight: 'bold', fill:'white', font:'18pt Arial', align: 'center' });
   text.anchor.set(0.5);
   text.alpha = 0;
 
