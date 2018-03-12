@@ -156,6 +156,7 @@ var main = function () {
 	game.state.add('Preload', Preload, false);
   game.state.add('Interstitial', Interstitial, false);
   game.state.add('TitleScreen', TitleScreen, false);
+  game.state.add('Credits', Credits, false);
   game.state.add('IntroSlide', IntroSlide, false);
   game.state.add('Gameplay', Gameplay, false);
 

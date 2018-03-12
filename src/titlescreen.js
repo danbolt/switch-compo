@@ -65,7 +65,7 @@ TitleScreen.prototype.startGame = function () {
     return;
   }
 
-  sfx['enter'].play(undefined, undefined, 0.7);
+  sfx['enter'].play(undefined, undefined, 0.15);
 
   this.game.input.keyboard.callbackContext = null;
   this.game.input.keyboard.onUpCallback = null;

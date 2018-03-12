@@ -198,7 +198,7 @@ Gameplay.prototype.update = function() {
     this.game.camera.fade(0x000000, 1, true);
     this.game.time.events.add(2000, function () {
         hl2GodMode = false;
-        this.game.state.start('TitleScreen');
+        this.game.state.start('Credits');
     }, this);
   }
 };
