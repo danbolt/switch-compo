@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/danbolt/switch-compo.git"
   },
-  "author": "Daniel Savage",
+  "author": "Daniel Savage <dansvg@gmail.com>",
   "bugs": {
     "url": "https://github.com/danbolt/switch-compo/issues"
   },
@@ -22,7 +22,16 @@
   "build": {
     "appId": "com.danbolt.spectres",
     "mac": {
-      "category":"public.app-category.games"
+      "category":"public.app-category.games",
+      "target": "dmg",
+      "icon": "icon.icns"
+    },
+    "win": {
+      "icon": "icon.ico",
+      "target": "zip"
+    },
+    "linux": {
+      "target": "zip"
     },
     "files": [
       "icon.*",
