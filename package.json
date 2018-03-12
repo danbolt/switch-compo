@@ -1,0 +1,24 @@
+{
+  "name": "spectres-of-the-cold",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danbolt/switch-compo.git"
+  },
+  "author": "Daniel Savage",
+  "bugs": {
+    "url": "https://github.com/danbolt/switch-compo/issues"
+  },
+  "homepage": "https://github.com/danbolt/switch-compo",
+  "devDependencies": {
+    "electron": "^1.8.3"
+  }
+}
