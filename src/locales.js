@@ -22,6 +22,12 @@ var LocTable = {
     "tut_look": "Use <RIGHTSTICK> to look around.",
     "tut_crouch": "Hold <CROUCH> to stay low. ",
     "tut_psi": "Hold <PSI> to focus your mind.",
+
+    "speech": ["I am the last of the caretakers of old,\n\nwho once built and walked along these halls.",
+               "From the ethers I can hear the voices of those who have departed.\n\nLike the stars above, they call to this world from afar.",
+               "Child, know that the ones you miss love you dearly.\n\nDo not doubt the warmth you have brought them.",
+               "Your mother and father want you to know not only that,\n\nbut also for you to remember that in times of need.",
+               "As you go along in your journey,\n\nremember to care for yourself and nourish your kindness."],
   },
   "es-mx":
   {
@@ -46,6 +52,12 @@ var LocTable = {
     "tut_look": "Mantén presionado <RIGHTSTICK> para mirar.",
     "tut_crouch": "Mantén presionado <CROUCH> para agacharte.",
     "tut_psi": "Mantén presionado <PSI> para concentrar tu mente.",
+
+    "speech": ["Soy uno de los guardianes de antaño,\n\nque alguna vez construyeron y caminaron por estos pasillos.",
+               "Desde los éteres puedo escuchar las voces de aquellos que se han ido.\n\nComo las estrellas sobre nosotros, ellos llaman a este mundo desde lejos.",
+               "Pequeño, debes saber que aquellos que extrañas te aman profundamente.\n\nNo dudes de el calor que les has dado.",
+               "Tus padres quieren que sepas no sólo eso,\n\nsino que también lo recuerdes en tiempos difíciles.",
+               "Conforme avances en tu viaje,\n\nrecuerda cuidarte y nutrir tu amabilidad."],
   },
 };
 
