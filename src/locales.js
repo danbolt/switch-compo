@@ -28,6 +28,16 @@ var LocTable = {
                "Child, know that the ones you miss love you dearly.\n\nDo not doubt the warmth you have brought them.",
                "Your mother and father want you to know not only that,\n\nbut also for you to remember that in times of need.",
                "As you go along in your journey,\n\nremember to care for yourself and nourish your kindness."],
+
+     "credit_title": "Spectres of the Cold",
+     "credit_art": "Original Concept Art",
+     "credit_production": "General Production",
+     "credit_playtesting": "Playtesting",
+     "credit_dev_sup": "Development Support",
+     "credit_audio": "Audio",
+     "credit_loc": "Localization",
+     "credit_ty": "Special Thanks",
+     "credit_link": "danbolt.itch.io"
   },
   "es-mx":
   {
@@ -58,6 +68,16 @@ var LocTable = {
                "Pequeño, debes saber que aquellos que extrañas te aman profundamente.\n\nNo dudes de el calor que les has dado.",
                "Tus padres quieren que sepas no sólo eso,\n\nsino que también lo recuerdes en tiempos difíciles.",
                "Conforme avances en tu viaje,\n\nrecuerda cuidarte y nutrir tu amabilidad."],
+
+     "credit_title": "Spectres of the Cold",
+     "credit_art": "Arte Conceptual Original",
+     "credit_production": "Producción General",
+     "credit_playtesting": "Playtesting",
+     "credit_dev_sup": "Soporte de Desarrollo",
+     "credit_audio": "Audio",
+     "credit_loc": "Traducción",
+     "credit_ty": "Agradecimientos Especiales",
+     "credit_link": "danbolt.itch.io"
   },
 };
 

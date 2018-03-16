@@ -1,14 +1,14 @@
 var Credits = function () {
   this.creditsListing = [
-    { title: "Spectres of the Cold" },
-    { title: "Original Concept Art", who: "Jesse Taylor" },
-    { title: "General Production", who: "Daniel Savage" },
-    { title: "Playtesting", who: ["Natasha Miner", "Dylan Shellenberg", "Rose-Lynne Savage", "Clark Allenby", "Wilson Chung", "Joel Stack"] },
-    { title: "Development Support", who: "Jesse Taylor" },
-    { title: "Audio", who: ["noiseforfun.com", "SocializedArtist45", "spookymodem", "TobiasKosmos", "Daniel Savage", "XxChr0nosxX", "Aleks41", "qubodup", "Erokia", "xDimebagx", "jorge0000"] },
-    { title: "Localization", who: ["Alina Varela - Español"] },
-    { title: "Special Thanks", who: ["Byron Munsie", "Alina Varela", "Geoff Fisher", "Alyssa Savage", "Richard \"photonstorm\" Davey", "Mom and Dad"] },
-    { title: "danbolt.itch.io", click: "https://danbolt.itch.io" }
+    { title: "credit_title" },
+    { title: "credit_art", who: "Jesse Taylor" },
+    { title: "credit_production", who: "Daniel Savage" },
+    { title: "credit_playtesting", who: ["Natasha Miner", "Dylan Shellenberg", "Rose-Lynne Savage", "Clark Allenby", "Wilson Chung", "Joel Stack"] },
+    { title: "credit_dev_sup", who: "Jesse Taylor" },
+    { title: "credit_audio", who: ["noiseforfun.com", "SocializedArtist45", "spookymodem", "TobiasKosmos", "Daniel Savage", "XxChr0nosxX", "Aleks41", "qubodup", "Erokia", "xDimebagx", "jorge0000"] },
+    { title: "credit_loc", who: ["Alina Varela - Español"] },
+    { title: "credit_ty", who: ["Byron Munsie", "Alina Varela", "Geoff Fisher", "Alyssa Savage", "Richard \"photonstorm\" Davey", "Mom and Dad"] },
+    { title: "credit_link", click: "https://danbolt.itch.io" }
   ];
 
   this.creditsText = null;
@@ -30,7 +30,7 @@ Credits.prototype.create = function () {
   var tickCredit = function (ind) {
     var credit = this.creditsListing[ind];
 
-    this.creditsText.text = credit.title;
+    this.creditsText.text = loc(credit.title);
     if (typeof(credit.who) === 'string') {
         this.creditsText.text += '\n\n' + credit.who;
     } else if (credit.who === undefined) {
