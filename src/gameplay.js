@@ -322,8 +322,8 @@ Interstitial.prototype.create = function() {
     GameplayCameraAngle = Math.PI / -2 + 0.2;
   }
 
-  if (TransitionTable[this.prevMapKey + this.mapKey] !== undefined) {
-    this.showText(TransitionTable[this.prevMapKey + this.mapKey], 0);
+  if (loc(this.prevMapKey + this.mapKey) !== undefined) {
+    this.showText(loc(this.prevMapKey + this.mapKey), 0);
   } else {
     this.game.time.events.add(150, function () {
       this.game.state.start('Gameplay', false, false, this.mapKey, this.directionFrom);

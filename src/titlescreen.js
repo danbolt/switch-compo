@@ -41,10 +41,11 @@ TitleScreen.prototype.create = function() {
   logo.scale.set(0.85);
   logo.alpha = 0.01;
 
-  var pressStart = this.game.add.bitmapText(this.game.width / 2, this.game.height / 4 * 3, 'font', 'Press any button to start.', 16);
+  var pressStart = this.game.add.bitmapText(this.game.width / 2, this.game.height / 4 * 3, 'font', loc('press_start'), 16);
   pressStart.align = 'center';
   pressStart.anchor.set(0.5);
   pressStart.visible = false;
+  pressStart.maxWidth = 290;
 
   var t1 = this.game.add.tween(logo);
   t1.to( {alpha: 1.0}, 825, Phaser.Easing.Linear.None, false, 500);
