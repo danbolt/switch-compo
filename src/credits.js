@@ -6,7 +6,7 @@ var Credits = function () {
     { title: "Playtesting", who: ["Natasha Miner", "Dylan Shellenberg", "Rose-Lynne Savage", "Jesse Taylor", "Clark Allenby", "Wilson Chung"] },
     { title: "Development Support", who: "Jesse Taylor" },
     { title: "Audio", who: ["noiseforfun.com", "SocializedArtist45", "spookymodem", "TobiasKosmos", "Daniel Savage", "XxChr0nosxX", "Aleks41", "qubodup", "Erokia", "xDimebagx", "jorge0000"] },
-    { title: "Special Thanks", who: ["Byron Munsie", "Alina Valeria", "Geoff Fisher", "Alyssa Savage", "Richard \"photonstorm\" Davey", "Mom and Dad"] },
+    { title: "Special Thanks", who: ["Byron Munsie", "Alina Varela", "Geoff Fisher", "Alyssa Savage", "Richard \"photonstorm\" Davey", "Mom and Dad"] },
     { title: "danbolt.itch.io", click: "https://danbolt.itch.io" }
   ];
 
