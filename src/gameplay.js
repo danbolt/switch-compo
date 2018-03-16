@@ -106,8 +106,8 @@ Gameplay.prototype.create = function() {
   this.dialogueText.fixedToCamera = true;
   this.dialogueTextTween = null;
 
-  if (this.map.properties.message && visited[this.mapKey] !== true) {
-    this.showText([this.map.properties.message.replace("<RIGHTSTICK>", usingGamepad ? "RS" : "Q/E").replace("<CROUCH>", usingGamepad ? "B" : "M").replace("<PSI>", usingGamepad ? "A" : "N")], false, 1000);
+  if (this.map.properties.message && loc(this.map.properties.message) && visited[this.mapKey] !== true) {
+    this.showText([loc(this.map.properties.message).replace("<RIGHTSTICK>", usingGamepad ? "RS" : "Q/E").replace("<CROUCH>", usingGamepad ? "B" : "M").replace("<PSI>", usingGamepad ? "A" : "N")], false, 1000);
   }
 
   visited[this.mapKey] = true;

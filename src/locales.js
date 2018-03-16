@@ -15,7 +15,13 @@ var LocTable = {
     "systhesis4interlude3": ["All I could feel in those moments,\n\nwas how cruel I thought the world had become to me."],
     "the_goddessinterlude6": ["\"I'm going to be okay.\""],
     "interlude6overcoming": ["\"I'm worth knowing,\n\neven if that's not known yet.\""],
-    "overcomingleaving_ruins": ["Soon after that time,\n\nI came to learn that I can look after myself."]
+    "overcomingleaving_ruins": ["Soon after that time,\n\nI came to learn that I can look after myself."],
+
+    "run_away": "Run away.",
+    "dont_be_seen": "Don't be seen.",
+    "tut_look": "Use <RIGHTSTICK> to look around.",
+    "tut_crouch": "Hold <CROUCH> to stay low. ",
+    "tut_psi": "Hold <PSI> to focus your mind.",
   },
   "es-mx":
   {
@@ -33,12 +39,18 @@ var LocTable = {
     "systhesis4interlude3": ["Todo lo que podía sentir en esos momentos\n\nera qué tan cruel pensaba que el mundo se había vuelto conmigo."],
     "the_goddessinterlude6": ["\"Voy a estar bien.\""],
     "interlude6overcoming": ["\"Vale la pena conocerme,\n\nincluso si eso aún no se conoce.\""],
-    "overcomingleaving_ruins": ["Poco después de ese tiempo,\n\nme dí cuenta de que sí puedo cuidarme."]
+    "overcomingleaving_ruins": ["Poco después de ese tiempo,\n\nme dí cuenta de que sí puedo cuidarme."],
+
+    "run_away": "Huye.",
+    "dont_be_seen": "Que no te vean.",
+    "tut_look": "Mantén presionado <RIGHTSTICK> para mirar.",
+    "tut_crouch": "Mantén presionado <CROUCH> para agacharte.",
+    "tut_psi": "Mantén presionado <PSI> para concentrar tu mente.",
   },
 };
 
 var defaultLocale = 'en-ca';
 var currentLocale = defaultLocale;
 var loc = function(key) {
-  return LocTable[currentLocale][key] ? LocTable[currentLocale][key] : 'NS;' + currentLocale + ';' + key;
+  return LocTable[currentLocale][key];
 }
