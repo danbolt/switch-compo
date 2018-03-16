@@ -3,7 +3,7 @@ var Credits = function () {
     { title: "Spectres of the Cold" },
     { title: "Original Concept Art", who: "Jesse Taylor" },
     { title: "General Production", who: "Daniel Savage" },
-    { title: "Playtesting", who: ["Natasha Miner", "Dylan Shellenberg", "Rose-Lynne Savage", "Jesse Taylor", "Clark Allenby", "Wilson Chung"] },
+    { title: "Playtesting", who: ["Natasha Miner", "Dylan Shellenberg", "Rose-Lynne Savage", "Clark Allenby", "Wilson Chung", "Joel Stack"] },
     { title: "Development Support", who: "Jesse Taylor" },
     { title: "Audio", who: ["noiseforfun.com", "SocializedArtist45", "spookymodem", "TobiasKosmos", "Daniel Savage", "XxChr0nosxX", "Aleks41", "qubodup", "Erokia", "xDimebagx", "jorge0000"] },
     { title: "Localization", who: ["Alina Varela - Español"] },
