@@ -59,7 +59,9 @@ PickLang.prototype.create = function() {
     }, this);
 
     this.game.camera.onFadeComplete.add(function () {
-      this.game.state.start('TitleScreen', true, false);
+      this.game.time.events.add(1000, function() {
+        this.game.state.start('IntroSlide', true, false);
+      }, this);
       this.game.camera.onFadeComplete.removeAll();
     }, this);
     this.game.camera.fade(0x000000, 700, true);
