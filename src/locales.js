@@ -1,6 +1,8 @@
 var LocTable = {
   "en-ca":
   {
+    "lang_name": "English",
+
     "press_start": "Press any button to start.",
     "first_room": ["Fires and rioting behind me,\n\nI fled the remains of my home alone in the middle of the night.",
                    "Our village no longer tolerated those like my father,\n\nwho wedded my mother from the Tribe of the Beasts.",
@@ -41,6 +43,8 @@ var LocTable = {
   },
   "es-mx":
   {
+    "lang_name": "Español",
+
     "press_start": "Presiona cualquier botón para empezar.",
     "first_room": ["Fuego y disturbios detrás de mí,\n\nhuí de los restos de mi hogar solo, a la mitad de la noche.",
                    "Nuestra aldea dejó de tolerar a aquellos como mi padre,\n\nquien se casó con mi madre de la Tribu de las Bestias.",
@@ -78,7 +82,20 @@ var LocTable = {
      "credit_loc": "Traducción",
      "credit_ty": "Agradecimientos Especiales",
      "credit_link": "danbolt.itch.io"
+  }/*,
+  "ko":
+  {
+    "lang_name":"TEST_KOREAN"
   },
+  "jp":
+  {
+    "lang_name":"TEST_JAPANESE"
+  },
+  "fr-fr":
+  {
+    "lang_name":"TEST_FRENCH"
+  }
+  */
 };
 
 var defaultLocale = 'en-ca';
