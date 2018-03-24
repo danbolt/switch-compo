@@ -1044,7 +1044,7 @@
  "properties":
     {
      "eastExit":"second_room",
-     "message":"Use <RIGHTSTICK> to look around.",
+     "message":"tut_look",
      "westExit":"spectre_encounter"
     },
  "renderorder":"right-down",
