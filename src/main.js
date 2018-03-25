@@ -141,7 +141,7 @@ Preload.prototype.create = function() {
 };
 Preload.prototype.update = function () {
   if (TilesTexture !== null && TreesTexture !== null && CharactersTexture !== null) {
-    this.game.state.start('IntroSlide');
+    this.game.state.start('PickLang');
   }
 };
 
@@ -158,6 +158,7 @@ var main = function () {
   game.state.add('TitleScreen', TitleScreen, false);
   game.state.add('Credits', Credits, false);
   game.state.add('IntroSlide', IntroSlide, false);
+  game.state.add('PickLang', PickLang, false);
   game.state.add('Gameplay', Gameplay, false);
 
 	game.state.start('BootstrapLoad');
