@@ -20,9 +20,11 @@
     "electron-builder": "^20.4.1"
   },
   "build": {
+    "productName": "Spectres of the Cold",
     "appId": "com.danbolt.spectres",
+    "copyright": "Copyright © 2018 Daniel Savage",
     "mac": {
-      "category":"public.app-category.games",
+      "category": "public.app-category.games",
       "target": "dmg",
       "icon": "icon.icns"
     },
@@ -31,7 +33,10 @@
       "target": "zip"
     },
     "linux": {
-      "target": "zip"
+      "target": "zip",
+      "synopsis": "Here I felt my flesh become the food of my fears.",
+      "description": "A stealth game.",
+      "category": "Game"
     },
     "files": [
       "icon.*",
