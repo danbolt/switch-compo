@@ -67,11 +67,12 @@ PickLang.prototype.create = function() {
     this.game.camera.fade(0x000000, 700, true);
   };
 
+  var movedYAxis = false;
   this.game.input.keyboard.callbackContext = this;
   this.game.input.keyboard.onUpCallback = function (key) {
-    if (key.key === "ArrowDown") {
+    if (key.key === "ArrowDown" || key.key === "s") {
       selectDown.call(this);
-    } else if (key.key === "ArrowUp") {
+    } else if (key.key === "ArrowUp" || key.key === "w") {
       selectUp.call(this);
     } else if (key.key === "Enter" || key.key === " ") {
       selectEnter.call(this);
@@ -79,7 +80,29 @@ PickLang.prototype.create = function() {
   };
   this.game.input.gamepad.callbackContext = this;
   this.game.input.gamepad.onUpCallback = function (button) {
-    console.log(button);
+    if (button === Phaser.Gamepad.XBOX360_DPAD_DOWN) {
+      selectDown.call(this);
+    } else if (button === Phaser.Gamepad.XBOX360_DPAD_UP) {
+      selectUp.call(this);
+    } else if (button === Phaser.Gamepad.XBOX360_A) {
+      selectEnter.call(this);
+    }
+  };
+  this.game.input.gamepad.onAxisCallback = function (pad) {
+
+    if (pad.axis(1) > 0.8) {
+      if (movedYAxis === false) {
+        selectDown.call(this);
+        movedYAxis = true;
+      }
+    } else if (pad.axis(1) < -0.8) {
+      if (movedYAxis === false) {
+        selectUp.call(this);
+        movedYAxis = true;
+      }
+    } else {
+      movedYAxis = false;
+    }
   };
 
   refreshLangs();
