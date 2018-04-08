@@ -36,7 +36,8 @@
       "target": "zip",
       "synopsis": "Here I felt my flesh become the food of my fears.",
       "description": "A stealth game.",
-      "category": "Game"
+      "category": "Game",
+      "icon": "icon.png"
     },
     "files": [
       "icon.*",
