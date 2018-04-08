@@ -82,11 +82,49 @@ var LocTable = {
      "credit_loc": "Traducción",
      "credit_ty": "Agradecimientos Especiales",
      "credit_link": "danbolt.itch.io"
-  }/*,
+  },
   "ko":
   {
-    "lang_name":"TEST_KOREAN"
-  },
+    "lang_name":"조선말",
+
+    "press_start": "버튼을 누르면 시작합니다.",
+    "first_room": ["화염과 폭동,\n\n나는 불타버린 집을 뒤로하고 홀로 도망쳤다.",
+                   "마을은 야수 부족의 어머니와 결혼한 아버지를 더이상 용납하지 않았다.",
+                   "그 폭력적인 밤이 지난 후,\n\n나는 그들을 다시는 보지 못했다."],
+    "first_roomsecond_room": ["나는 오래된 폐허가 있는 숲으로 도망쳤다.\n\n전해오는 이야기로 그곳에는 죽은 자와 이야기 할 수있는 원령이 있다고 한다."],
+    "enter_ruinsspectre_encounter": ["여기에서 나는 내 육체가 공포의 음식이 되는것을 느꼈다."],
+    "spectre_encountercrouching1": ["\"추워.\""],
+    "crouching1crouching2": ["\"두려워.\""],
+    "crouching2crouching3": ["\"난 혼자야.\""],
+    "interlude1psi1": ["\"나는 뭔가 잘못된거 같아.\""],
+    "interlude2synthesis1": ["\"아무도 나에겐 관심없어.\""],
+    "systhesis4interlude3": ["내가 이 순간 느낄 수 있는것은,\n\n세상이 나에게 얼마나 잔인할 수 있을까 뿐이다."],
+    "the_goddessinterlude6": ["\"난 괜찬을 거야.\""],
+    "interlude6overcoming": ["\"나는 가치가 있다,\n\n아직 그것이 알려지지 않았더라도.\""],
+    "overcomingleaving_ruins": ["그 시간이 지나고,\n\n나는 스스로 돌볼 수 있다는 것을 배우게 되었다."],
+
+    "run_away": "도망.",
+    "dont_be_seen": "들키면 안되.",
+    "tut_look": "주변을 둘러 보려면 <RIGHTSTICK>를 사용하십시오.",
+    "tut_crouch": "버튼 <CROUCH>를 누르면 몸을 웅크림니다.",
+    "tut_psi": "버튼 <PSI>를 누르고 있으면 마음을 집중합니다.",
+
+    "speech": ["나는 한때 이곳을 창조하고,\n\n이곳을 걸어다녔던 마지막 남은 관리인이다.",
+               "에테르에게서 나는 떠나간 사람들의 목소리를 들을 수 있다.\n\n마치 별들 처럼 그들은 위에서 이세상을 부르고 있다.",
+               "아이여, 네가 그리워하는 사람들은 너는 진심으로 사랑한다는 것을 알아라.\n\n그들에게 너는 따뜻함을 가져주었다는 것을 결코 의심하지 말거라.",
+               "너의 엄마와 아빠는 네가 그것을 알기를 바랄뿐만 아니라,\n\n그것이 필요할때 그것을 꼭 기억되기를 바란단다.",
+               "네가 너의 인생을 살아가면서,\n\n자신을 돌보고 친절을 키우는 것을 잊지 말아라."],
+
+     "credit_title": "Spectres of the Cold",
+     "credit_art": "게임 콘셉",
+     "credit_production": "제작",
+     "credit_playtesting": "게임 플레이 테스트",
+     "credit_dev_sup": "게임 개발 서포트",
+     "credit_audio": "오디오",
+     "credit_loc": "지역화",
+     "credit_ty": "도움주신 분들",
+     "credit_link": "danbolt.itch.io"
+  }/*,
   "jp":
   {
     "lang_name":"TEST_JAPANESE"

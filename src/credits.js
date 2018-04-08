@@ -6,7 +6,7 @@ var Credits = function () {
     { title: "credit_playtesting", who: ["Natasha Miner", "Dylan Shellenberg", "Rose-Lynne Savage", "Clark Allenby", "Wilson Chung", "Joel Stack"] },
     { title: "credit_dev_sup", who: "Jesse Taylor" },
     { title: "credit_audio", who: ["noiseforfun.com", "SocializedArtist45", "spookymodem", "TobiasKosmos", "Daniel Savage", "XxChr0nosxX", "Aleks41", "qubodup", "Erokia", "xDimebagx", "jorge0000"] },
-    { title: "credit_loc", who: ["Alina Varela - Español"] },
+    { title: "credit_loc", who: ["Alina Varela - Español", "Sang Ho Lee (이 상호) - 조선말"] },
     { title: "credit_ty", who: ["Byron Munsie", "Alina Varela", "Geoff Fisher", "Alyssa Savage", "Richard \"photonstorm\" Davey", "Mom and Dad"] },
     { title: "credit_link", click: "https://danbolt.itch.io" }
   ];
