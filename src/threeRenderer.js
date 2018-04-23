@@ -181,6 +181,10 @@ var setupThreeScene= function (game, player, wolves) {
 
   // populate small tilemap
   var map = game.state.getCurrentState().map;
+  var twoXSections = [];
+  if (map.objects.decor) {
+    twoXSections = map.objects.decor.filter(function (decorValue) { return decorValue.type === '2x';}).map(function (twoX) { return new Phaser.Rectangle(twoX.x, twoX.y, twoX.width, twoX.height); });
+  }
   var background = game.state.getCurrentState().background;
   var foreground = game.state.getCurrentState().foreground;
   var foreground2 = game.state.getCurrentState().highForeground;
@@ -205,7 +209,13 @@ var setupThreeScene= function (game, player, wolves) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 64, ty * 32 + 16);
- 
+
+          var is2X = twoXSections.find(function (section) { return section.contains(tile.worldX, tile.worldY); });
+          if (is2X !== undefined) {
+            var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
+            ThreeScene.add(cube);
+            cube.position.set(tx * 32 + 16, 96, ty * 32 + 16);
+          }
       	}
       }
   }

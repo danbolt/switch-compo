@@ -86,8 +86,35 @@
          "width":60,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "height":19,
+         "name":"decor",
+         "objects":[
+                {
+                 "height":1277.32,
+                 "id":35,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"2x",
+                 "visible":true,
+                 "width":967.742,
+                 "x":493.858494839761,
+                 "y":-410.523117870722
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "width":30,
+         "x":0,
+         "y":0
         }],
- "nextobjectid":35,
+ "nextobjectid":36,
  "orientation":"orthogonal",
  "properties":
     {
