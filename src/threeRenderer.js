@@ -20,9 +20,12 @@ var GameplayCameraData = { fov: GameplayWalkingFov, zDist: GameplayCameraDistanc
 var GameplayFovChangeTween = null;
 
 var sprite = null; // TODO: rename me
+var spriteModel = null;
 var target = null;
 var wolves = null;
 var rainDrops = [];
+
+var roomboy = null;
 
 var rainMat = new THREE.LineBasicMaterial({
     color: 0x0000ff
@@ -113,6 +116,11 @@ var loadThreeTextures = function () {
   tl.load('asset/img/playerSprite.png', function (loadedTexture) {
     CharactersTexture = loadedTexture;
   });
+
+  var ml = new THREE.GLTFLoader();
+  ml.load('asset/model/roompusher.glb', function (gltf) {
+    roomboy = gltf;
+  });
 };
 
 var setupThree = function () {
@@ -130,7 +138,12 @@ var setupThree = function () {
   ThreeScene.background = backgroundColor;
 };
 
+let cubsToOpt = [];
+let hasOptedCubes = 0;
 var setupThreeScene= function (game, player, wolves) {
+  cubesToOpt = [];
+  hasOptedCubes = 0;
+
   var ambient = new THREE.AmbientLight(0x888888);
   ThreeScene.add(ambient);
   var directional = new THREE.DirectionalLight(0xFFFFFF, 0.3);
@@ -150,11 +163,19 @@ var setupThreeScene= function (game, player, wolves) {
   var sphere = new THREE.SphereBufferGeometry(player.targetPt.data.radius * 0.8, 8, 6, 0, 1 / spherePieces * Math.PI * 2, 0, 1.5);
   var circle = new THREE.CircleGeometry(player.targetPt.data.soundRange, 8);
   var material3 = new THREE.SpriteMaterial( { fog: true, map: playerSprite } );
+
  
   sprite = new THREE.Sprite(material3);
   sprite.scale.set(32, 64, 32);
   ThreeScene.add(sprite);
   player.data.threeSprite = sprite;
+
+
+  if (roomboy !== null) {
+    ThreeScene.add(roomboy.scene);
+    spriteModel = roomboy.scene;
+  }
+  console.log(spriteModel);
 
   var bloodMaterial = TileMaterialMap[57].clone();
   bloodMaterial.transparent = true;
@@ -193,6 +214,7 @@ var setupThreeScene= function (game, player, wolves) {
       	var tile = map.getTile(tx, ty, background);
       	if (tile && tile.index !== 1) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
+          cubesToOpt.push(cube);
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 0, ty * 32 + 16);
       	}
@@ -200,6 +222,7 @@ var setupThreeScene= function (game, player, wolves) {
       	var tile = map.getTile(tx, ty, foreground);
       	if (tile && tile.index !== 1) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
+          cubesToOpt.push(cube);
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
         }
@@ -207,12 +230,14 @@ var setupThreeScene= function (game, player, wolves) {
         var tile = map.getTile(tx, ty, foreground2);
       	if (tile && tile.index !== 1) {
       	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
+          cubesToOpt.push(cube);
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 64, ty * 32 + 16);
 
           var is2X = twoXSections.find(function (section) { return section.contains(tile.worldX, tile.worldY); });
           if (is2X !== undefined) {
             var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
+            cubesToOpt.push(cube);
             ThreeScene.add(cube);
             cube.position.set(tx * 32 + 16, 96, ty * 32 + 16);
           }
@@ -338,7 +363,14 @@ var setupThreeScene= function (game, player, wolves) {
   ThreeCamera.lookAt((player.x + player.targetPt.x) / 2, 16, (player.y + player.targetPt.y) / 2);
 };
 
+lastDir = 0.0;
 var UpdateThreeScene = function (player, wolves) {
+  if (hasOptedCubes == 1) {
+    cubesToOpt.forEach(function (cube) {
+      cube.matrixAutoUpdate = false;
+    }, this);
+  }
+  hasOptedCubes++;
   ThreeCamera.position.x = (player.x + player.targetPt.x) / 2 - GameplayCameraData.zDist * Math.cos(GameplayCameraAngle);
   ThreeCamera.position.y = GameplayCameraData.yDist + GameplayCameraData.yPush;
   ThreeCamera.position.z = (player.y + player.targetPt.y) / 2 - GameplayCameraData.zDist * Math.sin(GameplayCameraAngle);
@@ -348,6 +380,15 @@ var UpdateThreeScene = function (player, wolves) {
   sprite.material.map.offset.x = (player.animations.frame % 8) / 8;
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
   sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' || player.animations.currentAnim.name === 'idle_right_focus' ? -32 : 32, 64, 32);
+  spriteModel.position.set(player.x, 42, player.y + 16);
+  spriteModel.scale.set(15.0, (player.crouching ?  9.0 : 15.0), 15.0);
+  if (player.body.velocity.getMagnitudeSq() > 0.1) {
+    lastDir =  Math.atan2(player.body.velocity.y, -player.body.velocity.x) - (Math.PI * 0.5);
+    spriteModel.rotation.set(Math.sin(player.game.time.now / 100) * 0.1, lastDir, 0.0);
+  } else {
+    spriteModel.rotation.set(0.0, lastDir, (player.alive === false) ? Math.PI * 0.5 : 0.0);
+  }
+  sprite.visible = false;
 
   target.position.set(player.targetPt.x, 16.1, player.targetPt.y + 16);
   target.rotation.y = player.game.time.now / 700;

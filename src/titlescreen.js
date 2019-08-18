@@ -60,7 +60,7 @@ PickLang.prototype.create = function() {
 
     this.game.camera.onFadeComplete.add(function () {
       this.game.time.events.add(1000, function() {
-        this.game.state.start('IntroSlide', true, false);
+        this.game.state.start('Gameplay', true, false, 'first_room', 'north');
       }, this);
       this.game.camera.onFadeComplete.removeAll();
     }, this);

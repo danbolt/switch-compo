@@ -42,6 +42,7 @@ var Player = function(game, x, y) {
 
   this.currentState = PlayerState.MOVING;
   this.facingDirection = new Phaser.Point(0.0, 1.0);
+  this.trueDirection = new Phaser.Point(0, 1);
   this.isCrouching = false;
   this.gamepadAxis = new Phaser.Point(0, 0);
   this.gamepadAxisCStick = new Phaser.Point(0, 0);
@@ -334,6 +335,8 @@ Player.prototype.update = function() {
   var moving = (Math.abs(inputX) > 0.01 || Math.abs(inputY) > 0.01);
   if (moving) {
     this.facingDirection.set(inputX, inputY);
+    this.trueDirection.x =  this.facingDirection.x;
+    this.trueDirection.y =  this.facingDirection.y;
     this.facingDirection.rotate(0, 0, GameplayCameraAngle + Math.PI / 2);
     this.facingDirection.normalize();
   }
