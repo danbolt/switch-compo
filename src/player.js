@@ -133,7 +133,7 @@ var Player = function(game, x, y) {
       }
 
       GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
-      GameplayFovChangeTween.to( { fov: GameplayPSIFov, zDist: 120, yDist: 340 }, 1000, Phaser.Easing.Linear.None);
+      GameplayFovChangeTween.to( { fov: GameplayPSIFov, zDist: 120, yDist: GameplayCameraYDistance }, 1000, Phaser.Easing.Linear.None);
       GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
         ThreeCamera.fov = GameplayCameraData.fov;
         ThreeCamera.updateProjectionMatrix();
@@ -176,7 +176,7 @@ var Player = function(game, x, y) {
       }
 
       GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
-      GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 750, Phaser.Easing.Cubic.InOut);
+      GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: GameplayCameraYDistance }, 750, Phaser.Easing.Cubic.InOut);
       GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
         ThreeCamera.fov = GameplayCameraData.fov;
         ThreeCamera.updateProjectionMatrix();
@@ -207,7 +207,7 @@ var Player = function(game, x, y) {
     sfx[['crouch0', 'crouch1', 'crouch2'][~~(3 * Math.random())]].play(undefined, 0, 0.5, false);
 
     GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
-    GameplayFovChangeTween.to( { fov: GameplayCrouchingFov, zDist: 300, yDist: 120 }, 500, Phaser.Easing.Cubic.InOut);
+    GameplayFovChangeTween.to( { fov: GameplayCrouchingFov, zDist: 300, yDist: GameplayCameraYDistance }, 500, Phaser.Easing.Cubic.InOut);
     GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
       ThreeCamera.fov = GameplayCameraData.fov;
       ThreeCamera.updateProjectionMatrix();
@@ -225,7 +225,7 @@ var Player = function(game, x, y) {
     }
 
     GameplayFovChangeTween = this.game.add.tween(GameplayCameraData);
-    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: 200 }, 500, Phaser.Easing.Cubic.InOut);
+    GameplayFovChangeTween.to( { fov: GameplayWalkingFov, zDist: 250, yDist: GameplayCameraYDistance }, 500, Phaser.Easing.Cubic.InOut);
     GameplayFovChangeTween.onUpdateCallback(function (tween, value, data) {
       ThreeCamera.fov = GameplayCameraData.fov;
       ThreeCamera.updateProjectionMatrix();
@@ -233,28 +233,13 @@ var Player = function(game, x, y) {
     GameplayFovChangeTween.start();
   };
 
-  // charge logic
-  this.game.input.keyboard.addKey(Phaser.KeyCode.N).onDown.add(chargeDownCallback, this);
-  this.game.input.keyboard.addKey(Phaser.KeyCode.N).onUp.add(chargeUpCallback, this);
-  this.game.input.keyboard.addKey(Phaser.KeyCode.M).onDown.add(crouchDownCallback, this);
-  this.game.input.keyboard.addKey(Phaser.KeyCode.M).onUp.add(crouchUpCallback, this);
 
   this.game.input.gamepad.callbackContext = this;
   this.game.input.gamepad.onDownCallback = function (buttonCode) {
-    if (buttonCode === Phaser.Gamepad.XBOX360_A) {
-      chargeDownCallback.call(this);
-    } else if (buttonCode === Phaser.Gamepad.XBOX360_B) {
-      crouchDownCallback.call(this);
-    }
 
     usingGamepad = true;
   };
   this.game.input.gamepad.onUpCallback = function (buttonCode) {
-    if (buttonCode === Phaser.Gamepad.XBOX360_A) {
-      chargeUpCallback.call(this);
-    } else if (buttonCode === Phaser.Gamepad.XBOX360_B) {
-      crouchUpCallback.call(this);
-    }
 
     usingGamepad = true;
   };
@@ -316,12 +301,6 @@ Player.prototype.update = function() {
     GameplayCameraData.yPush = Math.pow(this.gamepadAxisCStick.y * 128, 3) / 15000;
   }
 
-  if (this.halt === false && this.game.input.keyboard.isDown(Phaser.KeyCode.M) || this.game.input.gamepad.isDown(Phaser.Gamepad.XBOX360_B)) {
-    this.crouching = true;
-  } else {
-    this.crouching = false;
-  }
-
   if (this.currentState === PlayerState.MOVING) {
     this.stamina = Math.min(1.0, this.stamina + this.game.time.elapsed * 0.0001);
 
@@ -342,7 +321,7 @@ Player.prototype.update = function() {
   }
 
   if (this.currentState === PlayerState.MOVING) {
-    if (moving && this.crouching === false) {
+    if (moving) {
       this.body.velocity.set(this.walkSpeed * this.facingDirection.x, this.walkSpeed * this.facingDirection.y);
     } else {
       this.body.velocity.set(0);

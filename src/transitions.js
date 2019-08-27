@@ -1,5 +1,4 @@
 var audioTransitionTable = {
-  "first_room": "burning",
   "second_room": "outdoors",
   "enter_ruins": "outdoors",
   "spectre_encounter": "indoors",

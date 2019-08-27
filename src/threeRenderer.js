@@ -11,12 +11,13 @@ var CharactersTexture = null;
 var TileMaterialMap = {};
 var TreesMaterialMap = {};
 
-var GameplayCameraDistance = 250;
+var GameplayCameraDistance = 125;
+var GameplayCameraYDistance = 190;
 var GameplayCameraAngle = -Math.PI / 2 + 0.1;
 const GameplayWalkingFov = 50;
 const GameplayCrouchingFov = 40;
 const GameplayPSIFov = 70;
-var GameplayCameraData = { fov: GameplayWalkingFov, zDist: GameplayCameraDistance, yDist: 220, yPush: 0 };
+var GameplayCameraData = { fov: GameplayWalkingFov, zDist: GameplayCameraDistance, yDist: GameplayCameraYDistance, yPush: 0 };
 var GameplayFovChangeTween = null;
 
 var sprite = null; // TODO: rename me
@@ -35,8 +36,40 @@ var rainGeom = new THREE.Geometry();
     new THREE.Vector3( 0, -10, 0 ),
     new THREE.Vector3( 0,  10, 0 ),
   );
-var rainGeomBuffer = new THREE.BufferGeometry();
-rainGeomBuffer.fromGeometry(rainGeom);
+
+var bramble = new THREE.ShaderMaterial( {
+
+  uniforms: {
+    time: { value: 1.0 },
+  },
+
+  vertexShader: `
+    varying vec4 vertLambert;
+    varying vec2 fragTexCoord;
+
+    void main() {
+      const vec4 lightDir = normalize(vec4(1.0, 0.4, 1.0, 1.0));
+
+      vec4 vModelNormal = normalize(modelMatrix * vec4(normal, 0.0));
+      float lambertDot = max(dot(vModelNormal, lightDir), 0.11);
+      vertLambert = lambertDot * vec4(1.0, 0.0, 1.0, 1.0);
+
+      fragTexCoord = uv;
+
+      gl_Position = projectionMatrix * (floor(modelViewMatrix * vec4(position + vec3(0.5, 0.5, 0.5),1.0)) / 10.0) * 10.0;
+    }
+  `
+  ,
+  fragmentShader: `
+    varying vec4 vertLambert;
+    varying vec2 fragTexCoord;
+
+    void main() {
+        gl_FragColor = vertLambert;
+    }
+  `
+
+} );
 
 var targetMaterial = new THREE.ShaderMaterial({uniforms: {
       time: { type: "f", value: 1.0 }
@@ -120,6 +153,7 @@ var loadThreeTextures = function () {
   var ml = new THREE.GLTFLoader();
   ml.load('asset/model/roompusher.glb', function (gltf) {
     roomboy = gltf;
+    console.log(gltf);
   });
 };
 
@@ -158,7 +192,7 @@ var setupThreeScene= function (game, player, wolves) {
   playerSprite.offset.x = 0 / 8;
   playerSprite.offset.y = 3 / 4;
 
-  var geometry = new THREE.BoxGeometry( 32, 32, 32 );
+  var geometry = new THREE.BoxBufferGeometry( 32, 32, 32 );
   var spherePieces = 20;
   var sphere = new THREE.SphereBufferGeometry(player.targetPt.data.radius * 0.8, 8, 6, 0, 1 / spherePieces * Math.PI * 2, 0, 1.5);
   var circle = new THREE.CircleGeometry(player.targetPt.data.soundRange, 8);
@@ -175,7 +209,6 @@ var setupThreeScene= function (game, player, wolves) {
     ThreeScene.add(roomboy.scene);
     spriteModel = roomboy.scene;
   }
-  console.log(spriteModel);
 
   var bloodMaterial = TileMaterialMap[57].clone();
   bloodMaterial.transparent = true;
@@ -221,7 +254,7 @@ var setupThreeScene= function (game, player, wolves) {
       	
       	var tile = map.getTile(tx, ty, foreground);
       	if (tile && tile.index !== 1) {
-      	  var cube = new THREE.Mesh( geometry, TileMaterialMap[tile.index] );
+      	  var cube = new THREE.Mesh( geometry, bramble );
           cubesToOpt.push(cube);
       	  ThreeScene.add(cube);
       	  cube.position.set(tx * 32 + 16, 32, ty * 32 + 16);
@@ -381,7 +414,7 @@ var UpdateThreeScene = function (player, wolves) {
   sprite.material.map.offset.y = (3 - ~~(player.animations.frame / 8)) / 4;
   sprite.scale.set(player.animations.currentAnim.name === 'run_right' || player.animations.currentAnim.name === 'idle_right' || player.animations.currentAnim.name === 'idle_right_focus' ? -32 : 32, 64, 32);
   spriteModel.position.set(player.x, 42, player.y + 16);
-  spriteModel.scale.set(15.0, (player.crouching ?  9.0 : 15.0), 15.0);
+  spriteModel.scale.set(8.0, (player.crouching ?  4.0 : 8.0), 8.0);
   if (player.body.velocity.getMagnitudeSq() > 0.1) {
     lastDir =  Math.atan2(player.body.velocity.y, -player.body.velocity.x) - (Math.PI * 0.5);
     spriteModel.rotation.set(Math.sin(player.game.time.now / 100) * 0.1, lastDir, 0.0);
