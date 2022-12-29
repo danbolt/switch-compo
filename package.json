@@ -17,7 +17,7 @@
   "homepage": "https://github.com/danbolt/switch-compo",
   "devDependencies": {
     "electron": "^1.8.3",
-    "electron-builder": "^20.4.1"
+    "electron-builder": "^20.44.4"
   },
   "build": {
     "productName": "Spectres of the Cold",
